@@ -5,6 +5,7 @@ const CustomTheme = createTheme({
   palette: {
     primary: {
       main: "#67B6FF",
+      contrastText: "#FFF",
     },
     error: {
       main: "#FF2E00",
