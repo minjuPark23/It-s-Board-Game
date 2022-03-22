@@ -1,13 +1,17 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-//<Route path="/" element={<Home />} />
+import SignIn from "./page/User/SignIn/index";
+import SignUp from "./page/User/SignUp/index";
 
 function Router() {
   return (
     <BrowserRouter>
-      <Routes>라우터 자리</Routes>
+      <Routes>
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+      </Routes>
     </BrowserRouter>
   );
 }
 
-export default App;
+export default Router;
