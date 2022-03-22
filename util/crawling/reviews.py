@@ -2,7 +2,6 @@
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
@@ -13,19 +12,30 @@ import re
 # from webdriver_manager.chrome import ChromeDriverManager
 
 def get_review_page(g):
-    for i in range(75, 100):
+    for i in range(17, 50):
         # Chrome의 경우 | 아까 받은 chromedriver의 위치를 지정해준다.
-        driver1 = webdriver.Chrome('C:/workspace/projects/IBG/util/crawling/chromedriver.exe')
+        driver1 = webdriver.Chrome(r'C:\Users\SSAFY\Downloads\chromedriver2')
         # 암묵적으로 웹 자원 로드를 위해 3초까지 기다려 준다.
         driver1.implicitly_wait(3)
         # url에 접근한다.
         driver1.get(g['bgg_url'][i] + '/ratings');
+        time.sleep(2)
         html1 = driver1.page_source
         soup1 = BeautifulSoup(html1, 'html.parser')
         page_idx = soup1.select('ul.pagination li:nth-last-child(3) > a.ng-binding')
         page = 0
+        max = 1
         for idx in page_idx:
-            page = int(idx.get_text().strip())
+            if max < int(idx.get_text().strip()):
+                page = int(idx.get_text().strip())
+
+        if page == 0:
+            page_idx = soup1.select('ul.pagination li:nth-last-child(3) > a.ng-binding')
+
+            for idx in page_idx:
+                if max < int(idx.get_text().strip()):
+                    page = int(idx.get_text().strip())
+
 
         print(g['names'][i])
         print(page)
@@ -40,14 +50,15 @@ def get_review_info(ii, page, g):
     dates_ = []
     comments_ = []
 
-    for p in range(1, page + 1):
-        # Chrome의 경우 | 아까 받은 chromedriver의 위치를 지정해준다.
-        driver = webdriver.Chrome('C:/workspace/projects/IBG/util/crawling/chromedriver.exe')
-        # 암묵적으로 웹 자원 로드를 위해 3초까지 기다려 준다.
-        driver.implicitly_wait(3)
+    # Chrome의 경우 | 아까 받은 chromedriver의 위치를 지정해준다.
+    driver = webdriver.Chrome(r'C:\Users\SSAFY\Downloads\chromedriver')
+    # 암묵적으로 웹 자원 로드를 위해 3초까지 기다려 준다.
+    driver.implicitly_wait(3)
 
+    for p in range(1, page + 1):
         # print(g['bgg_url'][ii] + '/ratings?pageid=' + str(p))
-        driver.get(g['bgg_url'][ii] + '/ratings?pageid=' + str(p));
+        driver.get(g['bgg_url'][ii] + '/ratings?pageid=' + str(p))
+        time.sleep(3)
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
 
@@ -85,8 +96,8 @@ def get_review_info(ii, page, g):
         print(len(ids_))
         print(len(comments_))
         print(len(ratings_))
-        driver.close()
 
+    driver.close()
     mCols = []
     df = pd.DataFrame(columns=mCols)
     df['game_id'] = game_id_
