@@ -1,13 +1,14 @@
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-//<Route path="/" element={<Home />} />
+import { Route, Routes } from "react-router-dom";
+import Main from "./page/Main/index";
+import BoardGameSearch from "./page/BoardGameSearch/index";
 
 function Router() {
   return (
-    <BrowserRouter>
-      <Routes>라우터 자리</Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Main />} />
+      <Route path="/search" element={<BoardGameSearch />} />
+    </Routes>
   );
 }
 
-export default App;
+export default Router;
