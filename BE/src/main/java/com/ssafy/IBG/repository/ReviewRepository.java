@@ -13,14 +13,24 @@ public class ReviewRepository {
 
     private final EntityManager em;
 
-    public List<Review> findByGameNo(int gameNo){
+    /**
+    * @author : 박민주
+    * @date : 2022-03-23 오후 6:23
+    * @desc: 게임 하나당 리뷰 목록
+    **/
+    public List<Review> findReviewByGameNo(Integer gameNo){
         List<Review> reviewList = em.createQuery("select r from Review r where r.game.gameNo = :gameNo", Review.class)
                 .setParameter("gameNo", gameNo)
                 .getResultList();
         return reviewList;
     }
 
-    public void save(Review review){
+    /**
+    * @author : 박민주
+    * @date : 2022-03-23 오후 6:23
+    * @desc: 리뷰 등록
+    **/
+    public void saveReview(Review review){
         em.persist(review);
     }
 }

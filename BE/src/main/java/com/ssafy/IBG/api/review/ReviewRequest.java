@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ReviewRequest{
-    private int userNo;
-    private int gameNo;
+    private Integer userNo;
+    private Integer gameNo;
     private String content;
 }

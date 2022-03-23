@@ -9,18 +9,26 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    public List<Review> findByGameNo(int gameNo){
-        return reviewRepository.findByGameNo(gameNo);
+    /**
+    * @author : 박민주
+    * @date : 2022-03-23 오후 6:24
+    **/
+    public List<Review> getReviewByGameNo(Integer gameNo){
+        return reviewRepository.findReviewByGameNo(gameNo);
     }
 
+    /**
+    * @author : 박민주
+    * @date : 2022-03-23 오후 6:24
+    **/
     @Transactional
     public void saveReview(Review review){
-        System.out.println(review.getReviewContent());
-        reviewRepository.save(review);
+        reviewRepository.saveReview(review);
     }
 }
