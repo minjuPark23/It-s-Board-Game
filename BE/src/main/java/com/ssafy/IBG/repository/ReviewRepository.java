@@ -1,0 +1,36 @@
+package com.ssafy.IBG.repository;
+
+import com.ssafy.IBG.domain.Review;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import java.util.List;
+
+@Repository
+@RequiredArgsConstructor
+public class ReviewRepository {
+
+    private final EntityManager em;
+
+    /**
+    * @author : 박민주
+    * @date : 2022-03-23 오후 6:23
+    * @desc: 게임 하나당 리뷰 목록
+    **/
+    public List<Review> findReviewByGameNo(Integer gameNo){
+        List<Review> reviewList = em.createQuery("select r from Review r where r.game.gameNo = :gameNo", Review.class)
+                .setParameter("gameNo", gameNo)
+                .getResultList();
+        return reviewList;
+    }
+
+    /**
+    * @author : 박민주
+    * @date : 2022-03-23 오후 6:23
+    * @desc: 리뷰 등록
+    **/
+    public void saveReview(Review review){
+        em.persist(review);
+    }
+}

@@ -50,7 +50,7 @@ public class GameRepository {
      * @author : 박민주
      * @date : 2022-03-23 오후 5:52
      **/
-    public Game findGameByGameNo(int gameNo){
+    public Game findGameByGameNo(Integer gameNo){
         try{
             Game game = em.find(Game.class, gameNo);
             return game;
