@@ -13,9 +13,13 @@ export default function SignIn() {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        style={{ minHeight: "100vh" }}
+        style={{ minHeight: "90vh" }}
       >
-        <Grid item xs={2}>
+        <Grid
+          item
+          xs={2}
+          sx={{ flexGrow: 1, m: { xs: 4, md: 0 }}}
+        >
           <Form />
         </Grid>
       </Grid>
