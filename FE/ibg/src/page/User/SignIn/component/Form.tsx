@@ -5,6 +5,7 @@ import {
   TextField,
   FormControlLabel,
   Checkbox,
+  Box,
   Grid,
   Typography,
   Container,
@@ -12,21 +13,24 @@ import {
 import Email from "../../component/Email";
 
 function Form() {
-  const [width, setWidth] = useState(window.innerWidth);
   const [password, setPassword] = useState("");
-  const [passwordCheck, setPasswordCheck] = useState("");
-  const [agreement] = useState("");
-  let agreed = false;
-  /*비밀번호 검사 */
+  const [checked, setChecked] = React.useState(false);
+
+  let passwordError = "";
+  let emailError = "";
+
+  /*비밀번호 */
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  const passwordValidation = () => {
-    return password.length < 1;
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+    console.log(!checked); //not true = checked. true = checked
   };
 
   const sendData = () => {
-    if (!agreed) alert("개인정보 약관에 동의해주세요");
+    // if (password.length == 0) alert("이이이");
     //이제 이 값들을 부모에 주면 됨 api : string, string, string임
   };
 
@@ -54,10 +58,6 @@ function Form() {
                 fullWidth
                 onChange={onChangePassword}
                 value={password}
-                error={passwordValidation()}
-                helperText={
-                  passwordValidation() ? "비밀번호를 입력해주세요" : ""
-                }
                 name="password"
                 label="비밀번호 입력"
                 type="password"
@@ -69,31 +69,45 @@ function Form() {
           </Grid>
 
           <Grid item xs={12} sm={12}>
+            <FormControlLabel
+              sx={{ mt: 1 }}
+              control={
+                <Checkbox
+                  checked={checked}
+                  onChange={handleChange}
+                  name="이메일 저장"
+                  value="이메일 저장"
+                />
+              }
+              label="이메일 저장"
+            />
+            <Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={sendData}
+                sx={{ my: 2 }}
+              >
+                로그인
+              </Button>
+            </Grid>
+
             <Button
-              type="submit"
+              component={Link}
+              to="/signup"
               fullWidth
-              variant="contained"
+              variant="outlined"
               color="primary"
               size="large"
-              onClick={sendData}
-              sx={{ my: 2 }}
+
+              // className={classes.submit}
             >
-              로그인
+              회원가입
             </Button>
           </Grid>
-
-          <Button
-            component={Link}
-            to="/signup"
-            fullWidth
-            variant="outlined"
-            color="primary"
-            size="large"
-
-            // className={classes.submit}
-          >
-            회원가입
-          </Button>
         </form>
       </div>
     </Container>
