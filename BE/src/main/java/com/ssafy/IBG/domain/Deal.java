@@ -1,5 +1,6 @@
 package com.ssafy.IBG.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,7 @@ import java.util.Date;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Getter @Setter
+@Data
 public class Deal {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
