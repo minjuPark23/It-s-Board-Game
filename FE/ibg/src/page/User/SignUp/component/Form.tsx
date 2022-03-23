@@ -1,11 +1,11 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Button,
   TextField,
   FormControlLabel,
   Checkbox,
   Grid,
-  Box,
   Typography,
   Container,
 } from "@mui/material/";
@@ -141,7 +141,9 @@ function Form() {
           </Button>
         </form>
         <Grid sx={{ py: 1 }}>
-          <a href="/signin">이미 계정이 있으신가요?</a>
+          <Link to="/signin" replace>
+            이미 계정이 있으신가요?
+          </Link>
         </Grid>
       </div>
     </Container>
