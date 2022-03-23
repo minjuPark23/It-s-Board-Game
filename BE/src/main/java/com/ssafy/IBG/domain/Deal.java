@@ -6,6 +6,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Getter @Setter
 public class Deal {
@@ -14,8 +16,13 @@ public class Deal {
     @Column(name = "dealNo")
     private int daelNo;
 
-    private int userNo;
-    private int gameNo;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "userNo")
+    private User user;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "gameNo")
+    private Game game;
 
     private String dealTitle;
     private String dealContent;
