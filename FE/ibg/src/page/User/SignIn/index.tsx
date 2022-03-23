@@ -2,6 +2,7 @@ import Form from "./component/Form";
 import { Grid } from "@mui/material/";
 
 export default function SignIn() {
+  /*form에서 입력한 데이터를 받아온다 : api 연결*/
   const callLoginApi = (email: string, password: string) => {
     alert(email);
     alert(password);
