@@ -2,10 +2,21 @@ import React, { useState } from "react";
 import Form from "./component/Form";
 import { Grid, Box } from "@mui/material/";
 import WelcomeStepper from "../component/WelcomeStepper";
+
 //index에서 api 호출 -> Form에서 index(parent)로 전달
 
 export default function SignUp() {
   const [width] = useState(window.innerWidth);
+  const handleCallback = (
+    nickname: string,
+    email: string,
+    password: string
+  ) => {
+    //정보 받아 왔다!
+    // alert(nickname);
+    // alert(email);
+    // alert(password);
+  };
   return (
     <>
       <Grid
@@ -21,7 +32,7 @@ export default function SignUp() {
         </Box>
 
         <Grid item xs={2} sx={{ flexGrow: 1, m: { xs: 4, md: 0 } }}>
-          <Form />
+          <Form parentCallback={handleCallback} />
         </Grid>
       </Grid>
     </>
