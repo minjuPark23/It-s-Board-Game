@@ -7,15 +7,8 @@ import WelcomeStepper from "../component/WelcomeStepper";
 
 export default function SignUp() {
   const [width] = useState(window.innerWidth);
-  const handleCallback = (
-    nickname: string,
-    email: string,
-    password: string
-  ) => {
-    //정보 받아 왔다!
-    // alert(nickname);
-    // alert(email);
-    // alert(password);
+  const callJoinApi = (nickname: string, email: string, password: string) => {
+    //join api 연결
   };
   return (
     <>
@@ -32,7 +25,7 @@ export default function SignUp() {
         </Box>
 
         <Grid item xs={2} sx={{ flexGrow: 1, m: { xs: 4, md: 0 } }}>
-          <Form parentCallback={handleCallback} />
+          <Form parentCallback={callJoinApi} />
         </Grid>
       </Grid>
     </>
