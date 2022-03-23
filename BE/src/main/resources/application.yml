@@ -6,21 +6,37 @@ spring:
     password: ssafyB101!
   jpa:
     hibernate:
+<<<<<<< HEAD
+      ddl-auto: update
+#      ddl-auto: create
+=======
 #      ddl-auto: update
       ddl-auto: create
+>>>>>>> d661db677e6eeb5f885851d8ce7caed7cc4e7c39
     properties:
       hibernate:
-        #        show_sql: true
+#        show_sql: true
         format_sql: true
   servlet:
     multipart:
+<<<<<<< HEAD
+      max-file-size: 50MB
+      max-request-size: 50MB
+      #test
+
+=======
 #      location: C:\\workspace\\projects\\IBG\\image\\
       max-file-size: 50MB
       max-request-size: 50MB
+>>>>>>> d661db677e6eeb5f885851d8ce7caed7cc4e7c39
 server:
   port: 7777
   servlet:
     context-path: /ibg
+<<<<<<< HEAD
+
+=======
+>>>>>>> d661db677e6eeb5f885851d8ce7caed7cc4e7c39
 logging:
   level:
     org.hibernate.SQL: debug

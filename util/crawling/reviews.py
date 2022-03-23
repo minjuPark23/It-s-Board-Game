@@ -56,6 +56,7 @@ def get_review_info(ii, page, g):
     driver.implicitly_wait(3)
 
     for p in range(1, page + 1):
+
         # print(g['bgg_url'][ii] + '/ratings?pageid=' + str(p))
         driver.get(g['bgg_url'][ii] + '/ratings?pageid=' + str(p))
         time.sleep(3)
@@ -105,7 +106,7 @@ def get_review_info(ii, page, g):
     df['id'] = ids_
     df['date'] = dates_
     df['comment'] = comments_
-    df.to_csv('C:/workspace/projects/IBG/util/data/Game_review_' + str(ii) + '.csv')
+    df.to_csv('C:/Users/SSAFY/Downloads/Game_review_' + str(ii) + '.csv')
 
 
 # def set_csv(ii, game_id_, ratings_, ids_, dates_, comments_):
@@ -120,7 +121,7 @@ def get_review_info(ii, page, g):
 
 
 if __name__ == '__main__':
-    g = pd.read_csv('C:/workspace/projects/IBG/util/data/Game_res.csv')
+    g = pd.read_csv('C:/Users/SSAFY/Downloads/Game_res.csv')
 
     get_review_page(g)
     # Game = pd.read_csv('C:/Users/SSAFY/Downloads/Game.csv')
