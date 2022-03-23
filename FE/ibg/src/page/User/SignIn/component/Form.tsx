@@ -27,10 +27,6 @@ function Form({ sendDataToParent }: User) {
     setPassword(e.target.value);
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-    console.log(!checked); //not true = checked. true = checked
-  };
   let prevSave = "";
   /* 이메일 검사 */
   useEffect(() => {
@@ -154,7 +150,6 @@ function Form({ sendDataToParent }: User) {
               variant="outlined"
               color="primary"
               size="large"
-
               // className={classes.submit}
             >
               회원가입
