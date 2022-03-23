@@ -58,14 +58,8 @@ function Form({ parentCallback }: User) {
     agreed = e.target.checked;
   };
   const sendData = () => {
-    let userArray = ["", "", ""];
     if (!agreed) alert("개인정보 약관에 동의해주세요");
-    userArray[0] = nickname;
-    userArray[1] = email;
-    userArray[2] = password;
-    //이제 userArray만 전달하면 됨
-
-    parentCallback(nickname, email, password); //>??
+    else parentCallback(nickname, email, password); // 전달
   };
 
   /*랜더링 */

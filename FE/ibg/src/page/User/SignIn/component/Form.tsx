@@ -10,15 +10,15 @@ import {
   Typography,
   Container,
 } from "@mui/material/";
-import Email from "../../component/Email";
 
-function Form() {
+interface User {
+  sendDataToParent: (email: string, password: string) => void;
+}
+
+function Form({ sendDataToParent }: User) {
   const [password, setPassword] = useState("");
   const [checked, setChecked] = React.useState(false);
-
-  let passwordError = "";
-  let emailError = "";
-
+  const [email, setEmail] = useState("");
   /*비밀번호 */
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -28,10 +28,17 @@ function Form() {
     setChecked(event.target.checked);
     console.log(!checked); //not true = checked. true = checked
   };
-
+  /* 이메일 검사 */
+  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+  const emailValidation = () => {
+    let check = /@/;
+    return !check.test(email) && email.length > 1;
+  };
   const sendData = () => {
-    // if (password.length == 0) alert("이이이");
-    //이제 이 값들을 부모에 주면 됨 api : string, string, string임
+    if (password.length != 0 && email.length != 0)
+      sendDataToParent(email, password); //전달
   };
 
   /*랜더링 */
@@ -49,7 +56,23 @@ function Form() {
         <form>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
-              <Email />
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                type="email"
+                onChange={onChangeEmail}
+                value={email}
+                error={emailValidation()}
+                helperText={
+                  emailValidation() ? "올바른 이메일형식이 아닙니다" : ""
+                }
+                label="이메일 주소 입력"
+                name="email"
+                autoComplete="email"
+                autoFocus
+              />
             </Grid>
             <Grid item xs={12}>
               <TextField
