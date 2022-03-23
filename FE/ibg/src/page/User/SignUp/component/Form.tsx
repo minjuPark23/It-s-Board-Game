@@ -1,23 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   Button,
   TextField,
   FormControlLabel,
   Checkbox,
   Grid,
-  Box,
   Typography,
   Container,
 } from "@mui/material/";
-import Email from "../../component/Email";
 import CheckButton from "../../component/CheckButton";
 
-function Form() {
+interface User {
+  parentCallback: (nickname: string, email: string, password: string) => void;
+}
+
+function Form({ parentCallback }: User) {
   const [width, setWidth] = useState(window.innerWidth);
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [nickname, setNickname] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [agreement] = useState("");
+
   let agreed = false;
+  /* 닉네임 검사 */
+  const onChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(e.target.value);
+  };
+  const nicknameValidation = () => {
+    return nickname.length == 1;
+  };
+  /* 이메일 검사 */
+  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+  const emailValidation = () => {
+    let check = /@/;
+    return !check.test(email) && email.length > 1;
+  };
   /*비밀번호 유효 검사 */
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -37,8 +58,14 @@ function Form() {
     agreed = e.target.checked;
   };
   const sendData = () => {
+    let userArray = ["", "", ""];
     if (!agreed) alert("개인정보 약관에 동의해주세요");
-    //이제 이 값들을 부모에 주면 됨 api : string, string, string임
+    userArray[0] = nickname;
+    userArray[1] = email;
+    userArray[2] = password;
+    //이제 userArray만 전달하면 됨
+
+    parentCallback(nickname, email, password); //>??
   };
 
   /*랜더링 */
@@ -48,7 +75,13 @@ function Form() {
         <Typography
           component="h1"
           variant="h4"
-          sx={{ py: 4, px: 1 }}
+          sx={{
+            py: 4,
+            px: 1,
+            pb: { xs: 2 },
+            pt: { xs: -3 },
+            display: { xs: "none", sm: "flex" },
+          }}
           fontWeight={"bold"}
         >
           회원가입
@@ -56,7 +89,23 @@ function Form() {
         <form>
           <Grid container spacing={2}>
             <Grid item xs={9} sm={9}>
-              <Email />
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                type="email"
+                onChange={onChangeEmail}
+                value={email}
+                error={emailValidation()}
+                helperText={
+                  emailValidation() ? "올바른 이메일형식이 아닙니다" : ""
+                }
+                label="이메일 주소 입력"
+                name="email"
+                autoComplete="email"
+                autoFocus
+              />
             </Grid>
             <Grid item xs={3} sm={3}>
               <CheckButton value={width} />
@@ -67,9 +116,15 @@ function Form() {
                 required
                 fullWidth
                 id="nickname"
+                onChange={onChangeNickname}
+                value={nickname}
+                error={nicknameValidation()}
+                helperText={
+                  nicknameValidation()
+                    ? "닉네임은 두글자 이상이여야 합니다"
+                    : ""
+                }
                 label="닉네임 입력"
-                name="nickname"
-                autoComplete="nickname"
                 autoFocus
               />
             </Grid>
@@ -141,7 +196,9 @@ function Form() {
           </Button>
         </form>
         <Grid sx={{ py: 1 }}>
-          <a href="/signin">이미 계정이 있으신가요?</a>
+          <Link to="/signin" replace>
+            이미 계정이 있으신가요?
+          </Link>
         </Grid>
       </div>
     </Container>
