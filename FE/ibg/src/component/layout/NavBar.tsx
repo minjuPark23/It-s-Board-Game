@@ -183,12 +183,6 @@ export default function NavBar() {
     navigate(page);
   };
 
-  // 수정필요 - 로그인 후 NavBar 확인을 위한 임시 함수
-  const tempChangeAuth = () => {
-    movePage("/signin"); //임시용
-    setAuth(true);
-  };
-
   return (
     <StyledAppBar>
       <Container maxWidth="xl">
