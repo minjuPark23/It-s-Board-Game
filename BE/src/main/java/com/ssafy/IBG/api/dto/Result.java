@@ -1,4 +1,4 @@
-package com.ssafy.IBG.domain;
+package com.ssafy.IBG.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,4 +8,8 @@ import lombok.Data;
 public class Result<T>{
     private int code;
     private T data;
+
+    public Result(int code) {
+        this.code = code;
+    }
 }
