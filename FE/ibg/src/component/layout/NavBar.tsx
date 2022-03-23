@@ -168,7 +168,7 @@ export default function NavBar() {
         </List>
       ) : (
         <List>
-          <ListItem button onClick={() => () => movePage("/signin")}>
+          <ListItem button onClick={() => movePage("/signin")}>
             <ListItemIcon>
               <LoginIcon />
             </ListItemIcon>
