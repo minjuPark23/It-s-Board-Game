@@ -1,10 +1,12 @@
-import React, { useState } from "react";
 import Form from "./component/Form";
-import { Grid, Box } from "@mui/material/";
-import WelcomeStepper from "../component/WelcomeStepper";
-//index에서 api 호출 -> Form에서 index(parent)로 전달
+import { Grid } from "@mui/material/";
 
 export default function SignIn() {
+  const callLoginApi = (email: string, password: string) => {
+    alert(email);
+    alert(password);
+    //api 연결
+  };
   return (
     <>
       <Grid
@@ -15,12 +17,8 @@ export default function SignIn() {
         justifyContent="center"
         style={{ minHeight: "90vh" }}
       >
-        <Grid
-          item
-          xs={2}
-          sx={{ flexGrow: 1, m: { xs: 4, md: 0 }}}
-        >
-          <Form />
+        <Grid item xs={2} sx={{ flexGrow: 1, m: { xs: 4, md: 0 } }}>
+          <Form sendDataToParent={callLoginApi} />
         </Grid>
       </Grid>
     </>
