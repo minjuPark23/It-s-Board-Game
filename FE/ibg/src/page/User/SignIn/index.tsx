@@ -5,7 +5,6 @@ import WelcomeStepper from "../component/WelcomeStepper";
 //index에서 api 호출 -> Form에서 index(parent)로 전달
 
 export default function SignIn() {
-  const [width] = useState(window.innerWidth);
   return (
     <>
       <Grid
