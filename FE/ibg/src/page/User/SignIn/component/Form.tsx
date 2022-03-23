@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
+
 import {
   Button,
   TextField,
   FormControlLabel,
   Checkbox,
-  Box,
   Grid,
   Typography,
   Container,
@@ -19,16 +20,32 @@ function Form({ sendDataToParent }: User) {
   const [password, setPassword] = useState("");
   const [checked, setChecked] = React.useState(false);
   const [email, setEmail] = useState("");
+  const [isRemember, setIsRemember] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(["rememberEmail"]);
   /*비밀번호 */
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-    console.log(!checked); //not true = checked. true = checked
-  };
+  let prevSave = "";
   /* 이메일 검사 */
+  useEffect(() => {
+    if (cookies.rememberEmail !== undefined) {
+      setEmail(cookies.rememberEmail);
+      setIsRemember(true);
+      prevSave = email;
+    }
+  }, []);
+
+  const saveEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsRemember(e.target.checked);
+    if (e.target.checked) {
+      //alert("remember" + email + " " + e.target.checked);
+      setCookie("rememberEmail", email, { maxAge: 2000 });
+    } else {
+      removeCookie("rememberEmail");
+    }
+  };
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
@@ -37,8 +54,16 @@ function Form({ sendDataToParent }: User) {
     return !check.test(email) && email.length > 1;
   };
   const sendData = () => {
-    if (password.length != 0 && email.length != 0)
-      sendDataToParent(email, password); //전달
+    if (password.length != 0 && email.length != 0) {
+      {
+        if (isRemember && prevSave != email) {
+          //원래 저장된 이메일과 다른 email을 저장하는 경우 */
+          removeCookie("rememberEmail");
+          setCookie("rememberEmail", email, { maxAge: 2000 });
+        }
+        sendDataToParent(email, password); //전달
+      }
+    }
   };
 
   /*랜더링 */
@@ -96,8 +121,8 @@ function Form({ sendDataToParent }: User) {
               sx={{ mt: 1 }}
               control={
                 <Checkbox
-                  checked={checked}
-                  onChange={handleChange}
+                  checked={isRemember}
+                  onChange={saveEmail}
                   name="이메일 저장"
                   value="이메일 저장"
                 />
@@ -125,7 +150,6 @@ function Form({ sendDataToParent }: User) {
               variant="outlined"
               color="primary"
               size="large"
-
               // className={classes.submit}
             >
               회원가입
