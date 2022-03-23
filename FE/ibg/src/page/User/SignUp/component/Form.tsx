@@ -48,7 +48,13 @@ function Form() {
         <Typography
           component="h1"
           variant="h4"
-          sx={{ py: 4, px: 1 }}
+          sx={{
+            py: 4,
+            px: 1,
+            pb: { xs: 2 },
+            pt: { xs: -3 },
+            display: { xs: "none", sm: "flex" },
+          }}
           fontWeight={"bold"}
         >
           회원가입

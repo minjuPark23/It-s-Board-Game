@@ -12,7 +12,7 @@ type Props = {
 export default function WelcomeStepper({ value }: Props) {
   const page: number = +value;
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ flexGrow: 1, pt: { xs: 5, md: 0 } }}>
       <Stepper activeStep={page} alternativeLabel>
         {steps.map((label) => (
           <Step key={label}>

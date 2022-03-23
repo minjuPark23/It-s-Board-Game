@@ -15,7 +15,7 @@ export default function CheckButton({ value }: Props) {
         size={value < 600 ? "small" : "large"}
         sx={{ py: 2 }}
       >
-        중복확인
+        {value < 600 ? "확인" : "증복 확인"}
       </Button>
     </>
   );
