@@ -13,7 +13,12 @@ public class UserRepository {
 
     private final EntityManager em;
 
-    public User findUser(int userNo) {
+    /**
+     * @author : 곽현준
+     * @date : 2022-03-23 오후 5:48
+     * @description : userNo로 유저 객체 검색
+    **/
+    public User findUserByUserNo(int userNo) {
         try{
             return em.find(User.class, userNo);
         }catch (NoResultException e) {

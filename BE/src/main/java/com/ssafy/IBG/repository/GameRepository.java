@@ -13,7 +13,12 @@ public class GameRepository {
 
     private final EntityManager em;
 
-    public Game findGame(int gameNo) {
+    /**
+     * @author : 곽현준
+     * @date : 2022-03-23 오후 5:48
+     * @description : gameNo로 Game 객체 검색
+    **/
+    public Game findGameByGameNo(int gameNo) {
         try{
             return em.find(Game.class, gameNo);
         }catch (NoResultException e) {

@@ -1,8 +1,8 @@
 package com.ssafy.IBG.api;
 
-import com.ssafy.IBG.api.Deal.DealRequest;
-import com.ssafy.IBG.api.Deal.DealUtil;
-import com.ssafy.IBG.api.Dto.Result;
+import com.ssafy.IBG.api.deal.DealRequest;
+import com.ssafy.IBG.api.deal.DealUtil;
+import com.ssafy.IBG.api.dto.Result;
 import com.ssafy.IBG.domain.Deal;
 import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.User;
@@ -33,6 +33,11 @@ public class DealApiController {
 
     private final DealUtil dealUtil;
 
+    /**
+     * @author : 곽현준
+     * @date : 2022-03-23 오후 5:48
+     * @description : 거래내역 업로드
+    **/
     @PostMapping("/deal")
     public Result saveDeal(DealRequest request){
 
@@ -46,10 +51,6 @@ public class DealApiController {
         deal.setDealTitle(request.getDealTitle());
         deal.setDealContent(request.getDealContent());
         deal.setDealPrice(request.getDealPrice());
-
-
-        log.debug("file org name = {}", request.getFile().getOriginalFilename());
-        log.debug("file content type = {}", request.getFile().getContentType());
 
         // File Upload
         MultipartFile file = null;

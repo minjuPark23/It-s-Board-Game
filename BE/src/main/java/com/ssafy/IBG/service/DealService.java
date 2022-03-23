@@ -14,8 +14,10 @@ public class DealService {
     private final DealRepository dealRepository;
 
     /**
-     * 겨래 등록
-     */
+     * @author : 곽현준
+     * @date : 2022-03-23 오후 5:49
+     * @description : deal 객체 저장
+    **/
     @Transactional
     public void saveDeal(Deal deal) {
         dealRepository.saveDeal(deal);

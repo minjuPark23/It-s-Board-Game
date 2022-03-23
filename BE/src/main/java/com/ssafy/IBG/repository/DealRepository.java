@@ -12,6 +12,11 @@ public class DealRepository {
 
     private final EntityManager em;
 
+    /**
+     * @author : 곽현준
+     * @date : 2022-03-23 오후 5:48
+     * @description : deal 객체 저장
+    **/
     public void saveDeal(Deal deal) {
         em.persist(deal);
     }

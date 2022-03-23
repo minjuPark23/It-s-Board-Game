@@ -1,14 +1,14 @@
-package com.ssafy.IBG.api.Deal;
+package com.ssafy.IBG.api.deal;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class DealRequest {
-    private int gameNo;
-    private int userNo;
+    private Integer gameNo;
+    private Integer userNo;
     private String dealTitle;
     private String dealContent;
     private MultipartFile file;
-    private int dealPrice;
+    private Integer dealPrice;
 }
