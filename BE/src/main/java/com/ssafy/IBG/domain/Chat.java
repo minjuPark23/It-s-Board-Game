@@ -7,11 +7,13 @@ import javax.persistence.*;
 
 @Entity
 @Getter @Setter
-public class Game {
+public class Chat {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "gameNo")
-    private int gameNo;
+    @Column(name = "chatNo")
+    private int chatNo;
 
+    private int userNo;
 
+    private int dealNo;
 }

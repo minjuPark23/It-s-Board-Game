@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Result<T>{
+public class Result<T> {
     private int code;
     private T data;
 
-    public Result(int code) {
+    public Result(int code){
         this.code = code;
     }
 }

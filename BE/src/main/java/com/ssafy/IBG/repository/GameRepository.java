@@ -19,9 +19,9 @@ public class GameRepository {
     private final EntityManager em;
 
     /**
-    * @author : 박민주
-    * @date : 2022-03-23 오후 5:51
-    **/
+     * @author : 박민주
+     * @date : 2022-03-23 오후 5:51
+     **/
     public List<Game> findGameSearchGame(String searchName){
         JPQLQuery<Game> query = new JPAQuery<>(em);
         QGame qGame = new QGame("Game");
@@ -32,9 +32,9 @@ public class GameRepository {
     }
 
     /**
-    * @author : 박민주
-    * @date : 2022-03-23 오후 5:51
-    **/
+     * @author : 박민주
+     * @date : 2022-03-23 오후 5:51
+     **/
     public Game findGameByGameName(String gameName){
         try{
             Game game = em.createQuery("select g from Game g where g.gameName = :gameName", Game.class)
@@ -47,9 +47,9 @@ public class GameRepository {
     }
 
     /**
-    * @author : 박민주
-    * @date : 2022-03-23 오후 5:52
-    **/
+     * @author : 박민주
+     * @date : 2022-03-23 오후 5:52
+     **/
     public Game findGameByGameNo(int gameNo){
         try{
             Game game = em.find(Game.class, gameNo);
@@ -61,9 +61,9 @@ public class GameRepository {
     }
 
     /**
-    * @author : 박민주
-    * @date : 2022-03-23 오후 5:52
-    **/
+     * @author : 박민주
+     * @date : 2022-03-23 오후 5:52
+     **/
     public List<Game> findGameByFilter(String gameName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
 
         JPQLQuery<Game> query = new JPAQuery<>(em);
@@ -99,5 +99,4 @@ public class GameRepository {
                 .fetch();
         return gameList;
     }
-
 }
