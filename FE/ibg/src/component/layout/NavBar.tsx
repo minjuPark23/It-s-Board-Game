@@ -25,6 +25,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import ExtensionOutlinedIcon from "@mui/icons-material/ExtensionOutlined";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
+import LoginIcon from "@mui/icons-material/Login";
 import Logout from "@mui/icons-material/Logout";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
@@ -152,18 +153,29 @@ export default function NavBar() {
         ))}
       </List>
       <Divider />
-      <List>
-        {userNav.map((item) => (
-          <ListItem
-            button
-            key={item.label}
-            onClick={() => (item.link ? movePage(item.link) : item.method)}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.label} />
+      {auth ? (
+        <List>
+          {userNav.map((item) => (
+            <ListItem
+              button
+              key={item.label}
+              onClick={() => (item.link ? movePage(item.link) : item.method)}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.label} />
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <List>
+          <ListItem button onClick={() => () => movePage("/signin")}>
+            <ListItemIcon>
+              <LoginIcon />
+            </ListItemIcon>
+            <ListItemText primary="로그인" />
           </ListItem>
-        ))}
-      </List>
+        </List>
+      )}
     </Box>
   );
 
@@ -275,8 +287,7 @@ export default function NavBar() {
               <Button
                 color="warning"
                 sx={{ color: "black", display: { xs: "none", md: "block" } }}
-                // 수정필요 - (임시)클릭하면 로그인 상태로 변경, 클릭하면 로그인 페이지로 이동하도록 수정해야 함
-                onClick={tempChangeAuth}
+                onClick={() => movePage("/signin")}
               >
                 로그인
               </Button>
