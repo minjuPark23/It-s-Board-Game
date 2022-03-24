@@ -50,13 +50,23 @@ public class UserRepository {
      *  F03. 회원 정보 가져오기
      *  return 해당하는 유저의 정보
     * */
-    public User findUserByUserNo(int userNo) throws NoResultException{
-        return em.find(User.class, userNo);
+    public User findUserByUserNo(int userNo){
+        try {
+            return em.find(User.class, userNo);
+        } catch (NoResultException e){
+            System.err.println("해당 유저가 없습니다.");
+            return null;
+        }
     }
 
-    public User findUserByUserEmail(String userEmail) throws NoResultException{
-        return em.createQuery("select u from User u where u.userEmail = :userEmail", User.class)
-                .setParameter("userEmail", userEmail)
-                .getSingleResult();
+    public User findUserByUserEmail(String userEmail){
+        try {
+            return em.createQuery("select u from User u where u.userEmail = :userEmail", User.class)
+                    .setParameter("userEmail", userEmail)
+                    .getSingleResult();
+        } catch (NoResultException e){
+            System.err.println("해당 유저가 없습니다.");
+            return null;
+        }
     }
 }

@@ -12,6 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class InterestService {
 
     private final InterestRepository interestRepository;
@@ -48,7 +49,6 @@ public class InterestService {
      * @date : 2022-03-23
      * @desc: 해당 유저가 좋아요 표시한 모든 데이터를 가져온다.
      **/
-    @Transactional(readOnly = true)
     public List<Interest> getInterestList(Integer userNo){
         return interestRepository.findInterestListByUserNo(userNo);
     }
