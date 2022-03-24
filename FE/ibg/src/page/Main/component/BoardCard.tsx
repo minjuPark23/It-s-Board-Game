@@ -5,9 +5,10 @@ import {
   CardContent,
   CardMedia,
   CardActionArea,
-  Typography,
   Grid,
 } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
+import StarIcon from "@mui/icons-material/Star";
 
 interface Game {
   game: {
@@ -28,7 +29,20 @@ interface Game {
   };
 }
 
-const ImgWrapper = styled("div")(({ theme }) => ({
+const StyledCard = styled(Card)(() => ({
+  "&:hover": {
+    animation: "circlemove 1.5s infinite linear",
+  },
+  "@keyframes circlemove": {
+    "0%,100%": { transform: "translate(-1%,-1%)" },
+    "50%": {
+      transform: "translate(-1%,-2%)",
+      boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+    },
+  },
+}));
+
+const ImgWrapper = styled("div")(() => ({
   position: "relative",
   width: "100%",
   height: 0,
@@ -36,10 +50,33 @@ const ImgWrapper = styled("div")(({ theme }) => ({
   paddingBottom: "100%",
 }));
 
+const GameTitle = styled("div")(({ theme }) => ({
+  fontSize: "1.1rem",
+  fontWeight: 600,
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+  overflow: "hidden",
+  marginBottom: theme.spacing(1),
+}));
+
+const Category = styled("div")(({ theme }) => ({
+  fontSize: "0.85rem",
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+  overflow: "hidden",
+  marginBottom: theme.spacing(1.3),
+}));
+
+const AddInfo = styled("div")(() => ({
+  fontSize: "0.8rem",
+  display: "flex",
+  alignItems: "center",
+}));
+
 export default function BoardCard({ game }: Game) {
   return (
     <Grid item xs={12} sm={4} md={3} lg={2.5}>
-      <Card>
+      <StyledCard variant="outlined">
         <CardActionArea>
           <ImgWrapper>
             <CardMedia
@@ -55,12 +92,17 @@ export default function BoardCard({ game }: Game) {
             />
           </ImgWrapper>
           <CardContent>
-            <Typography gutterBottom variant="h6" component="div">
-              {game.gameName}
-            </Typography>
+            <GameTitle>{game.gameName}</GameTitle>
+            <Category>{game.gameCategory}</Category>
+            <AddInfo>
+              <PersonIcon color="warning" fontSize="small" sx={{ mr: 0.5 }} />
+              {game.gameMinPlayer}~{game.gameMaxPlayer}명
+              <StarIcon color="warning" fontSize="small" sx={{ mx: 0.5 }} />
+              {game.gameTotalScore}
+            </AddInfo>
           </CardContent>
         </CardActionArea>
-      </Card>
+      </StyledCard>
     </Grid>
   );
 }
