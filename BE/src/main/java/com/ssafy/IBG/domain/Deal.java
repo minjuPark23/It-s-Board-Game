@@ -1,7 +1,7 @@
 package com.ssafy.IBG.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -9,11 +9,10 @@ import java.util.Date;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Getter @Setter
+@Data
 public class Deal {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dealNo")
     private int daelNo;
 
     @ManyToOne(fetch = LAZY)
