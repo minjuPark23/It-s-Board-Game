@@ -5,7 +5,6 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
-import random
 import pandas as pd
 import re
 
@@ -13,14 +12,14 @@ import re
 # from webdriver_manager.chrome import ChromeDriverManager
 
 def get_review_page(g):
-    for i in range(118, 150):
+    for i in range(17, 50):
         # Chrome의 경우 | 아까 받은 chromedriver의 위치를 지정해준다.
-        driver1 = webdriver.Chrome(r'C:\Users\multicampus\Downloads\chromedriver')
+        driver1 = webdriver.Chrome(r'C:\Users\SSAFY\Downloads\chromedriver2')
         # 암묵적으로 웹 자원 로드를 위해 3초까지 기다려 준다.
         driver1.implicitly_wait(3)
         # url에 접근한다.
         driver1.get(g['bgg_url'][i] + '/ratings');
-        time.sleep(random.uniform(5, 6));
+        time.sleep(2)
         html1 = driver1.page_source
         soup1 = BeautifulSoup(html1, 'html.parser')
         page_idx = soup1.select('ul.pagination li:nth-last-child(3) > a.ng-binding')
@@ -41,7 +40,7 @@ def get_review_page(g):
         print(g['names'][i])
         print(page)
         get_review_info(i, page, g)
-        driver1.quit()
+        driver1.close()
 
 
 def get_review_info(ii, page, g):
@@ -52,7 +51,7 @@ def get_review_info(ii, page, g):
     comments_ = []
 
     # Chrome의 경우 | 아까 받은 chromedriver의 위치를 지정해준다.
-    driver = webdriver.Chrome(r'C:\Users\multicampus\Downloads\chromedriver')
+    driver = webdriver.Chrome(r'C:\Users\SSAFY\Downloads\chromedriver')
     # 암묵적으로 웹 자원 로드를 위해 3초까지 기다려 준다.
     driver.implicitly_wait(3)
 
@@ -60,7 +59,7 @@ def get_review_info(ii, page, g):
 
         # print(g['bgg_url'][ii] + '/ratings?pageid=' + str(p))
         driver.get(g['bgg_url'][ii] + '/ratings?pageid=' + str(p))
-        time.sleep(random.uniform(5, 6));
+        time.sleep(3)
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
 
@@ -99,7 +98,7 @@ def get_review_info(ii, page, g):
         print(len(comments_))
         print(len(ratings_))
 
-    driver.quit()
+    driver.close()
     mCols = []
     df = pd.DataFrame(columns=mCols)
     df['game_id'] = game_id_
@@ -107,7 +106,7 @@ def get_review_info(ii, page, g):
     df['id'] = ids_
     df['date'] = dates_
     df['comment'] = comments_
-    df.to_csv('C:/Users/multicampus/Downloads/Game_review_' + str(ii) + '.csv')
+    df.to_csv('C:/Users/SSAFY/Downloads/Game_review_' + str(ii) + '.csv')
 
 
 # def set_csv(ii, game_id_, ratings_, ids_, dates_, comments_):
@@ -122,7 +121,7 @@ def get_review_info(ii, page, g):
 
 
 if __name__ == '__main__':
-    g = pd.read_csv('C:/Users/multicampus/Downloads/Game_res.csv')
+    g = pd.read_csv('C:/Users/SSAFY/Downloads/Game_res.csv')
 
     get_review_page(g)
     # Game = pd.read_csv('C:/Users/SSAFY/Downloads/Game.csv')
