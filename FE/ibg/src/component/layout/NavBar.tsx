@@ -188,10 +188,25 @@ export default function NavBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
           <ImageListItem
-            sx={{ mr: { xs: 0, md: 3 }, minWidth: 65, cursor: "pointer" }}
+            sx={{
+              maxWidth: 50,
+              cursor: "pointer",
+            }}
             onClick={() => movePage("/")}
           >
-            <img src="img/logo.PNG" alt="logo" />
+            <img src="img/logo.png" alt="logo" />
+          </ImageListItem>
+
+          <ImageListItem
+            sx={{
+              mr: { xs: 0, md: 3 },
+              minWidth: 65,
+              cursor: "pointer",
+              display: { xs: "none", md: "block" },
+            }}
+            onClick={() => movePage("/")}
+          >
+            <img src="img/logotext.PNG" alt="logoText" />
           </ImageListItem>
 
           {/* Nav 반응형 - PC --------------------------------------*/}
