@@ -168,7 +168,7 @@ export default function NavBar() {
         </List>
       ) : (
         <List>
-          <ListItem button onClick={() => () => movePage("/signin")}>
+          <ListItem button onClick={() => movePage("/signin")}>
             <ListItemIcon>
               <LoginIcon />
             </ListItemIcon>
@@ -181,12 +181,6 @@ export default function NavBar() {
 
   const movePage = (page: string) => {
     navigate(page);
-  };
-
-  // 수정필요 - 로그인 후 NavBar 확인을 위한 임시 함수
-  const tempChangeAuth = () => {
-    movePage("/signin"); //임시용
-    setAuth(true);
   };
 
   return (
