@@ -5,10 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Data
@@ -18,15 +17,19 @@ public class Score {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int scoreNo;
 
-    private int userNo;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "userNo")
+    private User user;
 
-    private int gameNo;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "gameNo")
+    private Game game;
 
     private int scoreRating;
 
-    public Score(int userNo, int gameNo, int scoreRating){
-        this.userNo = userNo;
-        this.gameNo = gameNo;
+    public Score(User user, Game game, int scoreRating){
+        this.user = user;
+        this.game = game;
         this.scoreRating = scoreRating;
     }
 

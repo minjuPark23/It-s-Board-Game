@@ -3,10 +3,9 @@ package com.ssafy.IBG.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Data
@@ -17,12 +16,16 @@ public class Interest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int likeNo;
 
-    private int userNo;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "userNo")
+    private User user;
 
-    private int gameNo;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "gameNo")
+    private Game game;
 
-    public Interest(int userNo, int gameNo) {
-        this.userNo = userNo;
-        this.gameNo = gameNo;
+    public Interest(User user, Game game) {
+        this.user = user;
+        this.game = game;
     }
 }

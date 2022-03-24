@@ -18,9 +18,8 @@ public class UserService {
      * @date : 2022-03-23
      * @desc: 유저 회원 가입 후 회원 번호를 반환
      **/
-    public Integer join(User user){
-        userRepository.save(user);
-        return user.getUserNo();
+    public boolean join(User user){
+        return userRepository.saveUser(user);
     }
 
     /**

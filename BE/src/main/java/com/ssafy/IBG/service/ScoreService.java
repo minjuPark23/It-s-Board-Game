@@ -1,7 +1,11 @@
 package com.ssafy.IBG.service;
 
+import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Score;
+import com.ssafy.IBG.domain.User;
+import com.ssafy.IBG.repository.GameRepository;
 import com.ssafy.IBG.repository.ScoreRepository;
+import com.ssafy.IBG.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ScoreService {
 
     private final ScoreRepository scoreRepository;
+    private final UserRepository userRepository;
+    private final GameRepository gameRepository;
 
     /**
      * @author : 권오범
@@ -19,7 +25,6 @@ public class ScoreService {
      **/
     @Transactional
     public boolean registScore(Integer userNo, Integer gameNo, Integer scoreRating){
-
         Score score = scoreRepository.findScoreByUserNoGameNo(userNo, gameNo);
 
         if(score != null){
@@ -27,7 +32,7 @@ public class ScoreService {
             return true;
         }
 
-        return scoreRepository.save(new Score(userNo, gameNo, scoreRating));
+        return scoreRepository.saveScore(new Score(userRepository.findUserByUserNo(userNo), gameRepository.findGameByGameNo(gameNo), scoreRating));
     }
 
 }

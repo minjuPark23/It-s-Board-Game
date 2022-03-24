@@ -14,21 +14,16 @@ public class UserRepository {
     private final EntityManager em;
 
     /**
-<<<<<<< HEAD
      *  F01. 회원 가입
      * */
-    public void save(User user){
-        em.persist(user);
-    }
-
-    /**
-     *  F03. 유저 로그인
-     * */
-    public User login(String userEmail, String userPwd){
-        return em.createQuery("select u from User u where u.userEmail =: userEmail and u.userPwd =: userPwd", User.class)
-                .setParameter("userEmail", userEmail)
-                .setParameter("userPwd", userPwd)
-                .getSingleResult();
+    public boolean saveUser(User user){
+        try {
+            em.persist(user);
+            return true;
+        } catch (Exception e){
+            System.err.println("회원가입 실패");
+            return false;
+        }
     }
 
     /**

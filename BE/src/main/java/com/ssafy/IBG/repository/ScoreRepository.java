@@ -1,6 +1,8 @@
 package com.ssafy.IBG.repository;
 
+import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Score;
+import com.ssafy.IBG.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +19,7 @@ public class ScoreRepository {
     /**
      *  Score 등록
      * */
-    @Transactional
-    public boolean save(Score score){
+    public boolean saveScore(Score score){
         try{
             em.persist(score);
             return true;
@@ -33,7 +34,7 @@ public class ScoreRepository {
      * */
     public Score findScoreByUserNoGameNo(Integer userNo, Integer gameNo){
         try {
-            return em.createQuery("select s from Score s where s.userNo =: userNo and s.gameNo =: gameNo", Score.class)
+            return em.createQuery("select s from Score s where s.user.userNo =: userNo and s.game.gameNo =: gameNo", Score.class)
                     .setParameter("userNo", userNo)
                     .setParameter("gameNo", gameNo)
                     .getSingleResult();

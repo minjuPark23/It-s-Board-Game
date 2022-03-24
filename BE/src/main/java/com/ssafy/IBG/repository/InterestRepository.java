@@ -1,6 +1,8 @@
 package com.ssafy.IBG.repository;
 
+import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Interest;
+import com.ssafy.IBG.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,16 +20,14 @@ public class InterestRepository {
     /**
      *  관심 목록 삭제
      * */
-    @Transactional
-    public void remove(Interest interest){
+    public void removeInterest(Interest interest){
         em.remove(interest);
     }
 
     /**
      *  관심 목록 저장
      * */
-    @Transactional
-    public void save(Interest interest){
+    public void saveInterest(Interest interest){
         em.persist(interest);
     }
 
@@ -36,7 +36,7 @@ public class InterestRepository {
      * */
     public Interest findInterestByUserNoGameNo(Integer userNo, Integer gameNo){
         try {
-            return em.createQuery("select i from Interest i where i.userNo =: userNo and i.gameNo =: gameNo", Interest.class)
+            return em.createQuery("select i from Interest i where i.user.userNo =: userNo and i.game.gameNo =: gameNo", Interest.class)
                     .setParameter("userNo", userNo)
                     .setParameter("gameNo", gameNo)
                     .getSingleResult();
@@ -50,7 +50,7 @@ public class InterestRepository {
      *  관심 목록 가져오기
      * */
     public List<Interest> findInterestListByUserNo(Integer userNo){
-        return em.createQuery("select i from Interest i where i.userNo =: userNo", Interest.class)
+        return em.createQuery("select i from Interest i where i.user.userNo =: userNo", Interest.class)
                 .setParameter("userNo", userNo)
                 .getResultList();
     }
