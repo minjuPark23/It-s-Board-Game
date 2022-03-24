@@ -20,7 +20,7 @@ public class GameService {
      * @desc: 자동 완성 검색
      **/
     public List<Game> getGameSearchGame(String searchName){
-        return gameRepository.findGameSearchGame(searchName);
+        return gameRepository.findGameBySearchGame(searchName);
     }
 
     /**
@@ -37,7 +37,7 @@ public class GameService {
      * @date : 2022-03-23 오후 5:49
      * @desc: 게임 번호 상세보기
      **/
-    public Game getGameByGameNo(Integer gameNo){
+    public Game getGameByGameNo(int gameNo){
         return gameRepository.findGameByGameNo(gameNo);
     }
 

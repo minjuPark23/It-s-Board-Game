@@ -10,17 +10,17 @@ import java.util.stream.Collectors;
 
 @Data
 public class GameResponse{
-    private Integer gameNo;
+    private int gameNo;
     private String gameImg;
     private String gameName;
-    private Integer gameYear;
-    private Double gameTotalScore;
+    private int gameYear;
+    private double gameTotalScore;
     private boolean isLike;
-    private Integer gameMinPlayer;
-    private Integer gameMaxPlayer;
-    private Integer gameMinTime;
-    private Integer gameMaxTime;
-    private Double gameWeight;
+    private int gameMinPlayer;
+    private int gameMaxPlayer;
+    private int gameMinTime;
+    private int gameMaxTime;
+    private double gameWeight;
     private String gameCategory;
     private List<ReviewResponse> ResponseReviewList;
 

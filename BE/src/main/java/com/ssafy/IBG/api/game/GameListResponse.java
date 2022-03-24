@@ -5,12 +5,12 @@ import lombok.Data;
 
 @Data
 public class GameListResponse{
-    private Integer gameNo;
+    private int gameNo;
     private String gameName;
     private String gameCategory;
-    private Integer gameMinPlayer;
-    private Integer gameMaxPlayer;
-    private Double gameTotalScore;
+    private int gameMinPlayer;
+    private int gameMaxPlayer;
+    private double gameTotalScore;
     private String gameImg;
     private boolean isLike;
 

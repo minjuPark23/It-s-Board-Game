@@ -18,7 +18,7 @@ public class ReviewRepository {
     * @date : 2022-03-23 오후 6:23
     * @desc: 게임 하나당 리뷰 목록
     **/
-    public List<Review> findReviewByGameNo(Integer gameNo){
+    public List<Review> findReviewByGameNo(int gameNo){
         List<Review> reviewList = em.createQuery("select r from Review r where r.game.gameNo = :gameNo", Review.class)
                 .setParameter("gameNo", gameNo)
                 .getResultList();

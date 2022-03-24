@@ -27,7 +27,7 @@ public class ReviewApiController {
     * @desc: 게임 하나의 리뷰 목록
     **/
     @GetMapping("/review/{gameNo}")
-    public Result getReviewList(@PathVariable("gameNo") Integer gameNo){
+    public Result getReviewList(@PathVariable("gameNo") int gameNo){
         List<Review> reviewList = reviewService.getReviewByGameNo(gameNo);
         List<ReviewResponse> collect = reviewList.stream()
                 .map(rl -> new ReviewResponse(rl))

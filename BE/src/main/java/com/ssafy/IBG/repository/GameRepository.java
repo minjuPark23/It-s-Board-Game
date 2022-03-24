@@ -22,7 +22,7 @@ public class GameRepository {
      * @author : 박민주
      * @date : 2022-03-23 오후 5:51
      **/
-    public List<Game> findGameSearchGame(String searchName){
+    public List<Game> findGameBySearchGame(String searchName){
         JPQLQuery<Game> query = new JPAQuery<>(em);
         QGame qGame = new QGame("Game");
         List<Game> gameList = query.from(qGame)
@@ -50,7 +50,7 @@ public class GameRepository {
      * @author : 박민주
      * @date : 2022-03-23 오후 5:52
      **/
-    public Game findGameByGameNo(Integer gameNo){
+    public Game findGameByGameNo(int gameNo){
         try{
             Game game = em.find(Game.class, gameNo);
             return game;

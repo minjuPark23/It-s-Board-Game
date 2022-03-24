@@ -7,8 +7,8 @@ import java.text.SimpleDateFormat;
 
 @Data
 public class ReviewResponse{
-    private Integer reviewNo;
-    private Integer userName;
+    private int reviewNo;
+    private int userName;
     private String reviewContent;
     private String reviewReg;
 

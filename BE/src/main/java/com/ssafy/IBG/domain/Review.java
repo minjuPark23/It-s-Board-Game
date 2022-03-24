@@ -14,10 +14,10 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reviewNo")
-    private Integer reviewNo;
+    private int reviewNo;
 
     @Column(name = "userNo")
-    private Integer userNo;
+    private int userNo;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "gameNo")

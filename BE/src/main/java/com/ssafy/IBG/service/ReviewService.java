@@ -19,7 +19,7 @@ public class ReviewService {
     * @author : 박민주
     * @date : 2022-03-23 오후 6:24
     **/
-    public List<Review> getReviewByGameNo(Integer gameNo){
+    public List<Review> getReviewByGameNo(int gameNo){
         return reviewRepository.findReviewByGameNo(gameNo);
     }
 
