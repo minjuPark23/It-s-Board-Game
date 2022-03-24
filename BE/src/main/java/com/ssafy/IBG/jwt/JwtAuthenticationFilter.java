@@ -93,7 +93,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET)); // secrete 값
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX +jwtToken); // 헤더에 담겨 사용자에게 응답
-        Result result = new Result(true, HttpStatus.OK.value(), new UserDto(principalDetails.getUser().getUserNo(), principalDetails.getUser().getUserEmail()));
+        Result result = new Result(HttpStatus.OK.value(), new UserDto(principalDetails.getUser().getUserNo(), principalDetails.getUser().getUserEmail()));
         String json = new ObjectMapper().writeValueAsString(result);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -112,7 +112,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        Result result = new Result(false, HttpStatus.BAD_REQUEST.value());
+        Result result = new Result(HttpStatus.BAD_REQUEST.value());
         String json = new ObjectMapper().writeValueAsString(result);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

@@ -39,9 +39,9 @@ public class UserApiController {
         user.setUserPwd(encPwd);
 
         if(userService.join(user) != null){
-            return new Result(true, HttpStatus.OK.value());
+            return new Result(HttpStatus.OK.value());
         }else{
-            return new Result(true, HttpStatus.CONFLICT.value());
+            return new Result(HttpStatus.CONFLICT.value());
         }
     }
 
@@ -54,9 +54,9 @@ public class UserApiController {
     public Result emailVerify(@RequestBody UserConfirmRequest request){
 
         if(userService.confirmEmail(request.getUserEmail()))
-            return new Result(true, HttpStatus.OK.value());
+            return new Result(HttpStatus.OK.value());
 
-        return new Result(false, HttpStatus.CONFLICT.value());
+        return new Result(HttpStatus.CONFLICT.value());
     }
 
     /**
@@ -67,9 +67,9 @@ public class UserApiController {
     @PostMapping("/nickname")
     public Result nickVerify(@RequestBody UserConfirmRequest request){
         if(userService.confirmNick(request.getUserNick()))
-            return new Result(true, HttpStatus.OK.value());
+            return new Result(HttpStatus.OK.value());
 
-        return new Result(false, HttpStatus.CONFLICT.value());
+        return new Result(HttpStatus.CONFLICT.value());
     }
 
     /**
@@ -82,10 +82,10 @@ public class UserApiController {
         User user = userService.getUserByUserNo(userNo);
 
         if(user == null)
-            return new Result(false, HttpStatus.CONFLICT.value());
+            return new Result(HttpStatus.CONFLICT.value());
 
         UserInfoResponse response = new UserInfoResponse(user.getUserNo(), user.getUserEmail(), user.getUserNick());
-        return new Result(true, HttpStatus.OK.value(), response);
+        return new Result(HttpStatus.OK.value(), response);
     }
 
     /**
@@ -97,9 +97,9 @@ public class UserApiController {
     public Result setInterestTransaction(@RequestBody UserInterestRequest request){
 
         if(interestService.setInterestTransaction(request.getUserNo(), request.getGameNo()))
-            return new Result(true, HttpStatus.OK.value());
+            return new Result(HttpStatus.OK.value());
 
-        return new Result(false, HttpStatus.CONFLICT.value());
+        return new Result(HttpStatus.CONFLICT.value());
     }
 
     /**
@@ -112,9 +112,9 @@ public class UserApiController {
         List<Interest> list = interestService.getInterestList(userNo);
 
         if(list.isEmpty())
-            return new Result(false, HttpStatus.NO_CONTENT.value());
+            return new Result(HttpStatus.NO_CONTENT.value());
 
-        return new Result(true, HttpStatus.OK.value(), list);
+        return new Result(HttpStatus.OK.value(), list);
     }
 
     /**
@@ -125,9 +125,9 @@ public class UserApiController {
     @PostMapping("/user/score")
     public Result setScore(@RequestBody UserScoreRequest request){
         if(!scoreService.registScore(request.getUserNo(), request.getGameNo(), request.getScoreRating()))
-            return new Result(false, HttpStatus.CONFLICT.value());
+            return new Result(HttpStatus.CONFLICT.value());
 
-        return new Result(true, HttpStatus.OK.value());
+        return new Result(HttpStatus.OK.value());
     }
 
 
