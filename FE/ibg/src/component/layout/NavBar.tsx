@@ -33,7 +33,7 @@ import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutline
 // Nav 항목 - link가 존재하면 페이지 이동, method가 존재하면 해당 함수 실행
 const pages = [
   { label: "보드게임", icon: <ExtensionOutlinedIcon />, link: "/search" },
-  { label: "BGM", icon: <StorefrontOutlinedIcon />, link: "/" },
+  { label: "BGM", icon: <StorefrontOutlinedIcon />, link: "/market" },
 ];
 const userNav = [
   {
@@ -168,7 +168,7 @@ export default function NavBar() {
         </List>
       ) : (
         <List>
-          <ListItem button onClick={() => () => movePage("/signin")}>
+          <ListItem button onClick={() => movePage("/signin")}>
             <ListItemIcon>
               <LoginIcon />
             </ListItemIcon>
@@ -181,12 +181,6 @@ export default function NavBar() {
 
   const movePage = (page: string) => {
     navigate(page);
-  };
-
-  // 수정필요 - 로그인 후 NavBar 확인을 위한 임시 함수
-  const tempChangeAuth = () => {
-    movePage("/signin"); //임시용
-    setAuth(true);
   };
 
   return (
