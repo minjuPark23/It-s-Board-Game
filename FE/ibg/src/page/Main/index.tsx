@@ -23,7 +23,7 @@ const tempData = {
       gameNo: 1,
       gameImg:
         "https://cf.geekdo-images.com/original/img/uqlrq_bQJqHpcaN7_7qocV5XfbU=/0x0/pic4718279.jpg",
-      gameName: "Die Macher",
+      gameName: "Die Macher long title very long",
       gameMinPlayer: 3,
       gameMaxPlayer: 5,
       // gameMinTime: 240,
