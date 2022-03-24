@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import Main from "./page/main/index";
+import Main from "./page/Main/index";
 import SignIn from "./page/User/SignIn/index";
 import SignUp from "./page/User/SignUp/index";
 import BoardGameDetail from "./page/BoardGame/BoardGameDetail";
