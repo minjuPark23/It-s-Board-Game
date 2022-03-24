@@ -46,9 +46,8 @@ public class UserService {
      * @date : 2022-03-23
      * @desc: 유저 회원 번호로 해당 유저 정보를 반환
      **/
-    public User getUser(Integer userNo){
+    public User getUserByUserNo(Integer userNo){
         return userRepository.findUserByUserNo(userNo);
     }
-
 
 }

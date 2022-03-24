@@ -79,7 +79,7 @@ public class UserApiController {
      **/
     @GetMapping("/user/account/{userNo}")
     public Result getUserInfo(@PathVariable("userNo") Integer userNo){
-        User user = userService.getUser(userNo);
+        User user = userService.getUserByUserNo(userNo);
 
         if(user == null)
             return new Result(false, HttpStatus.CONFLICT.value());

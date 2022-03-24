@@ -12,6 +12,14 @@ public class Result<T> {
 
     public Result(boolean isSuccess, int code) {
         this.isSuccess = isSuccess;
+    }
+
+    public Result(int code, T data){
+        this.code = code;
+        this.data = data;
+    }
+
+    public Result(int code){
         this.code = code;
     }
 }
