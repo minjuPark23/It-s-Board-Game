@@ -13,17 +13,14 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "reviewNo")
     private int reviewNo;
 
-    @Column(name = "userNo")
     private int userNo;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "gameNo")
     private Game game;
 
-    @Column(name = "reviewContent")
     private String reviewContent;
 
     @Column(name = "reviewReg", columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
