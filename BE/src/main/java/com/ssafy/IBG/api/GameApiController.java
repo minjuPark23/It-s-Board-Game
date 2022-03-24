@@ -27,7 +27,7 @@ public class GameApiController {
     **/
     @PostMapping("/search/auto")
     public Result getSearchAutoComplete(@RequestBody SearchNameRequest searchName){
-        List<Game> gameList = gameService.findSearchGame(searchName.getSearchName());
+        List<Game> gameList = gameService.getGameSearchGame(searchName.getSearchName());
         return getResult(gameList);
     }
 
@@ -39,7 +39,7 @@ public class GameApiController {
     @PostMapping("/search")
     public Result getGameByGameName(@RequestBody GameNameRequest gameName){
         Game game = gameService.getGameByGameName(gameName.getGameName());
-        List<Review> reviewList = reviewService.getGameByGameNo(game.getGameNo());
+        List<Review> reviewList = reviewService.getReviewByGameNo(game.getGameNo());
         if(game == null){
             return new Result(HttpStatus.NO_CONTENT.value());
         }else{
@@ -56,7 +56,7 @@ public class GameApiController {
     @GetMapping("/search/{gameNo}")
     public Result getGame(@PathVariable("gameNo") int gameNo){
         Game game = gameService.getGameByGameNo(gameNo);
-        List<Review> reviewList = reviewService.getGameByGameNo(game.getGameNo());
+        List<Review> reviewList = reviewService.getReviewByGameNo(game.getGameNo());
         if(game == null){
             return new Result(HttpStatus.NO_CONTENT.value());
         }else{

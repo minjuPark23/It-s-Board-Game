@@ -1,22 +1,29 @@
 package com.ssafy.IBG.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.ssafy.IBG.domain.auth.UserAuthType;
+import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Data
+@Table(uniqueConstraints = {@UniqueConstraint(name = "userNick_unique", columnNames = {"userEmail", "userNick"})})
 public class User {
 
-    @Id @GeneratedValue
-    @Column(name = "userNo")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userNo;
 
+    @Column(nullable = false)
     private String userEmail;
+
+    @Column(nullable = false)
     private String userPwd;
+
+    @Column(nullable = false)
     private String userNick;
+
+    @Column(columnDefinition = "varchar(20) default 'ROLE_USER'")
+    @Enumerated(EnumType.STRING)
+    private UserAuthType userAuth = UserAuthType.ROLE_USER;
 }
