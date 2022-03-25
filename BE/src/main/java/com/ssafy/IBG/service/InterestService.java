@@ -1,6 +1,8 @@
 package com.ssafy.IBG.service;
 
+import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Interest;
+import com.ssafy.IBG.domain.User;
 import com.ssafy.IBG.repository.GameRepository;
 import com.ssafy.IBG.repository.InterestRepository;
 import com.ssafy.IBG.repository.UserRepository;
@@ -31,7 +33,13 @@ public class InterestService {
 
         try{
             if(interest == null) {
-                interestRepository.saveInterest(new Interest(userRepository.findUserByUserNo(userNo), gameRepository.findGameByGameNo(gameNo)));
+                User user = userRepository.findUserByUserNo(userNo);
+                Game game = gameRepository.findGameByGameNo(gameNo);
+
+                if(user == null || game == null)
+                    return false;
+
+                interestRepository.saveInterest(new Interest(user, game));
             }
             else
                 interestRepository.removeInterest(interest);
@@ -58,6 +66,20 @@ public class InterestService {
     * @date : 2022-03-25 오전 10:42
     * @desc : userNo와 gameNo로 좋아요 했는지 찾기
     **/
+    public boolean getIsLike(Integer userNo, Integer gameNo){
+        if (userNo == null || gameNo == null){
+            return false;
+        }
+        Interest interest = interestRepository.findInterestByUserNoGameNo(userNo, gameNo);
+        if (interest == null) return false;
+        else return true;
+    }
+
+    /**
+     * @author : 박민주
+     * @date : 2022-03-25 오전 10:42
+     * @desc : userNo와 gameNo로 좋아요 했는지 찾기
+     **/
     public boolean getIsLike(Integer userNo, Integer gameNo){
         if (userNo == null || gameNo == null){
             return false;
