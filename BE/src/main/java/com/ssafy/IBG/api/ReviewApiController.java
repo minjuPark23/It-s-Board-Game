@@ -5,8 +5,10 @@ import com.ssafy.IBG.api.review.ReviewRequest;
 import com.ssafy.IBG.api.review.ReviewResponse;
 import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Review;
+import com.ssafy.IBG.domain.User;
 import com.ssafy.IBG.service.GameService;
 import com.ssafy.IBG.service.ReviewService;
+import com.ssafy.IBG.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,7 @@ public class ReviewApiController {
 
     private final ReviewService reviewService;
     private final GameService gameService;
+    private final UserService userService;
 
     /**
     * @author : 박민주
@@ -39,18 +42,21 @@ public class ReviewApiController {
     * @author : 박민주
     * @date : 2022-03-23 오후 6:22
     * @desc: 리뷰 등록
+    * @modify :
+    * - author : 박민주
+    * - date : 2022-03-25 오후 12:15
+    * - desc : 저장 성공/실패 판단하는 코드 작성
     **/
     @PostMapping("/review")
     public Result setReview(@RequestBody ReviewRequest request){
-        Review review = new Review();
-        review.setReviewContent(request.getContent());
         Game game = gameService.getGameByGameNo(request.getGameNo());
-        review.setGame(game);
-        /** 유저 찾기 **/
-        review.setUserNo(0);
-        reviewService.saveReview(review);
+        User user = userService.getUserByUserNo(request.getUserNo());
+        if(game == null || user == null) return new Result(HttpStatus.CONFLICT.value());
 
-        return new Result(HttpStatus.OK.value(), null);
+        boolean isOk = reviewService.saveReview(new Review(user, game, request.getContent()));
+
+        if (isOk) return new Result(HttpStatus.OK.value());
+        else return new Result(HttpStatus.CONFLICT.value());
     }
 
 }

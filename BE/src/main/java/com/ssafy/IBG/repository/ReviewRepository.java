@@ -29,8 +29,17 @@ public class ReviewRepository {
     * @author : 박민주
     * @date : 2022-03-23 오후 6:23
     * @desc: 리뷰 등록
+    * @modify :
+    * - author : 박민주
+    * - date : 2022-03-25 오후 12:11
+    * - desc : return boolean 추가
     **/
-    public void saveReview(Review review){
-        em.persist(review);
+    public boolean saveReview(Review review){
+        try{
+            em.persist(review);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 }
