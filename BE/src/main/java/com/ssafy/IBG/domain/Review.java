@@ -1,6 +1,7 @@
 package com.ssafy.IBG.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
@@ -9,6 +10,7 @@ import java.util.Date;
 @Entity
 @Data
 @Table
+@NoArgsConstructor
 public class Review {
 
     @Id
@@ -34,4 +36,5 @@ public class Review {
         this.game = game;
         this.reviewContent = reviewContent;
     }
+
 }
