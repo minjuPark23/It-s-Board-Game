@@ -3,10 +3,10 @@ package com.ssafy.IBG.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.IBG.api.user.UserResponse;
 import com.ssafy.IBG.config.auth.PrincipalDetails;
 import com.ssafy.IBG.api.dto.Result;
 import com.ssafy.IBG.domain.User;
-import com.ssafy.IBG.api.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -93,7 +93,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET)); // secrete 값
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX +jwtToken); // 헤더에 담겨 사용자에게 응답
-        Result result = new Result(HttpStatus.OK.value(), new UserDto(principalDetails.getUser().getUserNo(), principalDetails.getUser().getUserEmail()));
+        Result result = new Result(HttpStatus.OK.value(), new UserResponse(principalDetails.getUser().getUserNo(), principalDetails.getUser().getUserEmail()));
         String json = new ObjectMapper().writeValueAsString(result);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
