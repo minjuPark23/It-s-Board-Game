@@ -14,4 +14,5 @@ public class SearchFilterRequest {
     private Integer gameAge;
     private Double gameScore;
     private List<String> gameCategory;
+    private Integer userNo;
 }

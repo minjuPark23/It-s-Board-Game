@@ -8,14 +8,13 @@ import java.text.SimpleDateFormat;
 @Data
 public class ReviewResponse{
     private int reviewNo;
-    private int userName;
+    private String userNick;
     private String reviewContent;
     private String reviewReg;
 
     public ReviewResponse(Review review) {
         this.reviewNo = review.getReviewNo();
-        /** review.user.userName; **/
-        this.userName = review.getUserNo();
+        this.userNick = review.getUser().getUserNick();
         this.reviewContent = review.getReviewContent();
         this.reviewReg = new SimpleDateFormat("yyyyMMdd").format(review.getReviewReg());
     }
