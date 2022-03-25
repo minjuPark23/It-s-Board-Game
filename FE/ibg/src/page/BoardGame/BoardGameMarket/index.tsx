@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from "react";
 import { Grid, Box, Container, ThemeProvider, Typography, Divider, InputBase } from "@mui/material";
 import { styled, alpha, createTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
@@ -6,6 +7,9 @@ import BoardCard from "./component/BoardCard";
 import MarketUpload from "./component/MarketUpload";
 
 export default function BoardGameMarket() {
+
+const [dealList] = useState(tempData.dealList);
+
 /* 검색 */
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -68,6 +72,7 @@ theme.typography.h3 = {
   },
 };
 
+
   return (
     <Container style={{ marginTop: 20, padding: 20 }}>
     {/* BGM 상단 */}
@@ -95,17 +100,71 @@ theme.typography.h3 = {
           />
         </Search>
       <Grid container spacing={1} style={{ marginTop: 14 }} >
-        {/* 여기서 데이터를 보내야 할듯 */}
-        <BoardCard/>
-        <BoardCard/>
-        <BoardCard/>
-        <BoardCard/>
-        <BoardCard/>
-        <BoardCard/>
-        <BoardCard/>
+        {dealList.map((deal) => (
+          <BoardCard key={deal.gameNo} deal={deal}></BoardCard>
+        ))}
       </Grid>
      
     </Container>
   );
 }
 
+// 임시 데이터
+const tempData = {
+  dealList: [
+    {
+      dealTitle: "보드게임 팝니다.",
+      dealState: false,
+      gameNo: 1,
+      gameImg:
+        "https://ae01.alicdn.com/kf/H886df0f1371840bc8607e8eccd08a84bd/Mattel-Games-UNO-Kartenspiel-UNO.jpg_Q90.jpg_.webp",
+      gameName: "UNO",
+      gamePrice: 5000
+    },
+    {
+      dealTitle: "얍얍",
+      dealState: false,
+      gameNo: 2,
+      gameImg:
+        "http://openimage.interpark.com/goods_image_big/3/1/9/1/8358463191_l.jpg",
+      gameName: "CATAN",
+      gamePrice: 15000
+    },
+    {
+      dealTitle: "[젠가]저렴하다.",
+      dealState: true,
+      gameNo: 3,
+      gameImg:
+        "https://target.scene7.com/is/image/Target/GUEST_2ff3e3eb-c38d-4c5a-a6bc-7b95b96c3fec?wid=488&hei=488&fmt=pjpeg",
+      gameName: "Jenga",
+      gamePrice: 3000
+    },
+    {
+      dealTitle: "부루마블 판매",
+      dealState: false,
+      gameNo: 4,
+      gameImg:
+        "http://openimage.interpark.com/goods_image/1/7/9/3/8297011793s.jpg",
+      gameName: "부루마블",
+      gamePrice: 20000
+    },
+    {
+      dealTitle: "루미큐브 판매한다",
+      dealState: false,
+      gameNo: 5,
+      gameImg:
+        "http://rummikubshop.co.kr/web/product/big/202010/e1b94b790fb40aa849a74028e44f803f.jpg",
+      gameName: "Rummikub",
+      gamePrice: 4500
+    },
+    {
+      dealTitle: "[할리갈리]잼씀",
+      dealState: true,
+      gameNo: 6,
+      gameImg:
+        "https://www.koreaboardgames.com/upload/uploaded/prd/415051482112635.png",
+      gameName: "Halli Galli",
+      gamePrice: 25000
+    },
+  ],
+};
