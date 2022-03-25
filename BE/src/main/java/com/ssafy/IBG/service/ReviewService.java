@@ -26,9 +26,13 @@ public class ReviewService {
     /**
     * @author : 박민주
     * @date : 2022-03-23 오후 6:24
+    * @modify :
+    * - author : 박민주
+    * - date : 2022-03-25 오후 12:12
+    * - desc : return boolean 추가
     **/
     @Transactional
-    public void saveReview(Review review){
-        reviewRepository.saveReview(review);
+    public boolean saveReview(Review review){
+        return reviewRepository.saveReview(review);
     }
 }
