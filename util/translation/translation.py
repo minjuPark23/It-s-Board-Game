@@ -10,8 +10,8 @@ c_result_name_list = []
 c_result_desc_list = []
 
 def translate(name, option):
-    client_id = "di4xFd4M_nXWh80064nQ" # 개발자센터에서 발급받은 Client ID 값
-    client_secret = "HC4YnRYoFA" # 개발자센터에서 발급받은 Client Secret 값
+    client_id = "/** client_id **/" # 개발자센터에서 발급받은 Client ID 값
+    client_secret = "/** client_secret key **/" # 개발자센터에서 발급받은 Client Secret 값
     encText = urllib.parse.quote(name) # 번역할 내용
     data = "source=en&target=ko&text=" + encText # 영어 -> 한국어
     url = "https://openapi.naver.com/v1/papago/n2mt"
