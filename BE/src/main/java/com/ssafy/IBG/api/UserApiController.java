@@ -1,10 +1,10 @@
 package com.ssafy.IBG.api;
 
-import com.ssafy.IBG.api.game.GameListResponse;
 import com.ssafy.IBG.api.user.*;
 import com.ssafy.IBG.domain.Interest;
 import com.ssafy.IBG.api.dto.Result;
 import com.ssafy.IBG.domain.User;
+import com.ssafy.IBG.service.GameService;
 import com.ssafy.IBG.service.InterestService;
 import com.ssafy.IBG.service.ScoreService;
 import com.ssafy.IBG.service.UserService;
@@ -123,7 +123,7 @@ public class UserApiController {
                 })
                 .collect(Collectors.toList());
 
-        return new Result(HttpStatus.OK.value(), list);
+        return new Result(HttpStatus.OK.value(), collect);
     }
 
     /**
@@ -138,6 +138,5 @@ public class UserApiController {
 
         return new Result(HttpStatus.OK.value());
     }
-
 
 }
