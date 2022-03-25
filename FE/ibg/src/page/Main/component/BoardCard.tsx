@@ -2,22 +2,30 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import {
   Card,
-  CardActions, 
   CardContent,
   CardMedia,
   CardActionArea,
   Grid,
-  Typography
 } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
+import StarIcon from "@mui/icons-material/Star";
 
-interface Deal {
-  deal: {
-    dealTitle: string;
-    dealState: boolean;
+interface Game {
+  game: {
     gameNo: number;
     gameImg: string;
     gameName: string;
-    gamePrice: number;
+    gameMinPlayer: number;
+    gameMaxPlayer: number;
+    // gameMinTime: number;
+    // gameMaxTime: number;
+    // gameYear: number;
+    // gameWeight: number;
+    // gameAge: number;
+    gameCategory: string;
+    // gameDesc: string;
+    gameTotalScore: number;
+    isLike: boolean;
   };
 }
 
@@ -42,7 +50,7 @@ const ImgWrapper = styled("div")(() => ({
   paddingBottom: "100%",
 }));
 
-const DealTitle = styled("div")(({ theme }) => ({
+const GameTitle = styled("div")(({ theme }) => ({
   fontSize: "1.1rem",
   fontWeight: 600,
   whiteSpace: "nowrap",
@@ -59,37 +67,13 @@ const Category = styled("div")(({ theme }) => ({
   marginBottom: theme.spacing(1.3),
 }));
 
-/* 거래 상태 */
-const MarketState = styled("span")(({ theme }) => ({
-  width: 80,
-  height: 30,
-  lineHeight: 1,
-  textAlign: 'center',
-  fontSize: 12,
-  color: '#FCB500',
-  borderRadius: 10,
-  border: "1px solid #FCB500",
-  backgroundColor: "transparent",
-  padding: theme.spacing(1),
+const AddInfo = styled("div")(() => ({
+  fontSize: "0.8rem",
+  display: "flex",
+  alignItems: "center",
 }));
 
-/* 거래 가격 */
-const Price = styled(Typography)(({ theme }) => ({
-  width: 80,
-  height: 30,
-  textAlign: 'right',
-  padding: theme.spacing(0.8, 0, 0, 0),
-}));
-
-/* 하단 틀 */
-const StateWrapper = styled(CardActions)(({ theme }) => ({
-  justifyContent: 'space-between',
-padding: theme.spacing(0),
-marginRight: 0,
-marginTop: 20,
-}));
-
-export default function BoardCard({ deal }: Deal) {
+export default function BoardCard({ game }: Game) {
   return (
     <Grid item xs={12} sm={4} md={3} lg={2.5}>
       <StyledCard variant="outlined">
@@ -103,21 +87,19 @@ export default function BoardCard({ deal }: Deal) {
                 objectFit: "contain",
               }}
               component="img"
-              image={deal.gameImg}
-              alt={deal.gameName}
+              image={game.gameImg}
+              alt={game.gameName}
             />
           </ImgWrapper>
           <CardContent>
-            <DealTitle>{deal.dealTitle}</DealTitle>
-            <Category>{deal.gameName}</Category>
-            <StateWrapper>
-              <MarketState>
-              {deal.dealState}거래중
-              </MarketState>
-              <Price variant="body2">
-              {deal.gamePrice}원
-              </Price>
-            </StateWrapper>
+            <GameTitle>{game.gameName}</GameTitle>
+            <Category>{game.gameCategory}</Category>
+            <AddInfo>
+              <PersonIcon color="warning" fontSize="small" sx={{ mr: 0.5 }} />
+              {game.gameMinPlayer}~{game.gameMaxPlayer}명
+              <StarIcon color="warning" fontSize="small" sx={{ mx: 0.5 }} />
+              {game.gameTotalScore}
+            </AddInfo>
           </CardContent>
         </CardActionArea>
       </StyledCard>
