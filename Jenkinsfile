@@ -2,7 +2,7 @@ pipeline {
 	agent any
 
 	tools {
-		nodejs "nodejs-blog"
+		nodejs "nodejs-ibg"
 	}
 	
 	stages {
