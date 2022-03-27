@@ -13,7 +13,10 @@ pipeline {
 		}
 		stage('React install') {
 			steps {
+				echo 'ls'
 				sh 'cd ./FE/ibg'
+				echo 'pwd'
+				echo 'ls'
 				sh 'npm install'
 			}
 		}
