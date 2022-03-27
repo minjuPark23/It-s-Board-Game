@@ -1,7 +1,6 @@
 package com.ssafy.IBG.api;
 
-import com.ssafy.IBG.api.deal.DealRequest;
-import com.ssafy.IBG.api.deal.DealUtil;
+import com.ssafy.IBG.api.deal.*;
 import com.ssafy.IBG.api.dto.Result;
 import com.ssafy.IBG.domain.Deal;
 import com.ssafy.IBG.domain.Game;
@@ -12,14 +11,15 @@ import com.ssafy.IBG.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -36,10 +36,10 @@ public class DealApiController {
     /**
      * @author : 곽현준
      * @date : 2022-03-23 오후 5:48
-     * @description : 거래내역 업로드
+     * @desc : 거래내역 업로드
     **/
     @PostMapping("/deal")
-    public Result saveDeal(DealRequest request){
+    public Result saveDeal(DealSaveRequest request){
 
         Deal deal = new Deal();
 
@@ -107,6 +107,73 @@ public class DealApiController {
         // deal 엔티티 저장
         dealService.saveDeal(deal);
 
+        return new Result(HttpStatus.OK.value());
+    }
+
+    /**
+     * @author : 곽현준
+     * @date : 2022-03-27 오후 5:32
+     * @desc : 전체 거래 목록
+    **/
+    @GetMapping("/deal")
+    public Result getDealList() {
+        List<Deal> dealList = dealService.getDealList();
+        if(dealList == null) return new Result(HttpStatus.NO_CONTENT.value());
+        List<DealResponse> collect = dealList.stream()
+                .map(deal -> new DealResponse())
+                .collect(Collectors.toList());
+        return new Result(HttpStatus.OK.value(), collect);
+    }
+    
+    /**
+     * @author : 곽현준
+     * @date : 2022-03-27 오후 5:46
+     * @desc : 게임 이름으로 거래 목록
+    **/
+    @PostMapping("/deal/search")
+    public Result getDealListByGameName(@RequestBody DealSearchRequest dealSearchRequest) {
+        List<Deal> dealList = dealService.getDealListByGameName(dealSearchRequest.getGameName());
+        if(dealList == null) return new Result(HttpStatus.NO_CONTENT.value());
+        List<DealResponse> collect = dealList.stream()
+                .map(deal -> new DealResponse())
+                .collect(Collectors.toList());
+        return new Result(HttpStatus.OK.value(), collect);
+    }
+
+    /**
+     * @author : 곽현준
+     * @date : 2022-03-27 오후 5:56
+     * @desc : 거래 상세 가져오기
+    **/
+    @GetMapping("/deal/{dealNo}")
+    public Result getDealDetail(@PathVariable int dealNo) {
+        Deal deal = dealService.getDealDetailByDealNo(dealNo);
+        if(deal == null) return new Result(HttpStatus.NO_CONTENT.value());
+        DealResponse dealResponse = new DealResponse(
+                deal.getDealNo(),
+                deal.getUser().getUserNo(),
+                deal.getGame().getGameNo(),
+                deal.getDealTitle(),
+                deal.getDealContent(),
+                deal.getDealFileName(),
+                deal.getDealSavedName(),
+                deal.getDealPath(),
+                deal.getDealPrice(),
+                deal.getDealReg(),
+                deal.isDealStatus()
+        );
+        return new Result(HttpStatus.OK.value(), dealResponse);
+    }
+
+    /**
+     * @author : 곽현준
+     * @date : 2022-03-27 오후 6:13
+     * @desc : 거래완료
+    **/
+    @PutMapping("/deal")
+    public Result updateDealStatus(DealUpdateRequest dealUpdateRequest) {
+        Deal deal = dealService.updateDealStatus(dealUpdateRequest.getDealNo());
+        if(deal == null) return new Result(HttpStatus.NO_CONTENT.value());
         return new Result(HttpStatus.OK.value());
     }
 }
