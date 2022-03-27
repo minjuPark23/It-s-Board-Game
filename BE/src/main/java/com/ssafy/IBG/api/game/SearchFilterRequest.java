@@ -10,8 +10,9 @@ public class SearchFilterRequest {
     private String gameName;
     private Integer gamePlayer;
     private Integer gameTime;
-    private double gameWeight;
+    private Double gameWeight;
     private Integer gameAge;
-    private double gameScore;
+    private Double gameScore;
     private List<String> gameCategory;
+    private Integer userNo;
 }

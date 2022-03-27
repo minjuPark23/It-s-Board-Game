@@ -9,6 +9,7 @@ public class Result<T> {
     private int code;
     private T data;
 
+
     public Result(int code){
         this.code = code;
     }
