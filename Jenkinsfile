@@ -18,7 +18,7 @@ pipeline {
 		}
 		stage('Build') {
 			steps {
-				sh 'docker build -t basepage/nginx ./FE/'
+				sh 'docker build -t basepage/nginx ./FE/ibg'
 			}
 		}
 		stage('Deploy') {
