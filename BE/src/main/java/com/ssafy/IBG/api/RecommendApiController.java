@@ -51,12 +51,17 @@ public class RecommendApiController {
      * @desc: 리뷰 많은 순서로 추천 / Query 테스트 필요
      * */
     @GetMapping("/game/review")
-    public Result getRecommendByReviews(@RequestBody RecommendRequest request){
+    public Result getRecommendByReviews(@RequestBody(required = false) RecommendRequest request){
+
         List<Game> list = recommendService.getRecommendByReviews(50);
 
+        // 데이터 못 찾을 때
         if(list.isEmpty())
             return new Result(HttpStatus.NO_CONTENT.value());
 
+        // request.getUserNo()가 null일 때 좋아요 false로 제공
+        if(request == null)
+            return getResultList(list, null);
 
         return getResultList(list, request.getUserNo());
     }
@@ -72,6 +77,10 @@ public class RecommendApiController {
 
         if(list.size() == 0)
             return new Result(HttpStatus.NO_CONTENT.value());
+
+        // request.getUserNo()가 null일 때 좋아요 false로 제공
+        if(request == null)
+            return getResultList(list, null);
 
         return getResultList(list, request.getUserNo());
     }
