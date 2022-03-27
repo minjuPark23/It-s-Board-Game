@@ -14,7 +14,7 @@ pipeline {
 		stage('React install') {
 			steps {
 				sh 'ls'
-				sh 'npm install ./FE/ibg'
+				sh 'npm install ./FE/ibg -g'
 			}
 		}
 		stage('React Build') {
