@@ -13,7 +13,9 @@ pipeline {
 		}
 		stage('React Build') {
 			steps {
-				sh 'npm install ./FE/ibg'
+				sh 'cd ./FE/ibg'
+				sh 'npm install --network-timeout 100000'
+				sh 'npm run build'
 			}
 		}
 		stage('Build') {
