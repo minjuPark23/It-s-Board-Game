@@ -57,10 +57,9 @@ public class RecommendRepository {
     /**
      * @author : 권오범
      * @date : 2022-03-25 오전 15:00
-     *      - Test 필요
      **/
     public List<Game> findRecommendByReviews(int limit) {
-        return em.createQuery("select g from Game g order by count(g.review) desc", Game.class)
+        return em.createQuery("select g from Game g order by g.review.size desc", Game.class)
                 .setMaxResults(limit)
                 .getResultList();
     }
@@ -69,7 +68,6 @@ public class RecommendRepository {
     /**
      * @author : 권오범
      * @date : 2022-03-25 오전 15:00
-     *      - Test 필요
      **/
     public List<Game> findRecommendByRanking(int limit) {
         return em.createQuery("select g from Game g order by g.gameTotalScore desc", Game.class)

@@ -1,7 +1,6 @@
 package com.ssafy.IBG.api;
 
 import com.ssafy.IBG.api.game.*;
-import com.ssafy.IBG.api.review.ReviewResponse;
 import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.api.dto.Result;
 import com.ssafy.IBG.domain.Review;
