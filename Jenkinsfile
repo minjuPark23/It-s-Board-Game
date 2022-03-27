@@ -11,10 +11,14 @@ pipeline {
 				echo 'Hello...'
 			}
 		}
-		stage('React Build') {
+		stage('React install') {
 			steps {
 				sh 'cd ./FE/ibg'
-				sh 'npm install --network-timeout 100000'
+				sh 'npm install'
+			}
+		}
+		stage('React Build') {
+			steps {
 				sh 'npm run build'
 			}
 		}
