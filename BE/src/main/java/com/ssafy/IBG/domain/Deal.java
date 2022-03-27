@@ -15,7 +15,7 @@ public class Deal {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dealNo")
-    private int daelNo;
+    private int dealNo;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "userNo")
