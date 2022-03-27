@@ -13,9 +13,7 @@ pipeline {
 		}
 		stage('React Build') {
 			steps {
-				sh 'npm install -g yarn'
-				sh 'yarn --cwd ./FE install --network-timeout 100000'
-				sh 'yarn --cwd ./FE build'
+				sh 'npm install ./FE/ibg'
 			}
 		}
 		stage('Build') {
