@@ -14,15 +14,12 @@ pipeline {
 		stage('React install') {
 			steps {
 				sh 'ls'
-				sh 'cd ./FE/ibg'
-				sh 'pwd'
-				sh 'ls'
-				sh 'npm install'
+				sh 'npm install ./FE/ibg'
 			}
 		}
 		stage('React Build') {
 			steps {
-				sh 'npm run build'
+				sh 'npm run build --prefix FE/ibg'
 			}
 		}
 		stage('Build') {
