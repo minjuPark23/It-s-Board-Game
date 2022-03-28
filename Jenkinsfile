@@ -31,6 +31,7 @@ pipeline {
 			steps{
 				sh 'docker stop nginx && docker rm nginx'
 				sh 'docker run -d --name nginx -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt -u root basepage/nginx'
+				sh 'ls /etc/letsencrypt/live/j6b101.p.ssafy.io'
 			}
 		}
 		stage('Finish') {
