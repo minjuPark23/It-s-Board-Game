@@ -36,7 +36,7 @@ public class Game {
 
     private double gameWeight;
 
-    @Column(name = "gameDesc", length = 4000)
+    @Column(name = "gameDesc", length = 6000)
     private String gameDescription;
 
     @OneToMany(mappedBy = "game")
