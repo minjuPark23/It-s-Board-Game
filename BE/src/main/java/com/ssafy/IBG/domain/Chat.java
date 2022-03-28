@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Data
 public class Chat {
@@ -12,7 +14,14 @@ public class Chat {
     @Column(name = "chatNo")
     private int chatNo;
 
-    private int userNo;
+    // 거래 상대
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "userNo")
+    private User user;
 
-    private int dealNo;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "dealNo")
+    private Deal deal;
+
+
 }

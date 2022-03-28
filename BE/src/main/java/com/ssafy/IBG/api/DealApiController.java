@@ -105,7 +105,8 @@ public class DealApiController {
         }
 
         // deal 엔티티 저장
-        dealService.saveDeal(deal);
+        boolean isSaved = dealService.saveDeal(deal);
+        if(!isSaved) return new Result(HttpStatus.SERVICE_UNAVAILABLE.value());
 
         return new Result(HttpStatus.OK.value());
     }

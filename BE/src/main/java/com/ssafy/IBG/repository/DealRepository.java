@@ -19,8 +19,13 @@ public class DealRepository {
      * @date : 2022-03-23 오후 5:48
      * @desc : deal 객체 저장
     **/
-    public void saveDeal(Deal deal) {
-        em.persist(deal);
+    public boolean saveDeal(Deal deal) {
+        try {
+            em.persist(deal);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
     }
 
     /**

@@ -21,8 +21,8 @@ public class DealService {
      * @desc : deal 객체 저장
     **/
     @Transactional
-    public void saveDeal(Deal deal) {
-        dealRepository.saveDeal(deal);
+    public boolean saveDeal(Deal deal) {
+        return dealRepository.saveDeal(deal);
     }
 
     /**
