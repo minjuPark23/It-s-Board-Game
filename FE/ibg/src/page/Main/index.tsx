@@ -3,7 +3,8 @@ import { useState } from "react";
 import BoardCard from "./component/BoardCard";
 
 export default function Main() {
-  const [gameList, setGameList] = useState(tempData.gameList);
+  // const [gameList, setGameList] = useState(tempData.gameList); 빌드때문에 주석처리 했습니다
+  const [gameList] = useState(tempData.gameList);
 
   return (
     <Container style={{ marginTop: 20, padding: 20 }}>
