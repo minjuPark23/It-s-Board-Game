@@ -4,7 +4,7 @@ import BoardCardMain from "../../../component/BoardCardMain";
 import { Game } from "../../Main/index";
 
 export default function Main() {
-  const [gameList, setGameList] = useState<Game["game"][]>([]);
+  const [gameList, setGameList] = useState<Game[]>([]);
 
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
