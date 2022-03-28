@@ -24,7 +24,7 @@ public class GameResponse{
     private String gameCategory;
     private List<ReviewResponse> ResponseReviewList;
 
-    public GameResponse(Game game, boolean isLike, List<Review> reviewList) {
+    public GameResponse(Game game, boolean isLike, List<ReviewResponse> ResponseReviewList) {
         this.gameNo = game.getGameNo();
         this.gameImg = game.getGameImg();
         this.gameName = game.getGameName();
@@ -37,8 +37,6 @@ public class GameResponse{
         this.gameMaxTime = game.getGameMaxTime();
         this.gameWeight = game.getGameWeight();
         this.gameCategory = game.getGameCategory();
-        this.ResponseReviewList = reviewList.stream()
-                .map(rl -> new ReviewResponse(rl))
-                .collect(Collectors.toList());
+        this.ResponseReviewList = ResponseReviewList;
     }
 }
