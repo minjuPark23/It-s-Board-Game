@@ -45,5 +45,5 @@ out/
 **/venv
 
 ### DATA ###
-*.csv
 chromedriver.exe
+util/data/result.csv
