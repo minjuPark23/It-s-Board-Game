@@ -36,7 +36,9 @@ pipeline {
 		}
 		stage('Finish') {
 			steps{
+				sh 'docker ps -a'
 				sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
+				sh 'docker ps -a'
 			}
 		}
 	}
