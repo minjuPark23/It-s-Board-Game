@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class DealUpdateRequest {
-    private int dealNo;
+    private Integer dealNo;
 }

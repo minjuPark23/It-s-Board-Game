@@ -56,6 +56,7 @@ public class DealApiController {
         MultipartFile file = null;
         try{
             file = request.getFile();
+            log.debug("origin file name = {}", file.getOriginalFilename());
 
             // 파일명
             String originFile = file.getOriginalFilename();
@@ -90,7 +91,7 @@ public class DealApiController {
             dealUtil.makeDir(filePath);
 
             // 해당 파일 객체 생성
-            File savedFile = new File(filePath + storedFileName);
+            File savedFile = new File(filePath + File.separator + storedFileName);
 
             // 파일 저장
             file.transferTo(savedFile);
@@ -121,7 +122,19 @@ public class DealApiController {
         List<Deal> dealList = dealService.getDealList();
         if(dealList == null) return new Result(HttpStatus.NO_CONTENT.value());
         List<DealResponse> collect = dealList.stream()
-                .map(deal -> new DealResponse())
+                .map(deal -> new DealResponse(
+                        deal.getDealNo(),
+                        deal.getUser().getUserNo(),
+                        deal.getGame().getGameNo(),
+                        deal.getDealTitle(),
+                        deal.getDealContent(),
+                        deal.getDealFileName(),
+                        deal.getDealSavedName(),
+                        deal.getDealPath(),
+                        deal.getDealPrice(),
+                        deal.getDealReg(),
+                        deal.isDealStatus()
+                ))
                 .collect(Collectors.toList());
         return new Result(HttpStatus.OK.value(), collect);
     }
@@ -136,7 +149,19 @@ public class DealApiController {
         List<Deal> dealList = dealService.getDealListByGameName(dealSearchRequest.getGameName());
         if(dealList == null) return new Result(HttpStatus.NO_CONTENT.value());
         List<DealResponse> collect = dealList.stream()
-                .map(deal -> new DealResponse())
+                .map(deal -> new DealResponse(
+                        deal.getDealNo(),
+                        deal.getUser().getUserNo(),
+                        deal.getGame().getGameNo(),
+                        deal.getDealTitle(),
+                        deal.getDealContent(),
+                        deal.getDealFileName(),
+                        deal.getDealSavedName(),
+                        deal.getDealPath(),
+                        deal.getDealPrice(),
+                        deal.getDealReg(),
+                        deal.isDealStatus()
+                ))
                 .collect(Collectors.toList());
         return new Result(HttpStatus.OK.value(), collect);
     }
@@ -172,7 +197,7 @@ public class DealApiController {
      * @desc : 거래완료
     **/
     @PutMapping("/deal")
-    public Result updateDealStatus(DealUpdateRequest dealUpdateRequest) {
+    public Result updateDealStatus(@RequestBody DealUpdateRequest dealUpdateRequest) {
         Deal deal = dealService.updateDealStatus(dealUpdateRequest.getDealNo());
         if(deal == null) return new Result(HttpStatus.NO_CONTENT.value());
         return new Result(HttpStatus.OK.value());

@@ -57,6 +57,7 @@ public class DealService {
      * @date : 2022-03-27 오후 6:32
      * @desc : 거래 완료
     **/
+    @Transactional
     public Deal updateDealStatus(int dealNo) {
         Deal deal = dealRepository.findDealByDealNo(dealNo);
         if(deal == null) return null;
