@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import { Game } from "../page/Main";
 import { styled } from "@mui/material/styles";
 import {
@@ -64,9 +65,13 @@ const LikeButtonPosition = styled("span")(() => ({
 }));
 
 export default function BoardCard({ game }: Game) {
+  const navigate = useNavigate();
+  const moveToDetail = () => {
+    navigate(`detail/${game.gameNo}`);
+  };
   return (
     <Grid item xs={12} sm={4} md={3} lg={2.5}>
-      <StyledCard variant="outlined">
+      <StyledCard variant="outlined" onClick={moveToDetail}>
         <CardActionArea>
           <ImgWrapper>
             <CardMedia

@@ -13,9 +13,21 @@ export default function LikeButton({ initLike = false }) {
   return (
     <>
       {isLike ? (
-        <FavoriteOutlinedIcon color="error" onClick={toggleLike} />
+        <FavoriteOutlinedIcon
+          color="error"
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleLike();
+          }}
+        />
       ) : (
-        <FavoriteBorderOutlinedIcon color="error" onClick={toggleLike} />
+        <FavoriteBorderOutlinedIcon
+          color="error"
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleLike();
+          }}
+        />
       )}
     </>
   );
