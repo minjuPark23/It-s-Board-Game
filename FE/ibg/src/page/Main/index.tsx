@@ -4,26 +4,18 @@ import BoardCardMain from "../../component/BoardCardMain";
 
 // Game 객체 => types파일로 빼는 것이 좋음
 export interface Game {
-  game: {
-    gameNo: number;
-    gameImg: string;
-    gameName: string;
-    gameMinPlayer: number;
-    gameMaxPlayer: number;
-    // gameMinTime: number;
-    // gameMaxTime: number;
-    // gameYear: number;
-    // gameWeight: number;
-    // gameAge: number;
-    gameCategory: string;
-    // gameDesc: string;
-    gameTotalScore: number;
-    isLike: boolean;
-  };
+  gameNo: number;
+  gameImg: string;
+  gameName: string;
+  gameMinPlayer: number;
+  gameMaxPlayer: number;
+  gameCategory: string;
+  gameTotalScore: number;
+  isLike: boolean;
 }
 
 export default function Main() {
-  const [gameList, setGameList] = useState<Game["game"][]>([]);
+  const [gameList, setGameList] = useState<Game[]>([]);
 
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
