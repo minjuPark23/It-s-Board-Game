@@ -16,7 +16,7 @@ interface User {
 }
 
 function Form({ parentCallback }: User) {
-  const [width, setWidth] = useState(window.innerWidth);
+  const [width] = useState(window.innerWidth);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
@@ -29,7 +29,7 @@ function Form({ parentCallback }: User) {
     setNickname(e.target.value);
   };
   const nicknameValidation = () => {
-    return nickname.length == 1;
+    return nickname.length === 1;
   };
   /* 이메일 검사 */
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
