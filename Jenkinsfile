@@ -31,12 +31,13 @@ pipeline {
 			steps{
 				sh 'docker stop nginx && docker rm nginx'
 				sh 'docker run -d --name nginx -p 80:80 -p 443:443 -v /etc/letsencrypt/archive:/etc/letsencrypt/archive -u root basepage/nginx'
+				echo 'docker ps -a'
 			}
 		}
-		// stage('Finish') {
-		// 	steps{
-		// 		sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
-		// 	}
-		// }
+		stage('Finish') {
+			steps{
+				sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
+			}
+		}
 	}
 }
