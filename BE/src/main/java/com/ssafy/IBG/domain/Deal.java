@@ -12,7 +12,6 @@ import static javax.persistence.FetchType.LAZY;
 public class Deal {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dealNo")
     private int dealNo;
 
     @ManyToOne(fetch = LAZY)

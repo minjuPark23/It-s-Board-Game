@@ -5,11 +5,11 @@ import lombok.Data;
 @Data
 public class ChatLogSaveRequest {
     // 거래 번호
-    private int dealNo;
+    private Integer dealNo;
     // 상대 유저 번호
-    private int dealUserNo;
+    private Integer dealUserNo;
     // 채팅 내용
     private String content;
     // 채팅 작성자 유저 번호
-    private int userNo;
+    private Integer userNo;
 }

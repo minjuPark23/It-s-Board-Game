@@ -8,15 +8,15 @@ import java.util.Date;
 @Data
 @RequiredArgsConstructor
 public class DealResponse {
-    private int dealNo;
-    private int userNo;
-    private int gameNo;
+    private Integer dealNo;
+    private Integer userNo;
+    private Integer gameNo;
     private String dealTitle;
     private String dealContent;
     private String dealFileName;
     private String dealSavedName;
     private String dealPath;
-    private int dealPrice;
+    private Integer dealPrice;
     private Date dealReg;
     private boolean dealStatus;
 

@@ -11,7 +11,6 @@ import static javax.persistence.FetchType.LAZY;
 public class Chat {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "chatNo")
     private int chatNo;
 
     // 거래 상대
