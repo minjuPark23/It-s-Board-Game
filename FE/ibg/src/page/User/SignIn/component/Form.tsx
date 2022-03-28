@@ -18,24 +18,24 @@ interface User {
 
 function Form({ sendDataToParent }: User) {
   const [password, setPassword] = useState("");
-  const [checked, setChecked] = React.useState(false);
   const [email, setEmail] = useState("");
   const [isRemember, setIsRemember] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["rememberEmail"]);
+  const [prevSave, setPrevSave] = useState("");
   /*비밀번호 */
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  let prevSave = "";
+  // let prevSave = "";
   /* 이메일 검사 */
   useEffect(() => {
     if (cookies.rememberEmail !== undefined) {
       setEmail(cookies.rememberEmail);
       setIsRemember(true);
-      prevSave = email;
+      setPrevSave(cookies.rememberEmail);
     }
-  }, []);
+  }, [cookies.rememberEmail]);
 
   const saveEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsRemember(e.target.checked);
@@ -54,15 +54,13 @@ function Form({ sendDataToParent }: User) {
     return !check.test(email) && email.length > 1;
   };
   const sendData = () => {
-    if (password.length != 0 && email.length != 0) {
-      {
-        if (isRemember && prevSave != email) {
-          //원래 저장된 이메일과 다른 email을 저장하는 경우 */
-          removeCookie("rememberEmail");
-          setCookie("rememberEmail", email, { maxAge: 2000 });
-        }
-        sendDataToParent(email, password); //전달
+    if (password.length !== 0 && email.length !== 0) {
+      if (isRemember && prevSave !== email) {
+        //원래 저장된 이메일과 다른 email을 저장하는 경우 */
+        removeCookie("rememberEmail");
+        setCookie("rememberEmail", email, { maxAge: 2000 });
       }
+      sendDataToParent(email, password); //전달
     }
   };
 
