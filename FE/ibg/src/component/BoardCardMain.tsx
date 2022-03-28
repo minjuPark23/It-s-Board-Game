@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Game } from "../page/Main";
 import { styled } from "@mui/material/styles";
 import {
   Card,
@@ -7,29 +8,12 @@ import {
   CardActionArea,
   Grid,
 } from "@mui/material";
+import LikeButton from "./LikeButton";
 import PersonIcon from "@mui/icons-material/Person";
 import StarIcon from "@mui/icons-material/Star";
 
-interface Game {
-  game: {
-    gameNo: number;
-    gameImg: string;
-    gameName: string;
-    gameMinPlayer: number;
-    gameMaxPlayer: number;
-    // gameMinTime: number;
-    // gameMaxTime: number;
-    // gameYear: number;
-    // gameWeight: number;
-    // gameAge: number;
-    gameCategory: string;
-    // gameDesc: string;
-    gameTotalScore: number;
-    isLike: boolean;
-  };
-}
-
 const StyledCard = styled(Card)(() => ({
+  position: "relative",
   "&:hover": {
     animation: "circlemove 1.5s infinite linear",
   },
@@ -73,6 +57,12 @@ const AddInfo = styled("div")(() => ({
   alignItems: "center",
 }));
 
+const LikeButtonPosition = styled("span")(() => ({
+  position: "absolute",
+  right: "16px",
+  bottom: "10px",
+}));
+
 export default function BoardCard({ game }: Game) {
   return (
     <Grid item xs={12} sm={4} md={3} lg={2.5}>
@@ -100,6 +90,9 @@ export default function BoardCard({ game }: Game) {
               <StarIcon color="warning" fontSize="small" sx={{ mx: 0.5 }} />
               {game.gameTotalScore}
             </AddInfo>
+            <LikeButtonPosition>
+              <LikeButton initLike={game.isLike} />
+            </LikeButtonPosition>
           </CardContent>
         </CardActionArea>
       </StyledCard>
