@@ -46,3 +46,4 @@ out/
 
 ### DATA ###
 chromedriver.exe
+util/data/result.csv
