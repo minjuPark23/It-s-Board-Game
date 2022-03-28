@@ -1,30 +1,21 @@
+import { Container, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Container, Grid, Tooltip, Typography } from "@mui/material";
 import BoardCardMain from "../../component/BoardCardMain";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 // Game 객체 => types파일로 빼는 것이 좋음
 export interface Game {
-  game: {
-    gameNo: number;
-    gameImg: string;
-    gameName: string;
-    gameMinPlayer: number;
-    gameMaxPlayer: number;
-    // gameMinTime: number;
-    // gameMaxTime: number;
-    // gameYear: number;
-    // gameWeight: number;
-    // gameAge: number;
-    gameCategory: string;
-    // gameDesc: string;
-    gameTotalScore: number;
-    isLike: boolean;
-  };
+  gameNo: number;
+  gameImg: string;
+  gameName: string;
+  gameMinPlayer: number;
+  gameMaxPlayer: number;
+  gameCategory: string;
+  gameTotalScore: number;
+  isLike: boolean;
 }
 
 export default function Main() {
-  const [gameList, setGameList] = useState<Game["game"][]>([]);
+  const [gameList, setGameList] = useState<Game[]>([]);
 
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
@@ -33,17 +24,6 @@ export default function Main() {
 
   return (
     <Container style={{ marginTop: 20, padding: 20 }}>
-      <Typography
-        variant="h5"
-        sx={{ mt: 3, mb: 1, mr: 1, display: "flex", alignItems: "center" }}
-        fontWeight={"bold"}
-      >
-        나의 맞춤 추천
-        <Tooltip disableFocusListener arrow title="Add">
-          <HelpOutlineIcon sx={{ ml: 1 }} />
-        </Tooltip>
-      </Typography>
-
       <Grid container spacing={2}>
         {gameList.map((game) => (
           <BoardCardMain key={game.gameNo} game={game}></BoardCardMain>

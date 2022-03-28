@@ -64,10 +64,10 @@ const LikeButtonPosition = styled("span")(() => ({
   bottom: "10px",
 }));
 
-export default function BoardCard({ game }: Game) {
+export default function BoardCard(props: { game: Game }) {
   const navigate = useNavigate();
   const moveToDetail = () => {
-    navigate(`detail/${game.gameNo}`);
+    navigate(`detail/${props.game.gameNo}`);
   };
   return (
     <Grid item xs={12} sm={4} md={3} lg={2.5}>
@@ -82,21 +82,21 @@ export default function BoardCard({ game }: Game) {
                 objectFit: "contain",
               }}
               component="img"
-              image={game.gameImg}
-              alt={game.gameName}
+              image={props.game.gameImg}
+              alt={props.game.gameName}
             />
           </ImgWrapper>
           <CardContent>
-            <GameTitle>{game.gameName}</GameTitle>
-            <Category>{game.gameCategory}</Category>
+            <GameTitle>{props.game.gameName}</GameTitle>
+            <Category>{props.game.gameCategory}</Category>
             <AddInfo>
               <PersonIcon color="warning" fontSize="small" sx={{ mr: 0.5 }} />
-              {game.gameMinPlayer}~{game.gameMaxPlayer}명
+              {props.game.gameMinPlayer}~{props.game.gameMaxPlayer}명
               <StarIcon color="warning" fontSize="small" sx={{ mx: 0.5 }} />
-              {game.gameTotalScore}
+              {props.game.gameTotalScore}
             </AddInfo>
             <LikeButtonPosition>
-              <LikeButton initLike={game.isLike} />
+              <LikeButton initLike={props.game.isLike} />
             </LikeButtonPosition>
           </CardContent>
         </CardActionArea>
