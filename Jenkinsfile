@@ -30,15 +30,13 @@ pipeline {
 		stage('Deploy') {
 			steps{
 				sh 'docker stop nginx && docker rm nginx'
-				sh 'docker run -d --name nginx -p 80:80 -p 443:443 -v /etc/letsencrypt/archive:/etc/letsencrypt/archive -u root basepage/nginx'
-				sh 'docker ps -a'
+				sh 'docker run -d --name nginx -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt -u root basepage/nginx'
 			}
 		}
 		stage('Finish') {
 			steps{
 				sh 'docker ps -a'
 				sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
-				sh 'docker ps -a'
 			}
 		}
 	}
