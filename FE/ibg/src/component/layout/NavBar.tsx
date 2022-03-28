@@ -101,7 +101,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function NavBar() {
   // 로그인 여부
-  const [auth, setAuth] = React.useState(false);
+  //const [auth, setAuth] = React.useState(false); 빌드 때문에 주석처리 했습니다.
+  const [auth] = React.useState(false);
   // 사용자 메뉴 Open/Close(PC)
   const [userMenu, setUserMenu] = React.useState<null | HTMLElement>(null);
   // Mobild 메뉴 Open/Close
@@ -110,10 +111,11 @@ export default function NavBar() {
   const navigate = useNavigate();
 
   // 로그인 상태 확인하여 상태값 변경하기
+  /*
   const checkLoginState = () => {
     setAuth(false);
   };
-
+*/
   // 사용자 메뉴 열고 닫기(로그인 했을 때)
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setUserMenu(event.currentTarget);
