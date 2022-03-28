@@ -1,15 +1,40 @@
 import { Container, Grid } from "@mui/material";
-import { useState } from "react";
-import BoardCard from "./component/BoardCard";
+import { useEffect, useState } from "react";
+import BoardCardMain from "../../component/BoardCardMain";
+
+// Game 객체 => types파일로 빼는 것이 좋음
+export interface Game {
+  game: {
+    gameNo: number;
+    gameImg: string;
+    gameName: string;
+    gameMinPlayer: number;
+    gameMaxPlayer: number;
+    // gameMinTime: number;
+    // gameMaxTime: number;
+    // gameYear: number;
+    // gameWeight: number;
+    // gameAge: number;
+    gameCategory: string;
+    // gameDesc: string;
+    gameTotalScore: number;
+    isLike: boolean;
+  };
+}
 
 export default function Main() {
-  const [gameList, setGameList] = useState(tempData.gameList);
+  const [gameList, setGameList] = useState<Game["game"][]>([]);
+
+  useEffect(() => {
+    // API 연결(게임리스트 불러오기)
+    setGameList(tempData.gameList);
+  }, []);
 
   return (
     <Container style={{ marginTop: 20, padding: 20 }}>
       <Grid container spacing={2}>
         {gameList.map((game) => (
-          <BoardCard key={game.gameNo} game={game}></BoardCard>
+          <BoardCardMain key={game.gameNo} game={game}></BoardCardMain>
         ))}
       </Grid>
     </Container>
