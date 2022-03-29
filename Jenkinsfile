@@ -36,7 +36,7 @@ pipeline {
 		stage('Springboot Build') {
 			steps {
 				dir('./BE'){
-					sh './BE/gradlew build'
+					sh './gradlew build'
 				}
 			}
 		}
