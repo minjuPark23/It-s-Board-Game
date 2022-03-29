@@ -1,4 +1,4 @@
-import { apiInstance, loginApiInstance } from "./index.js";
+import { apiInstance, loginApiInstance } from "./index";
 
 const api = apiInstance();
 
@@ -23,11 +23,11 @@ async function userInfo(userNo: number) {
 
 //이메일 중복 조회
 async function checkEmail(email: string) {
-  return await api.post(`/email`, { userEmail: email });
+  return (await api.post(`/email`, { userEmail: email })).data;
 }
 //이메일 중복 조회
 async function checkNickname(nickname: string) {
-  return await api.post(`/nickname`, { userNick: nickname });
+  return (await api.post(`/nickname`, { userNick: nickname })).data; //도대체 뭘해야 되는걸까
 }
 
 export { join, login, userInfo, checkEmail, checkNickname };
