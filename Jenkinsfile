@@ -49,7 +49,7 @@ pipeline {
 			steps {
 				// sh 'docker stop springboot && docker rm springboot'
 				sh 'docker run -d --name springboot -p 7777:7777 -v /etc/letsencrypt:/etc/letsencrypt -u root basepage/springboot'
-				sh 'docker cp ./BE/build/lib springboot:./BE/build/lib'
+				sh 'docker cp ./BE/build/libs springboot:./BE/build/lib'
 			}
 		}
 		stage('Finish') {
