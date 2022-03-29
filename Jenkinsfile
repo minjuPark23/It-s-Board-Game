@@ -47,7 +47,7 @@ pipeline {
 		}
 		stage('Springboot Deploy') {
 			steps {
-				// sh 'docker stop springboot && docker rm springboot'
+				sh 'docker stop springboot && docker rm springboot'
 				sh 'docker run -d --name springboot -p 7777:7777 -v /etc/letsencrypt:/etc/letsencrypt -u root basepage/springboot'
 			}
 		}
