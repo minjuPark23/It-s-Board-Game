@@ -42,7 +42,7 @@ pipeline {
 		}
 		stage('Build Springboot image'){
 			steps {
-				sh 'ls'
+				sh 'ls ./BE/build/lib'
 				sh 'docker build -t basepage/springboot ./BE'
 			}
 		}
