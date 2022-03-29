@@ -35,7 +35,9 @@ pipeline {
 		}
 		stage('Springboot Build') {
 			steps {
-				sh './BE/gradlew build'
+				dir('./BE'){
+					sh './BE/gradlew build'
+				}
 			}
 		}
 		stage('Build Springboot image'){
