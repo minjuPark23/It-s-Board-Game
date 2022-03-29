@@ -1,15 +1,14 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
 import { Game } from "../index";
 import { styled } from "@mui/material/styles";
-import StarIcon from "@mui/icons-material/Star";
-import StarRating from "../../../../component/StarRating";
+import StarRating from "../component/StarRating";
 import {
   Card,
   CardContent,
   CardMedia,
   CardActionArea,
   Grid,
+  Box,
 } from "@mui/material";
 
 const StyledCard = styled(Card)(() => ({
@@ -41,11 +40,18 @@ const GameTitle = styled("div")(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }));
 
-export default function BoardCard(props: { game: Game }) {
-  const navigate = useNavigate();
+const initScore = 0;
 
+const setStarRatings = (score: number) => {
+  //
+  if (score > 0) {
+    //이 아이의 부모한테 ++해줘야함
+    alert(score);
+  }
+};
+export default function BoardCard(props: { game: Game }) {
   return (
-    <Grid item xs={12} sm={4} md={3} lg={2}>
+    <Grid item xs={12} sm={4} md={3} lg={2.3}>
       <StyledCard variant="outlined">
         <CardActionArea>
           <ImgWrapper>
@@ -62,8 +68,15 @@ export default function BoardCard(props: { game: Game }) {
             />
           </ImgWrapper>
           <CardContent>
-            <GameTitle>{props.game.gameName}</GameTitle>
-            <StarRating initStarRate={0} size={26} />
+            <Grid container justifyContent="center">
+              <GameTitle>{props.game.gameName}</GameTitle>
+              <Box width="100%" />
+              <StarRating
+                initStarRate={0}
+                size={35}
+                parentCallback={setStarRatings}
+              />
+            </Grid>
           </CardContent>
         </CardActionArea>
       </StyledCard>
