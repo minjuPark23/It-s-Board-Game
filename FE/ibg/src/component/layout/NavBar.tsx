@@ -196,7 +196,7 @@ export default function NavBar() {
             }}
             onClick={() => movePage("/")}
           >
-            <img src="img/logo.png" alt="logo" />
+            <img src="img/logo.PNG" alt="logo" />
           </ImageListItem>
 
           <ImageListItem
