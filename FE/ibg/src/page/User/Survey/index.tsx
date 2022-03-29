@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import BoardCardMain from "./component/BoardCardSurvey";
-import { Button, Box, Typography, Grid, Container } from "@mui/material";
+import { Button, Box, Grid, Container } from "@mui/material";
 import WelcomeStepper from "../component/WelcomeStepper";
+import { useNavigate } from "react-router-dom";
 // Game 객체 => types파일로 빼는 것이 좋음
 export interface Game {
   gameNo: number;
@@ -44,8 +45,8 @@ export default function Survey() {
             ))}
           </Grid>
         </Container>
-        /* 이부분 항상 sticky 로 유지하기 */
         <Button
+          style={{ position: "fixed", bottom: "0px" }}
           type="submit"
           fullWidth
           variant="contained"
