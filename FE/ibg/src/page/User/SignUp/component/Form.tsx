@@ -9,13 +9,14 @@ import {
   Typography,
   Container,
 } from "@mui/material/";
-import CheckButton from "../../component/CheckButton";
 
 interface User {
   parentCallback: (nickname: string, email: string, password: string) => void;
+  emailCallback: (email: string) => void;
+  nicknameCallback: (nickname: string) => void;
 }
 
-function Form({ parentCallback }: User) {
+function Form({ parentCallback, emailCallback, nicknameCallback }: User) {
   const [width] = useState(window.innerWidth);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -61,6 +62,16 @@ function Form({ parentCallback }: User) {
     if (!agreed) alert("개인정보 약관에 동의해주세요");
     else parentCallback(nickname, email, password); // 전달
   };
+  /* 이메일 중복 확인 */
+  const emailDup = () => {
+    // alert("중복");
+    emailCallback(email);
+  };
+  /* 이메일 중복 확인 */
+  const nicknameDup = () => {
+    // alert("중복");
+    nicknameCallback(nickname);
+  };
 
   /*랜더링 */
   return (
@@ -80,7 +91,7 @@ function Form({ parentCallback }: User) {
         >
           회원가입
         </Typography>
-        <form>
+        <form onSubmit={sendData}>
           <Grid container spacing={2}>
             <Grid item xs={9} sm={9}>
               <TextField
@@ -102,7 +113,17 @@ function Form({ parentCallback }: User) {
               />
             </Grid>
             <Grid item xs={3} sm={3}>
-              <CheckButton value={width} />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={emailDup}
+                size={width < 600 ? "small" : "large"}
+                sx={{ py: 2 }}
+              >
+                {width < 600 ? "확인" : "증복 확인"}
+              </Button>
             </Grid>
             <Grid item xs={9} sm={9}>
               <TextField
@@ -123,7 +144,17 @@ function Form({ parentCallback }: User) {
               />
             </Grid>
             <Grid item xs={3} sm={3}>
-              <CheckButton value={width} />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={nicknameDup}
+                size={width < 600 ? "small" : "large"}
+                sx={{ py: 2 }}
+              >
+                {width < 600 ? "확인" : "증복 확인"}
+              </Button>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -183,7 +214,7 @@ function Form({ parentCallback }: User) {
             color="primary"
             size="large"
             sx={{ py: 2 }}
-            onClick={sendData}
+            //onClick={sendData}
             // className={classes.submit}
           >
             회원가입
