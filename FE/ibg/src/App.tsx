@@ -1,9 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import Router from "./Router";
 import { CustomTheme } from "./component/CustomTheme";
-
 import { ThemeProvider } from "@emotion/react";
-
 import NavBar from "./component/layout/NavBar";
 import Footer from "./component/layout/Footer";
 
@@ -13,7 +11,7 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Router />
-        <Footer />
+        {window.location.pathname === "/survey" ? null: <Footer/>}
       </BrowserRouter>
     </ThemeProvider>
   );
