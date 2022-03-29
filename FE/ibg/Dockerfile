@@ -16,10 +16,6 @@ RUN rm /etc/nginx/conf.d/default.conf
 # host pc 의 nginx.conf 를 복사
 COPY ./ibg.conf /etc/nginx/conf.d
 
-# ssh 암호키 복사
-# COPY /etc/letsencrypt/live/j6b101.p.ssafy.io/fullchain.pem /etc/letsencrypt/live/j6b101.p.ssafy.io/fullchain.pem
-# COPY /etc/letsencrypt/live/j6b101.p.ssafy.io/privkey.pem /etc/letsencrypt/live/j6b101.p.ssafy.io/privkey.pem
-
 # 80 포트 오픈
 EXPOSE 80 443
 
