@@ -22,13 +22,12 @@ pipeline {
 				sh 'npm run build --prefix FE/ibg'
 			}
 		}
-		stage('Build') {
+		stage('Build nginx image') {
 			steps {
 				sh 'docker build -t basepage/nginx ./FE/ibg'
-				sh 'docker build -t basepage/springboot ./BE'
 			}
 		}
-		stage('Deploy') {
+		stage('React Deploy') {
 			steps{
 				sh 'docker stop nginx && docker rm nginx'
 				sh 'docker run -d --name nginx -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt -u root basepage/nginx'
@@ -37,6 +36,11 @@ pipeline {
 		stage('Springboot Build') {
 			steps {
 				sh './BE/gradlew build'
+			}
+		}
+		stage('Build Springboot image'){
+			steps {
+				sh 'docker build -t basepage/springboot ./BE'
 			}
 		}
 		stage('Springboot Deploy') {
