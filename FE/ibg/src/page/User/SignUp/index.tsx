@@ -4,13 +4,18 @@ import Form from "./component/Form";
 import WelcomeStepper from "../component/WelcomeStepper";
 import { useNavigate } from "react-router-dom";
 //index에서 api 호출 -> Form에서 index(parent)로 전달
+import { join } from "../../../api/user";
 
 export default function SignUp() {
   const [width] = useState(window.innerWidth);
   // 페이지 이동
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false); //https://gist.github.com/velopert/a94290c448162b99ad374631e376963c
   const callJoinApi = (nickname: string, email: string, password: string) => {
     //join api 연결
+    setLoading(true);
+    const res = join(email, nickname, password);
+    setLoading(false);
     navigate("/complete");
   };
   return (
