@@ -1,6 +1,7 @@
 import { apiInstance, loginApiInstance } from "./index";
 
 const api = apiInstance();
+const loginApi = loginApiInstance();
 
 // 회원 가입
 async function join(email: string, nickname: string, password: string) {
@@ -18,7 +19,6 @@ async function login(email: string, password: string) {
 
 // 회원 정보
 async function userInfo(userNo: number) {
-  const loginApi = loginApiInstance();
   return (await loginApi.get(`/user/account/${userNo}`)).data.data; //유저 객체라 data 썼는데 일단 자료가 들어와바야 알겠다.
 }
 
@@ -34,7 +34,7 @@ async function checkNickname(nickname: string) {
 //회원 별점 등록
 async function rateGame(userNo: number, gameNo: number, scoreRating: number) {
   return (
-    await api.post(`/user/score`, {
+    await loginApi.post(`/user/score`, {
       userNo: userNo,
       gameNo: gameNo,
       scoreRating: scoreRating,
@@ -44,7 +44,6 @@ async function rateGame(userNo: number, gameNo: number, scoreRating: number) {
 
 // 회원가입 설문조사
 async function initSurvey() {
-  const loginApi = loginApiInstance();
   return (await loginApi.get(`user/survey`)).data.data;
 }
 
