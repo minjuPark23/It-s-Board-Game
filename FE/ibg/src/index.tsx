@@ -40,6 +40,7 @@ function reducer(currentState: any, action: any) {
   }
   if (action.type === "join") {
     newState.user = action.userData;
+    newState.isLogin = true; //자동으로 로그인되게 해야 함
     return newState;
   }
 
