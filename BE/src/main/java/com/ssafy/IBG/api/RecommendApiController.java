@@ -29,7 +29,7 @@ public class RecommendApiController {
      * @desc: 유저에게 설문을 받을 게임 데이터 목록 전송
      * */
     @GetMapping("/user/survey")
-    public Result getSurveyGameList(){
+    public Result getSurveyGameList(@RequestBody RecommendRequest request){
 
         List<Game> list = recommendService.getGameForSurvey(50);
 
