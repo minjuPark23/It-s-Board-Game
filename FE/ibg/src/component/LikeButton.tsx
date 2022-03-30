@@ -2,7 +2,11 @@ import { useState } from "react";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 
-export default function LikeButton({ initLike = false, size = 25 }) {
+export default function LikeButton({
+  initLike = false,
+  size = 25,
+  gameNo = 0,
+}) {
   const [isLike, setIsLike] = useState(initLike);
 
   const toggleLike = () => {

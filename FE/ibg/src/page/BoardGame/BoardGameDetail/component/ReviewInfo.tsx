@@ -18,6 +18,7 @@ export default function Reviews(props: { reviewList: Review[] }) {
         리뷰
         <Typography component="span">({props.reviewList.length})</Typography>
       </Typography>
+      {/* 리뷰 입력 창은 로그인이 안되어있으면 로그인하라고 띄우는 것이 더 좋을 듯 함 */}
       <TextField
         fullWidth
         multiline
@@ -35,9 +36,9 @@ export default function Reviews(props: { reviewList: Review[] }) {
           </Button>
         )}
       </Box>
-      {props.reviewList.map((review) => (
-        <ReviewItem key={review.reviewNo} review={review} />
-      ))}
+      {props.reviewList.map((review) => {
+        return <ReviewItem key={review.reviewNo} review={review} />;
+      })}
     </Box>
   );
 }
