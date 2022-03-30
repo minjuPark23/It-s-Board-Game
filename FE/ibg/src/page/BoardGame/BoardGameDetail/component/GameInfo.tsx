@@ -1,3 +1,4 @@
+import { RootStateOrAny, useSelector } from "react-redux";
 import StarRating from "../../../../component/StarRating";
 import LikeButton from "../../../../component/LikeButton";
 import { GameDetail } from "../index";
@@ -82,6 +83,8 @@ const AlignDiv = styled("div")(() => ({
 }));
 
 export default function GameInfo(props: { game: GameDetail }) {
+  const user = useSelector((state: RootStateOrAny) => state.user);
+
   return (
     <Grid container spacing={2} sx={{ my: { xs: 0, md: 4 } }}>
       <Grid item xs={12} sm={4}>
@@ -135,7 +138,12 @@ export default function GameInfo(props: { game: GameDetail }) {
               <Typography sx={{ fontSize: { xs: 13, md: 16 } }}>
                 내 점수는요
               </Typography>
-              <StarRating initStarRate={props.game.myScore} size={35} />
+              <StarRating
+                initStarRate={props.game.myScore}
+                size={35}
+                gameNo={props.game.gameNo}
+                userNo={user.userNo}
+              />
             </AlignDiv>
             <Divider
               orientation="vertical"
