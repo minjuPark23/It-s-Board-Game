@@ -159,6 +159,7 @@ export default function GameInfo(props: { game: GameDetail }) {
                 initLike={props.game.like}
                 size={30}
                 gameNo={props.game.gameNo}
+                userNo={user.userNo}
               />
             </AlignDiv>
           </ScoreAndLike>
