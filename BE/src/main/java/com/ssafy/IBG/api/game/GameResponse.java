@@ -16,27 +16,31 @@ public class GameResponse{
     private int gameYear;
     private double gameTotalScore;
     private boolean isLike;
+    private double myScore;
     private int gameMinPlayer;
     private int gameMaxPlayer;
     private int gameMinTime;
     private int gameMaxTime;
     private double gameWeight;
     private String gameCategory;
+    private String gameDesc;
     private List<ReviewResponse> ResponseReviewList;
 
-    public GameResponse(Game game, boolean isLike, List<ReviewResponse> ResponseReviewList) {
+    public GameResponse(Game game, boolean isLike, List<ReviewResponse> ResponseReviewList, double myScore) {
         this.gameNo = game.getGameNo();
         this.gameImg = game.getGameImg();
         this.gameName = game.getGameName();
         this.gameYear = game.getGameYear();
         this.gameTotalScore = game.getGameTotalScore();
         this.isLike = isLike;
+        this.myScore = myScore;
         this.gameMinPlayer = game.getGameMinPlayer();
         this.gameMaxPlayer = game.getGameMaxPlayer();
         this.gameMinTime = game.getGameMinTime();
         this.gameMaxTime = game.getGameMaxTime();
         this.gameWeight = game.getGameWeight();
         this.gameCategory = game.getGameCategory();
+        this.gameDesc = game.getGameDescription();
         this.ResponseReviewList = ResponseReviewList;
     }
 }
