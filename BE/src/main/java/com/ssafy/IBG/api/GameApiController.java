@@ -53,6 +53,10 @@ public class GameApiController {
     * - author : 박민주
     * - date : 2022-03-28 오후 5:59
     * - desc : score 및 getResult2 추가
+    * @modify :
+    * - author : 박민주
+    * - date : 2022-03-30 오후 5:18
+    * - desc : 사용자 myScore 추가
     **/
     @PostMapping("/search")
     public Result getGameByGameName(@RequestBody GameNameRequest request){
@@ -62,18 +66,19 @@ public class GameApiController {
         }else{
             /** gameNo와 userNo **/
             boolean isLike = interestService.getIsLike(request.getUserNo(), game.getGameNo());
-            return getResult2(game, isLike);
+            Score myScore = scoreService.getScoreByUserNoGameNo(request.getUserNo(), game.getGameNo());
+            return getResult2(game, isLike, myScore.getScoreRating());
         }
     }
 
-    private Result getResult2(Game game, boolean isLike) {
+    private Result getResult2(Game game, boolean isLike, double myScore) {
         List<Review> reviewList = reviewService.getReviewByGameNo(game.getGameNo());
         List<ReviewResponse> collect = reviewList.stream()
                 .map(rl -> {
                     Score score = scoreService.getScoreByUserNoGameNo(rl.getUser().getUserNo(), rl.getGame().getGameNo());
                     return new ReviewResponse(rl, score);
                 }).collect(Collectors.toList());
-        return new Result(HttpStatus.OK.value(), new GameResponse(game, isLike, collect));
+        return new Result(HttpStatus.OK.value(), new GameResponse(game, isLike, collect, myScore));
     }
 
     /**
@@ -97,7 +102,8 @@ public class GameApiController {
         }else{
             /** gameNo와 userNo **/
             boolean isLike = interestService.getIsLike(userNo, gameNo);
-            return getResult2(game, isLike);
+            Score myScore = scoreService.getScoreByUserNoGameNo(userNo, game.getGameNo());
+            return getResult2(game, isLike, myScore.getScoreRating());
         }
     }
 
