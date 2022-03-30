@@ -25,6 +25,7 @@ public class Review {
     @JoinColumn(name = "gameNo")
     private Game game;
 
+    @Column(length = 6000)
     private String reviewContent;
 
     //    @Temporal(TemporalType.TIMESTAMP)
