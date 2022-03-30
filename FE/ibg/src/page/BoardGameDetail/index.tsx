@@ -1,10 +1,11 @@
-import { Container, Divider } from "@mui/material";
 import { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-import PageNotFound from "../../../component/PageNotFound";
+import { useParams } from "react-router-dom";
+import { getGameDetail } from "../../../api/game";
 import GameInfo from "./component/GameInfo";
 import ReviewInfo from "./component/ReviewInfo";
+import PageNotFound from "../../../component/PageNotFound";
 import { Game } from "../../Main";
+import { Container, Divider } from "@mui/material";
 
 export interface GameDetail extends Game {
   gameNameKr: string;
@@ -14,6 +15,7 @@ export interface GameDetail extends Game {
   gameWeight: number;
   gameAge: number;
   gameDesc: string;
+  myScore: number;
 }
 
 export interface Review {
@@ -25,15 +27,18 @@ export interface Review {
 }
 
 export default function BoardGameDetail() {
-  // const gameNo = useParams().no;
+  const gameNo = Number(useParams().no);
   const [game, setGame] = useState<GameDetail | null>(null);
   const [reviewList, setReviewList] = useState<Review[]>([]);
 
   // gameNo, userNo를 이용해서 게임 상세 정보 불러오기
   useEffect(() => {
-    // API 연결
-    setGame(tempData.game);
-    setReviewList(tempData.game.ResponseReviewList);
+    // API 연결, (수정 필요) userNo 추가하기
+    getGameDetail(gameNo, 1).then((data) => {
+      console.log(data);
+      setGame(data);
+      setReviewList(data.responseReviewList);
+    });
   }, []);
 
   return (

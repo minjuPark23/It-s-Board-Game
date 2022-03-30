@@ -27,9 +27,9 @@ const InfoWrapper = styled(Box)(({ theme }) => ({
   position: "relative",
   display: "flex",
   flexDirection: "column",
-  padding: theme.spacing(2, 1),
+  padding: theme.spacing(0, 1),
   [theme.breakpoints.up("sm")]: {
-    padding: theme.spacing(2, 3),
+    padding: theme.spacing(0, 3),
   },
 }));
 
@@ -91,8 +91,9 @@ export default function GameInfo(props: { game: GameDetail }) {
       </Grid>
       <Grid item xs={12} sm={8}>
         <InfoWrapper>
+          {/* (수정 필요) 한글 이름 넣기 */}
           <Typography sx={{ fontSize: { xs: 18, md: 25 }, fontWeight: "bold" }}>
-            {props.game.gameNameKr}
+            {props.game.gameName}
             <Typography component="span">({props.game.gameYear})</Typography>
           </Typography>
           <Typography
@@ -134,7 +135,7 @@ export default function GameInfo(props: { game: GameDetail }) {
               <Typography sx={{ fontSize: { xs: 13, md: 16 } }}>
                 내 점수는요
               </Typography>
-              <StarRating initStarRate={5} size={35} />
+              <StarRating initStarRate={props.game.myScore} size={35} />
             </AlignDiv>
             <Divider
               orientation="vertical"
@@ -146,7 +147,11 @@ export default function GameInfo(props: { game: GameDetail }) {
               <Typography sx={{ fontSize: { xs: 13, md: 16 } }}>
                 관심있어요
               </Typography>
-              <LikeButton initLike={props.game.isLike} size={30} />
+              <LikeButton
+                initLike={props.game.like}
+                size={30}
+                gameNo={props.game.gameNo}
+              />
             </AlignDiv>
           </ScoreAndLike>
         </InfoWrapper>
