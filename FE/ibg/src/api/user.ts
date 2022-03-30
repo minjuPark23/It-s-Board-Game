@@ -18,7 +18,8 @@ async function login(email: string, password: string) {
 
 // 회원 정보
 async function userInfo(userNo: number) {
-  return (await api.get(`/user/account/${userNo}`)).data.data; //유저 객체라 data 썼는데 일단 자료가 들어와바야 알겠다.
+  const loginApi = loginApiInstance();
+  return (await loginApi.get(`/user/account/${userNo}`)).data.data; //유저 객체라 data 썼는데 일단 자료가 들어와바야 알겠다.
 }
 
 //이메일 중복 조회
@@ -27,7 +28,31 @@ async function checkEmail(email: string) {
 }
 //이메일 중복 조회
 async function checkNickname(nickname: string) {
-  return (await api.post(`/nickname`, { userNick: nickname })).data; //도대체 뭘해야 되는걸까
+  return (await api.post(`/nickname`, { userNick: nickname })).data;
 }
 
-export { join, login, userInfo, checkEmail, checkNickname };
+//회원 별점 등록
+async function rateGame(userNo: number, gameNo: number, scoreRating: number) {
+  return (
+    await api.post(`/user/score`, {
+      userNo: userNo,
+      gameNo: gameNo,
+      scoreRating: scoreRating,
+    })
+  ).data; //응답 코드
+}
+
+// 회원가입 설문조사
+async function initSurvey() {
+  return (await api.get(`user/survey`)).data.data;
+}
+
+export {
+  join,
+  login,
+  userInfo,
+  checkEmail,
+  checkNickname,
+  rateGame,
+  initSurvey,
+};
