@@ -1,3 +1,4 @@
+import { RootStateOrAny, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Game } from "../page/Main";
 import { styled } from "@mui/material/styles";
@@ -70,9 +71,10 @@ const LikeButtonPosition = styled("span")(() => ({
 }));
 
 export default function BoardCard(props: { game: Game }) {
+  const user = useSelector((state: RootStateOrAny) => state.user);
   const navigate = useNavigate();
   const moveToDetail = () => {
-    navigate(`detail/${props.game.gameNo}`);
+    navigate(`/detail/${props.game.gameNo}`);
   };
   return (
     <Grid item xs={12} sm={4} md={3} lg={2.5}>
@@ -103,7 +105,9 @@ export default function BoardCard(props: { game: Game }) {
             <LikeButtonPosition>
               <LikeButton
                 initLike={props.game.like}
+                size={30}
                 gameNo={props.game.gameNo}
+                userNo={user.userNo}
               />
             </LikeButtonPosition>
           </CardContent>
