@@ -4,6 +4,7 @@ import { GameDetail } from "../index";
 
 import { styled } from "@mui/material/styles";
 import {
+  Box,
   Divider,
   Grid,
   ImageListItem,
@@ -22,7 +23,7 @@ const ImgWrapper = styled(ImageListItem)(() => ({
 }));
 
 // 게임 정보 영역
-const InfoWrapper = styled("div")(({ theme }) => ({
+const InfoWrapper = styled(Box)(({ theme }) => ({
   position: "relative",
   display: "flex",
   flexDirection: "column",
@@ -82,7 +83,7 @@ const AlignDiv = styled("div")(() => ({
 
 export default function GameInfo(props: { game: GameDetail }) {
   return (
-    <Grid container spacing={2} sx={{ my: 4 }}>
+    <Grid container spacing={2} sx={{ my: { xs: 0, md: 4 } }}>
       <Grid item xs={12} sm={4}>
         <ImgWrapper>
           <img src={props.game.gameImg} alt={props.game.gameName} />
