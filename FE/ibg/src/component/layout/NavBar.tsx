@@ -1,5 +1,7 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
+import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
+
 // material ui
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -100,9 +102,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function NavBar() {
+  const dispatch = useDispatch();
   // 로그인 여부
-  //const [auth, setAuth] = React.useState(false); 빌드 때문에 주석처리 했습니다.
-  const [auth] = React.useState(false);
+  const auth = useSelector((state: RootStateOrAny) => state.isLogin);
   // 사용자 메뉴 Open/Close(PC)
   const [userMenu, setUserMenu] = React.useState<null | HTMLElement>(null);
   // Mobild 메뉴 Open/Close
@@ -110,12 +112,19 @@ export default function NavBar() {
   // 페이지 이동
   const navigate = useNavigate();
 
-  // 로그인 상태 확인하여 상태값 변경하기
+  // 로그인 상태 확인하여 상태값 변경하기 => auth 변수에 할당했습니당!
   /*
   const checkLoginState = () => {
     setAuth(false);
   };
 */
+  //로그아웃 메서드
+  const logoutMethod = () => {
+    alert("called");
+    sessionStorage.clear();
+    dispatch({ type: "logout" });
+    navigate("/");
+  };
   // 사용자 메뉴 열고 닫기(로그인 했을 때)
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setUserMenu(event.currentTarget);
