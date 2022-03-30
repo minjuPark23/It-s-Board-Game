@@ -46,4 +46,5 @@ out/
 
 ### DATA ###
 *.csv
+*.p
 chromedriver.exe
