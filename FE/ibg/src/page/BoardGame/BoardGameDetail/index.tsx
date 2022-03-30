@@ -1,8 +1,9 @@
-import { Container } from "@mui/material";
+import { Container, Divider } from "@mui/material";
 import { useEffect, useState } from "react";
 // import { useParams } from "react-router-dom";
 import PageNotFound from "../../../component/PageNotFound";
 import GameInfo from "./component/GameInfo";
+import ReviewInfo from "./component/ReviewInfo";
 import { Game } from "../../Main";
 
 export interface GameDetail extends Game {
@@ -15,22 +16,33 @@ export interface GameDetail extends Game {
   gameDesc: string;
 }
 
+export interface Review {
+  reviewNo: number;
+  scoreRating: number;
+  userNick: string;
+  reviewContent: string;
+  reviewReg: string;
+}
+
 export default function BoardGameDetail() {
   // const gameNo = useParams().no;
   const [game, setGame] = useState<GameDetail | null>(null);
+  const [reviewList, setReviewList] = useState<Review[]>([]);
 
   // gameNo, userNo를 이용해서 게임 상세 정보 불러오기
   useEffect(() => {
     // API 연결
     setGame(tempData.game);
+    setReviewList(tempData.game.ResponseReviewList);
   }, []);
 
-  return game ? (
+  return (
     <Container>
-      <GameInfo game={game}></GameInfo>
+      {game ? <GameInfo game={game} /> : <PageNotFound />}
+      <Divider />
+
+      <ReviewInfo reviewList={reviewList} />
     </Container>
-  ) : (
-    <PageNotFound />
   );
 }
 
@@ -54,5 +66,21 @@ const tempData = {
       "Die Macher is a game about seven sequential political races in different regions of Germany. Players...",
     gameTotalScore: 7.6,
     isLike: true,
+    ResponseReviewList: [
+      {
+        reviewNo: 1,
+        scoreRating: 8,
+        userNick: "ImUser",
+        reviewContent: "이 게임 정말 재밌어요!!!",
+        reviewReg: "2022/03/29",
+      },
+      {
+        reviewNo: 2,
+        scoreRating: 10,
+        userNick: "보드게임조하",
+        reviewContent: "제가 제일 좋아하는 게임입니다.",
+        reviewReg: "2022/03/29",
+      },
+    ],
   },
 };
