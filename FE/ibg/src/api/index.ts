@@ -17,7 +17,7 @@ function loginApiInstance() {
     baseURL: API_BASE_URL,
     headers: {
       "Content-type": "application/json",
-      Authorization: `Bearer ${jwtToken}`,
+      Authorization: `${jwtToken}`,
     },
   });
   return instance;

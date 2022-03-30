@@ -3,6 +3,7 @@ import BoardCardMain from "./component/BoardCardSurvey";
 import { Button, Box, Grid, Container } from "@mui/material";
 import WelcomeStepper from "../component/WelcomeStepper";
 import { useNavigate } from "react-router-dom";
+import { initSurvey } from "../../../api/user";
 // Game 객체 => types파일로 빼는 것이 좋음
 export interface Game {
   gameNo: number;
@@ -16,6 +17,12 @@ export default function Survey() {
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
     setGameList(tempData.gameList);
+    // const init = async () => {
+    //   const data = await initSurvey();
+    //   setGameList(data);
+    //   console.log(data);
+    // };
+    // init();
   }, []);
 
   return (
