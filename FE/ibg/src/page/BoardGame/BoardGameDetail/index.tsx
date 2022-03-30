@@ -1,9 +1,11 @@
-import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-import PageNotFound from "../../../component/PageNotFound";
+import { useParams } from "react-router-dom";
+import { getGameDetail } from "../../../api/game";
 import GameInfo from "./component/GameInfo";
+import ReviewInfo from "./component/ReviewInfo";
+import PageNotFound from "../../../component/PageNotFound";
 import { Game } from "../../Main";
+import { Container, Divider } from "@mui/material";
 
 export interface GameDetail extends Game {
   gameNameKr: string;
@@ -13,24 +15,39 @@ export interface GameDetail extends Game {
   gameWeight: number;
   gameAge: number;
   gameDesc: string;
+  myScore: number;
+}
+
+export interface Review {
+  reviewNo: number;
+  scoreRating: number;
+  userNick: string;
+  reviewContent: string;
+  reviewReg: string;
 }
 
 export default function BoardGameDetail() {
-  // const gameNo = useParams().no;
+  const gameNo = Number(useParams().no);
   const [game, setGame] = useState<GameDetail | null>(null);
+  const [reviewList, setReviewList] = useState<Review[]>([]);
 
   // gameNo, userNo를 이용해서 게임 상세 정보 불러오기
   useEffect(() => {
-    // API 연결
-    setGame(tempData.game);
+    // API 연결, (수정 필요) userNo 추가하기
+    getGameDetail(gameNo, 1).then((data) => {
+      console.log(data);
+      setGame(data);
+      setReviewList(data.responseReviewList);
+    });
   }, []);
 
-  return game ? (
+  return (
     <Container>
-      <GameInfo game={game}></GameInfo>
+      {game ? <GameInfo game={game} /> : <PageNotFound />}
+      <Divider />
+
+      <ReviewInfo reviewList={reviewList} />
     </Container>
-  ) : (
-    <PageNotFound />
   );
 }
 
@@ -54,5 +71,21 @@ const tempData = {
       "Die Macher is a game about seven sequential political races in different regions of Germany. Players...",
     gameTotalScore: 7.6,
     isLike: true,
+    ResponseReviewList: [
+      {
+        reviewNo: 1,
+        scoreRating: 8,
+        userNick: "ImUser",
+        reviewContent: "이 게임 정말 재밌어요!!!",
+        reviewReg: "2022/03/29",
+      },
+      {
+        reviewNo: 2,
+        scoreRating: 10,
+        userNick: "보드게임조하",
+        reviewContent: "제가 제일 좋아하는 게임입니다.",
+        reviewReg: "2022/03/29",
+      },
+    ],
   },
 };
