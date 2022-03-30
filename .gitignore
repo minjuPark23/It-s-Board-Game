@@ -48,4 +48,3 @@ out/
 *.csv
 *.p
 chromedriver.exe
-util/data/result.csv
