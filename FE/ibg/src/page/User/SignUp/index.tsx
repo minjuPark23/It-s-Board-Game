@@ -18,7 +18,9 @@ export default function SignUp() {
     setLoading(true);
     const joinRes = join(email, nickname, password).then((codeRes) => {});
     setLoading(false);
-    navigate(`/survey`);
+
+    // navigate(`/survey`);
+    window.history.pushState("", "", "/survey");
   };
   /*이메일 중복체크 */
   const emailCheck = (email: string) => {
