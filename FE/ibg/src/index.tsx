@@ -9,7 +9,7 @@ import sessionStorage from "redux-persist/lib/storage/session";
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 
 const persistConfig = {
   key: "root",

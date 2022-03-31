@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Game } from "../index";
 import { styled } from "@mui/material/styles";
 import StarRating from "../../../../component/StarRating";
@@ -49,7 +48,6 @@ export default function BoardCard({ game, parentCallback }: ICount) {
   const setStarRatings = (score: number) => {
     //차라리 score가 0인것만 보내서  부모에서 SET으로 받고
     parentCallback(game.gameNo, score);
-  
   };
   const userno = useSelector((state: RootStateOrAny) => state.user.userNo);
 

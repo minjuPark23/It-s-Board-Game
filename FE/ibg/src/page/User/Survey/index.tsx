@@ -53,7 +53,7 @@ export default function Survey() {
       setGameList(data);
     };
     init();
-  }, []);
+  }, [userno]);
 
   // count 업데이트하는 method
   const countHandler = (ratedGameNo: number, score: number) => {
