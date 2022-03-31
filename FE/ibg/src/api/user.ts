@@ -42,6 +42,7 @@ async function rateGame(userNo: number, gameNo: number, scoreRating: number) {
   ).data; //응답 코드
 }
 
+// 관심목록 추가 및 제거
 async function addDelLike(userNo: number, gameNo: number) {
   return await (
     await loginApi.post(`user/like`, { userNo: userNo, gameNo: gameNo })
@@ -53,6 +54,13 @@ async function initSurvey(userNo: number) {
   return (await loginApi.get(`user/survey/${userNo}`)).data.data;
 }
 
+// 관심 목록 가져오기
+async function getLikedList(userNo: number) {
+  return await (
+    await loginApi.get(`user/like/${userNo}`)
+  ).data.data;
+}
+
 export {
   join,
   login,
@@ -62,4 +70,5 @@ export {
   rateGame,
   addDelLike,
   initSurvey,
+  getLikedList,
 };
