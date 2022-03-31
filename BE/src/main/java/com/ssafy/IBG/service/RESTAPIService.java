@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class RESTAPIService {
 
-    private final String BASE_URL = "http://localhost:7776/ibg/api/recommend";
+    private final String BASE_URL = "http://django:7776/ibg/api/recommend";
 
     public List<RecommendTestResponse> requestGETAPI(String url, Integer userNo) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
