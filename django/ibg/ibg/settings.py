@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-=2uhuc&)83lez7)%$ld_ioc)zuhk9jot=kvln(0gefhrke)4!(
 # 개발 모드면 True, 운영 모드면 False
 DEBUG = True
 
-ALLOWED_HOSTS = ['database', '3.38.252.84']
+ALLOWED_HOSTS = ['django:7776', '0.0.0.0:7776']
 
 
 # Application definition
