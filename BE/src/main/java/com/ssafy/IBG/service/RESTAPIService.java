@@ -34,10 +34,13 @@ public class RESTAPIService {
         // Combine Message
         HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
 
-        System.out.println(BASE_URL+url);
+        System.out.println(requestMessage);
 
         // Request and getResponse
         HttpEntity<String> response = restTemplate.getForEntity(BASE_URL+url, String.class, requestMessage);
+//        HttpEntity<String> response = restTemplate.postForEntity(BASE_URL+url, requestMessage, String.class);
+
+        System.out.println(response);
 
         // Response Body 파싱
         ObjectMapper objectMapper = new ObjectMapper();
