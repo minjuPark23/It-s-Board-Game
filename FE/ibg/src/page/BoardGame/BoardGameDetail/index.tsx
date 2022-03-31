@@ -16,6 +16,7 @@ export interface GameDetail extends Game {
   gameWeight: number;
   gameAge: number;
   gameDesc: string;
+  gameKorDesc: string;
   myScore: number;
 }
 
