@@ -3,24 +3,73 @@ import { Grid, Box } from "@mui/material/";
 import Form from "./component/Form";
 import WelcomeStepper from "../component/WelcomeStepper";
 //index에서 api 호출 -> Form에서 index(parent)로 전달
-import { join, checkEmail, checkNickname } from "../../../api/user";
-
+import {
+  join,
+  checkEmail,
+  checkNickname,
+  userInfo,
+  login,
+} from "../../../api/user";
+import jwtDecode from "jwt-decode";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+interface MyToken {
+  userNo: number;
+  exp: number;
+  userEmail: string; //이메일
+}
 export default function SignUp() {
   const [width] = useState(window.innerWidth);
 
   const [loading, setLoading] = useState(false); //https://gist.github.com/velopert/a94290c448162b99ad374631e376963c
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   //api 연결
   const callJoinApi = (nickname: string, email: string, password: string) => {
     console.log(loading); // => loading never used 빌드 경고 해결을 위해 추가했음
     setLoading(true);
 
     // const joinRes =    => 빌드 경고(never used)
-    join(email, nickname, password).then((codeRes) => {});
-    setLoading(false);
+    join(email, nickname, password).then((codeRes) => {
+      sessionStorage.removeItem("accessToken");
+      login(email, password).then((response) => {
+        if (response.data.code === 200) {
+          alert(response.data.code);
 
-    // navigate(`/survey`);
-    window.history.pushState("", "", "/survey");
+          let token = response.headers.authorization;
+          let decode_token = jwtDecode<MyToken>(token);
+          sessionStorage.setItem("accessToken", token);
+
+          alert(decode_token.userNo);
+          setLoading(true);
+          userInfo(decode_token.userNo)
+            .then((response) => {
+              console.log(response);
+              let userNick = response.userNick;
+              let userNo = response.userNo;
+
+              dispatch({
+                type: "login",
+                userData: { email, password, userNick, userNo },
+              });
+
+              // alert("navigate");
+              navigate("/survey");
+              window.location.reload();
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+          setLoading(false);
+        } else {
+          alert("이메일 또는 비밀번호를 확인해주세요");
+        }
+      });
+    });
+    setLoading(false);
+    navigate(`/survey`);
+    //window.history.pushState("", "", "/survey");
   };
   /*이메일 중복체크 */
   const emailCheck = (email: string) => {
