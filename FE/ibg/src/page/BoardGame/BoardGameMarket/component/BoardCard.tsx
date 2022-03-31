@@ -2,12 +2,12 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import {
   Card,
-  CardActions, 
+  CardActions,
   CardContent,
   CardMedia,
   CardActionArea,
   Grid,
-  Typography
+  Typography,
 } from "@mui/material";
 
 interface Deal {
@@ -64,9 +64,9 @@ const MarketState = styled("span")(({ theme }) => ({
   width: 80,
   height: 30,
   lineHeight: 1,
-  textAlign: 'center',
+  textAlign: "center",
   fontSize: 12,
-  color: '#FCB500',
+  color: "#FCB500",
   borderRadius: 10,
   border: "1px solid #FCB500",
   backgroundColor: "transparent",
@@ -77,21 +77,21 @@ const MarketState = styled("span")(({ theme }) => ({
 const Price = styled(Typography)(({ theme }) => ({
   width: 80,
   height: 30,
-  textAlign: 'right',
+  textAlign: "right",
   padding: theme.spacing(0.8, 0, 0, 0),
 }));
 
 /* 하단 틀 */
 const StateWrapper = styled(CardActions)(({ theme }) => ({
-  justifyContent: 'space-between',
-padding: theme.spacing(0),
-marginRight: 0,
-marginTop: 20,
+  justifyContent: "space-between",
+  padding: theme.spacing(0),
+  marginRight: 0,
+  marginTop: 20,
 }));
 
 export default function BoardCard({ deal }: Deal) {
   return (
-    <Grid item xs={12} sm={4} md={3} lg={2.5}>
+    <Grid item xs={12} sm={4} md={3} lg={2.4}>
       <StyledCard variant="outlined">
         <CardActionArea>
           <ImgWrapper>
@@ -111,12 +111,8 @@ export default function BoardCard({ deal }: Deal) {
             <DealTitle>{deal.dealTitle}</DealTitle>
             <Category>{deal.gameName}</Category>
             <StateWrapper>
-              <MarketState>
-              {deal.dealState}거래중
-              </MarketState>
-              <Price variant="body2">
-              {deal.gamePrice}원
-              </Price>
+              <MarketState>{deal.dealState}거래중</MarketState>
+              <Price variant="body2">{deal.gamePrice}원</Price>
             </StateWrapper>
           </CardContent>
         </CardActionArea>
