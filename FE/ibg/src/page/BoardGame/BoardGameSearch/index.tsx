@@ -1,18 +1,60 @@
-import { Container, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
+import { RootStateOrAny, useSelector } from "react-redux";
+import { searchAuto } from "../../../api/game";
 import BoardCardMain from "../../../component/BoardCardMain";
 import { Game } from "../../Main/index";
+import { Box, Container, Grid, Typography } from "@mui/material";
+import CustomSelect, { StyledOption } from "./component/CustomSelect";
 
-export default function Main() {
+export default function BoardGameSearch() {
+  const [initGameList, setInitGameList] = useState<Game[]>([]);
   const [gameList, setGameList] = useState<Game[]>([]);
+  const [sortingOpt, setSortingOpt] = useState<string | null>("recomm");
+  const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
 
   useEffect(() => {
-    // API 연결(게임리스트 불러오기)
-    setGameList(tempData.gameList);
+    searchAuto("", userNo).then((data) => {
+      setInitGameList(data);
+      setGameList(data);
+    });
   }, []);
+
+  useEffect(() => {
+    let sortData = [...initGameList];
+
+    switch (sortingOpt) {
+      case "recomm":
+        setGameList(initGameList);
+        break;
+      case "starRate":
+        sortData.sort((a, b) => b.gameTotalScore - a.gameTotalScore);
+        setGameList(sortData);
+        break;
+      case "name":
+        sortData.sort((a, b) => a.gameKorName.localeCompare(b.gameKorName));
+        setGameList(sortData);
+        break;
+    }
+  }, [sortingOpt]);
 
   return (
     <Container style={{ marginTop: 20, padding: 20 }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+        <Typography
+          sx={{
+            fontSize: { xs: 20, md: 30 },
+            fontWeight: "bold",
+            mb: 1,
+          }}
+        >
+          보드게임
+        </Typography>
+        <CustomSelect value={sortingOpt} onChange={setSortingOpt}>
+          <StyledOption value="recomm">추천순</StyledOption>
+          <StyledOption value="starRate">평점순</StyledOption>
+          <StyledOption value="name">이름순</StyledOption>
+        </CustomSelect>
+      </Box>
       <Grid container spacing={2}>
         {gameList.map((game) => (
           <BoardCardMain
@@ -25,60 +67,3 @@ export default function Main() {
     </Container>
   );
 }
-
-// 임시 데이터
-const tempData = {
-  gameList: [
-    {
-      gameNo: 1,
-      gameImg:
-        "https://cf.geekdo-images.com/original/img/uqlrq_bQJqHpcaN7_7qocV5XfbU=/0x0/pic4718279.jpg",
-      gameName: "Die Macher long title very long",
-      gameMinPlayer: 3,
-      gameMaxPlayer: 5,
-      // gameMinTime: 240,
-      // gameMaxTime: 240,
-      // gameYear: 1986,
-      // gameWeight: 4.3,
-      // gameAge: 14,
-      gameCategory: "Economic|Negotiation|Political",
-      // gameDesc: "Die Macher is a game about seven sequential political races in different regions of Germany. Players...",
-      gameTotalScore: 7.6,
-      like: true,
-    },
-    {
-      gameNo: 2,
-      gameImg:
-        "https://cf.geekdo-images.com/original/img/o07K8ZVh0PkOpOnSZs1TuABb7I4=/0x0/pic4001505.jpg",
-      gameName: "Dragonmaster",
-      gameMinPlayer: 3,
-      gameMaxPlayer: 4,
-      // gameMinTime: 30,
-      // gameMaxTime: 30,
-      // gameYear: 1981,
-      // gameWeight: 1.9,
-      // gameAge: 12,
-      gameCategory: "Card Game|Fantasy",
-      // gameDesc: "Dragonmaster is a trick-taking card game based on an older game called Coup d'État. Each player is g...",
-      gameTotalScore: 6.6,
-      like: false,
-    },
-    {
-      gameNo: 3,
-      gameImg:
-        "https://cf.geekdo-images.com/original/img/mPS50ts53753q5-kb5vWbTDN8Z0=/0x0/pic3211873.jpg",
-      gameName: "Samurai",
-      gameMinPlayer: 2,
-      gameMaxPlayer: 4,
-      // gameMinTime: 30,
-      // gameMaxTime: 60,
-      // gameYear: 1998,
-      // gameWeight: 2.4,
-      // gameAge: 10,
-      gameCategory: "Abstract Strategy|Medieval",
-      // gameDesc: "Samurai is set in medieval Japan. Players compete to gain the favor of three factions: samurai, peas...",
-      gameTotalScore: 7.4,
-      like: false,
-    },
-  ],
-};

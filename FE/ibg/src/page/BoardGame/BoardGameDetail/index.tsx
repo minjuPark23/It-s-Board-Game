@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getGameDetail } from "../../../api/game";
+import { getReviewList } from "../../../api/review";
 import GameInfo from "./component/GameInfo";
 import ReviewInfo from "./component/ReviewInfo";
 import PageNotFound from "../../../component/PageNotFound";
@@ -16,6 +17,7 @@ export interface GameDetail extends Game {
   gameWeight: number;
   gameAge: number;
   gameDesc: string;
+  gameKorDesc: string;
   myScore: number;
 }
 
@@ -29,25 +31,35 @@ export interface Review {
 
 export default function BoardGameDetail() {
   const gameNo = Number(useParams().no);
-  const user = useSelector((state: RootStateOrAny) => state.user);
+  const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
   const [game, setGame] = useState<GameDetail | null>(null);
   const [reviewList, setReviewList] = useState<Review[]>([]);
 
   // gameNo, userNo를 이용해서 게임 상세 정보 불러오기
   useEffect(() => {
-    // API 연결, (수정 필요) userNo 추가하기
-    getGameDetail(gameNo, user.userNo || 0).then((data) => {
+    getGameDetail(gameNo, userNo || 0).then((data) => {
       setGame(data);
       setReviewList(data.responseReviewList);
     });
-  }, []);
+  }, [gameNo, userNo]);
+
+  const refreshReview = () => {
+    getReviewList(gameNo).then((data) => {
+      setReviewList(data);
+    });
+  };
 
   return (
     <Container>
       {game ? <GameInfo game={game} /> : <PageNotFound />}
       <Divider />
 
-      <ReviewInfo reviewList={reviewList} />
+      <ReviewInfo
+        reviewList={reviewList}
+        gameNo={gameNo}
+        userNo={userNo}
+        addCallback={refreshReview}
+      />
     </Container>
   );
 }
