@@ -4,7 +4,7 @@ import BoardCardMain from "../../../component/BoardCardMain";
 import { Game } from "../../Main/index";
 
 export default function Main() {
-  const [gameList, setGameList] = useState<Game["game"][]>([]);
+  const [gameList, setGameList] = useState<Game[]>([]);
 
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
@@ -40,7 +40,7 @@ const tempData = {
       gameCategory: "Economic|Negotiation|Political",
       // gameDesc: "Die Macher is a game about seven sequential political races in different regions of Germany. Players...",
       gameTotalScore: 7.6,
-      isLike: true,
+      like: true,
     },
     {
       gameNo: 2,
@@ -57,7 +57,7 @@ const tempData = {
       gameCategory: "Card Game|Fantasy",
       // gameDesc: "Dragonmaster is a trick-taking card game based on an older game called Coup d'État. Each player is g...",
       gameTotalScore: 6.6,
-      isLike: false,
+      like: false,
     },
     {
       gameNo: 3,
@@ -74,7 +74,7 @@ const tempData = {
       gameCategory: "Abstract Strategy|Medieval",
       // gameDesc: "Samurai is set in medieval Japan. Players compete to gain the favor of three factions: samurai, peas...",
       gameTotalScore: 7.4,
-      isLike: false,
+      like: false,
     },
   ],
 };

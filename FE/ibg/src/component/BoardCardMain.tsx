@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import { Game } from "../page/Main";
 import { styled } from "@mui/material/styles";
 import {
@@ -12,6 +12,7 @@ import LikeButton from "./LikeButton";
 import PersonIcon from "@mui/icons-material/Person";
 import StarIcon from "@mui/icons-material/Star";
 
+// 카드 효과 스타일
 const StyledCard = styled(Card)(() => ({
   position: "relative",
   "&:hover": {
@@ -26,6 +27,7 @@ const StyledCard = styled(Card)(() => ({
   },
 }));
 
+// 이미지 영역
 const ImgWrapper = styled("div")(() => ({
   position: "relative",
   width: "100%",
@@ -34,6 +36,7 @@ const ImgWrapper = styled("div")(() => ({
   paddingBottom: "100%",
 }));
 
+// 게임명 스타일
 const GameTitle = styled("div")(({ theme }) => ({
   fontSize: "1.1rem",
   fontWeight: 600,
@@ -43,6 +46,7 @@ const GameTitle = styled("div")(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }));
 
+// 카테고리 스타일
 const Category = styled("div")(({ theme }) => ({
   fontSize: "0.85rem",
   whiteSpace: "nowrap",
@@ -51,22 +55,28 @@ const Category = styled("div")(({ theme }) => ({
   marginBottom: theme.spacing(1.3),
 }));
 
+// 부가정보 스타일
 const AddInfo = styled("div")(() => ({
   fontSize: "0.8rem",
   display: "flex",
   alignItems: "center",
 }));
 
+// 관심 버튼 위치
 const LikeButtonPosition = styled("span")(() => ({
   position: "absolute",
   right: "16px",
   bottom: "10px",
 }));
 
-export default function BoardCard({ game }: Game) {
+export default function BoardCard(props: { game: Game }) {
+  const navigate = useNavigate();
+  const moveToDetail = () => {
+    navigate(`detail/${props.game.gameNo}`);
+  };
   return (
     <Grid item xs={12} sm={4} md={3} lg={2.5}>
-      <StyledCard variant="outlined">
+      <StyledCard variant="outlined" onClick={moveToDetail}>
         <CardActionArea>
           <ImgWrapper>
             <CardMedia
@@ -77,21 +87,24 @@ export default function BoardCard({ game }: Game) {
                 objectFit: "contain",
               }}
               component="img"
-              image={game.gameImg}
-              alt={game.gameName}
+              image={props.game.gameImg}
+              alt={props.game.gameName}
             />
           </ImgWrapper>
           <CardContent>
-            <GameTitle>{game.gameName}</GameTitle>
-            <Category>{game.gameCategory}</Category>
+            <GameTitle>{props.game.gameName}</GameTitle>
+            <Category>{props.game.gameCategory}</Category>
             <AddInfo>
               <PersonIcon color="warning" fontSize="small" sx={{ mr: 0.5 }} />
-              {game.gameMinPlayer}~{game.gameMaxPlayer}명
+              {props.game.gameMinPlayer}~{props.game.gameMaxPlayer}명
               <StarIcon color="warning" fontSize="small" sx={{ mx: 0.5 }} />
-              {game.gameTotalScore}
+              {props.game.gameTotalScore}
             </AddInfo>
             <LikeButtonPosition>
-              <LikeButton initLike={game.isLike} />
+              <LikeButton
+                initLike={props.game.like}
+                gameNo={props.game.gameNo}
+              />
             </LikeButtonPosition>
           </CardContent>
         </CardActionArea>

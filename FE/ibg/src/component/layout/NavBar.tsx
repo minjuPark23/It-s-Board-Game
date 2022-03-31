@@ -1,5 +1,7 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
+import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
+
 // material ui
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -30,7 +32,7 @@ import Logout from "@mui/icons-material/Logout";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 
-// Nav 항목 - link가 존재하면 페이지 이동, method가 존재하면 해당 함수 실행
+// Nav 항목 - link가 존재하면 페이지 이동, method가 존재하면 해당 함수 실행(handleNavMethod 추가 필요)
 const pages = [
   { label: "보드게임", icon: <ExtensionOutlinedIcon />, link: "/search" },
   { label: "BGM", icon: <StorefrontOutlinedIcon />, link: "/market" },
@@ -44,12 +46,12 @@ const userNav = [
   {
     label: "채팅",
     icon: <ChatBubbleOutlineOutlinedIcon />,
-    method: null,
+    method: "",
   },
-  { label: "로그아웃", icon: <Logout />, method: null },
+  { label: "로그아웃", icon: <Logout />, method: "logout" },
 ];
 
-const StyledAppBar = styled(AppBar)(({ theme }) => ({
+const StyledAppBar = styled(AppBar)(() => ({
   position: "static",
   backgroundColor: "transparent",
   boxShadow: "rgba(33, 35, 38, 0.1) 0px 10px 10px -10px",
@@ -100,9 +102,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function NavBar() {
+  const dispatch = useDispatch();
   // 로그인 여부
-  //const [auth, setAuth] = React.useState(false); 빌드 때문에 주석처리 했습니다.
-  const [auth] = React.useState(false);
+  const auth = useSelector((state: RootStateOrAny) => state.isLogin);
   // 사용자 메뉴 Open/Close(PC)
   const [userMenu, setUserMenu] = React.useState<null | HTMLElement>(null);
   // Mobild 메뉴 Open/Close
@@ -110,12 +112,25 @@ export default function NavBar() {
   // 페이지 이동
   const navigate = useNavigate();
 
-  // 로그인 상태 확인하여 상태값 변경하기
-  /*
-  const checkLoginState = () => {
-    setAuth(false);
+  //로그아웃 메서드
+  const logoutMethod = () => {
+    alert("called");
+    sessionStorage.clear();
+    dispatch({ type: "logout" });
+    navigate("/");
   };
-*/
+
+  // 메뉴 메서드 실행
+  const handleNavMethod = (val: string) => {
+    switch (val) {
+      case "logout":
+        logoutMethod();
+        break;
+      default:
+        break;
+    }
+  };
+
   // 사용자 메뉴 열고 닫기(로그인 했을 때)
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setUserMenu(event.currentTarget);
@@ -161,7 +176,11 @@ export default function NavBar() {
             <ListItem
               button
               key={item.label}
-              onClick={() => (item.link ? movePage(item.link) : item.method)}
+              onClick={() =>
+                item.link
+                  ? movePage(item.link)
+                  : handleNavMethod(item.method as string)
+              }
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.label} />
@@ -181,6 +200,7 @@ export default function NavBar() {
     </Box>
   );
 
+  // 페이지 이동
   const movePage = (page: string) => {
     navigate(page);
   };
@@ -286,7 +306,15 @@ export default function NavBar() {
                 }}
               >
                 {userNav.map((item) => (
-                  <MenuItem sx={{ fontSize: "0.9rem" }}>
+                  <MenuItem
+                    sx={{ fontSize: "0.9rem" }}
+                    key={item.label}
+                    onClick={() =>
+                      item.link
+                        ? movePage(item.link)
+                        : handleNavMethod(item.method as string)
+                    }
+                  >
                     <ListItemIcon>{item.icon}</ListItemIcon>
                     {item.label}
                   </MenuItem>

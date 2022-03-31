@@ -53,10 +53,11 @@ function Form({ sendDataToParent }: User) {
     let check = /@/;
     return !check.test(email) && email.length > 1;
   };
-  const sendData = () => {
+  const sendData = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (password.length !== 0 && email.length !== 0) {
+      //원래 저장된 이메일과 다른 email을 저장하는 경우 */
       if (isRemember && prevSave !== email) {
-        //원래 저장된 이메일과 다른 email을 저장하는 경우 */
         removeCookie("rememberEmail");
         setCookie("rememberEmail", email, { maxAge: 2000 });
       }
@@ -76,7 +77,7 @@ function Form({ sendDataToParent }: User) {
         >
           로그인
         </Typography>
-        <form>
+        <form onSubmit={sendData}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
               <TextField
@@ -134,7 +135,6 @@ function Form({ sendDataToParent }: User) {
                 variant="contained"
                 color="primary"
                 size="large"
-                onClick={sendData}
                 sx={{ my: 2 }}
               >
                 로그인
