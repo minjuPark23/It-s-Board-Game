@@ -91,7 +91,7 @@ const StateWrapper = styled(CardActions)(({ theme }) => ({
 
 export default function BoardCard({ deal }: Deal) {
   return (
-    <Grid item xs={12} sm={4} md={3} lg={2.4}>
+    <Grid item xs={6} sm={4} md={3} lg={2.4}>
       <StyledCard variant="outlined">
         <CardActionArea>
           <ImgWrapper>

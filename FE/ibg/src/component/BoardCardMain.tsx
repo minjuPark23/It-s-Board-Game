@@ -17,6 +17,7 @@ import StarIcon from "@mui/icons-material/Star";
 // 카드 효과 스타일
 const StyledCard = styled(Card)(() => ({
   position: "relative",
+  width: "inherit",
   minWidth: "140px",
   "&:hover": {
     animation: "circlemove 1.5s infinite linear",
@@ -91,7 +92,6 @@ export default function BoardCard(props: { game: Game; responsive?: boolean }) {
             <CardMedia
               sx={{
                 position: "absolute",
-                width: "100%",
                 height: "100%",
                 objectFit: "contain",
               }}
