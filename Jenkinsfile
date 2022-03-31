@@ -58,6 +58,12 @@ pipeline {
 				}
 			}
 		}
+		stage('Django Deploy') {
+			steps {
+				// sh 'docker stop django && docker rm django'
+				sh 'docker run --network backend -d --name django -p 7776:7776 -v /etc/letsencrypt:/etc/letsencrypt -u root basepage/django'
+			}
+		}
 		stage('Finish') {
 			steps{
 				sh 'docker restart nginx'
