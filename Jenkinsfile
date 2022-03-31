@@ -53,10 +53,8 @@ pipeline {
 		}
 		stage('Django Build'){
 			steps {
-				dir('./django') {
-					dir('./ibg'){
-						sh 'docker build -t basepage/django ./django/ibg'
-					}
+				dir('./django/ibg') {
+					sh 'docker build -t basepage/django .'
 				}
 			}
 		}
