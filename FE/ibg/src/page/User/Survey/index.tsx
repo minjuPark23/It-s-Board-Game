@@ -24,7 +24,7 @@ export interface IProps {
 export default function Survey() {
   const [gameList, setGameList] = useState<Game[]>([]);
   const [count, setCount] = useState(0);
-  const [ratedGame, setRatedGame] = useState<number[]>([]);
+  const [ratedGame] = useState<number[]>([]);
   const [width] = useState(window.innerWidth);
   const [open, setOpen] = useState(false); //modal
   const navigate = useNavigate();
@@ -48,12 +48,9 @@ export default function Survey() {
 
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
-    //  setGameList(tempData.gameList);
     const init = async () => {
-      console.log("userno : " + userno);
       const data = await initSurvey(userno);
-      //  setGameList(data);
-      console.log(data);
+      setGameList(data);
     };
     init();
   }, []);
@@ -141,33 +138,3 @@ export default function Survey() {
     </>
   );
 }
-
-// 임시 데이터
-const tempData = {
-  gameList: [
-    {
-      gameNo: 1,
-      gameImg:
-        "https://cf.geekdo-images.com/original/img/uqlrq_bQJqHpcaN7_7qocV5XfbU=/0x0/pic4718279.jpg",
-      gameName: "Die Macher long title very long",
-    },
-    {
-      gameNo: 12,
-      gameImg:
-        "https://cf.geekdo-images.com/original/img/o07K8ZVh0PkOpOnSZs1TuABb7I4=/0x0/pic4001505.jpg",
-      gameName: "Dragonmaster",
-    },
-    {
-      gameNo: 2,
-      gameImg:
-        "https://cf.geekdo-images.com/original/img/o07K8ZVh0PkOpOnSZs1TuABb7I4=/0x0/pic4001505.jpg",
-      gameName: "Dragonmaster",
-    },
-    {
-      gameNo: 3,
-      gameImg:
-        "https://cf.geekdo-images.com/original/img/o07K8ZVh0PkOpOnSZs1TuABb7I4=/0x0/pic4001505.jpg",
-      gameName: "Dragonmaster",
-    },
-  ],
-};
