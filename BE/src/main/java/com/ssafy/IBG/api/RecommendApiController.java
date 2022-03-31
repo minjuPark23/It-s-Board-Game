@@ -13,6 +13,7 @@ import com.ssafy.IBG.service.RecommendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -94,11 +95,11 @@ public class RecommendApiController {
      * @date : 2022-03-25 오전 15:00
      * @desc: 예측 평점으로 추천
      * */
-    @GetMapping("/game/score")
-    public Result getRecommendByScore(@RequestBody(required = false) RecommendRequest request) throws JsonProcessingException {
-        List<RecommendTestResponse> list = restapiService.requestGETAPI("/user", null);
+    @GetMapping("/game/score/{userNo}")
+    public Result getRecommendByScore(@PathVariable(name = "userNo") Integer userNo) throws JsonProcessingException {
+        restapiService.requestGETAPI("/user", userNo);
 
-        return new Result(HttpStatus.OK.value(), list);
+        return new Result(HttpStatus.OK.value(), null);
     }
 
     /**

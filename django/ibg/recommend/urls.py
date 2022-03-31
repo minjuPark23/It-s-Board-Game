@@ -13,11 +13,10 @@ post_detail = PostView.as_view({
     'delete': 'destroy'
 })
 
+
 urlpatterns = format_suffix_patterns([
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('posts/', post_list, name='post_list'),
     path('posts/<int:pk>/', post_detail, name='post_detail'),
-    path("user/", UserView.as_view({
-        'get': 'list'
-    }))
+    path("user/<int:user_no>/",  UserView.recommand_user)
 ])
