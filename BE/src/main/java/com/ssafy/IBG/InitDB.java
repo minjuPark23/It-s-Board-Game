@@ -22,7 +22,7 @@ public class InitDB {
 //    public void init(){
 //        initService.dbInit();
 //    }
-    
+
     @Component
     @RequiredArgsConstructor
     @Transactional

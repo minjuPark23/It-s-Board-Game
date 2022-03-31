@@ -56,8 +56,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:7777",
-    "http://127.0.0.1:7777"
+    "http://j6b101.p.ssafy.io:7777",
+    "http://3.38.252.84:7777"
 ]
 
 ROOT_URLCONF = 'ibg.urls'
@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': 'ibg',  # DB 명
         'USER': 'ibg',  # 유저 ID
         'PASSWORD': 'ssafyB101!',  # 유저 비밀번호
-        'HOST': 'localhost',    # 현재 DB 연결 HOST
+        'HOST': 'database',    # 현재 DB 연결 HOST
         'PORT': '3306'  # 현재 DB 연결 포트번호
     }
 }
