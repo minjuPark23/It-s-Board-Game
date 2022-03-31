@@ -9,7 +9,7 @@ import sessionStorage from "redux-persist/lib/storage/session";
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 
 const persistConfig = {
   key: "root",
@@ -28,7 +28,6 @@ function reducer(currentState: any, action: any) {
 
   if (action.type === "login") {
     newState.user = action.userData;
-    // console.log(newState.user, "store");
     newState.isLogin = true;
     return newState;
   }
@@ -39,9 +38,9 @@ function reducer(currentState: any, action: any) {
     return newState;
   }
   if (action.type === "join") {
+    //return newState;
     newState.user = action.userData;
-    newState.isLogin = true; //자동으로 로그인되게 해야 함
-    return newState;
+    newState.isLogin = true;
   }
 
   return newState;
