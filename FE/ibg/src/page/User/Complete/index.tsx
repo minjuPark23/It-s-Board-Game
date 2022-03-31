@@ -41,7 +41,7 @@ export default function SignUp() {
             maxHeight: { xs: 186, md: 300 },
             maxWidth: { xs: 200, md: 400 },
           }}
-          alt="The house from the offer."
+          alt="Congrats."
           src={pic}
         />
 

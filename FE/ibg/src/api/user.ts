@@ -42,9 +42,15 @@ async function rateGame(userNo: number, gameNo: number, scoreRating: number) {
   ).data; //응답 코드
 }
 
+async function addDelLike(userNo: number, gameNo: number) {
+  return await (
+    await loginApi.post(`user/like`, { userNo: userNo, gameNo: gameNo })
+  ).data;
+}
+
 // 회원가입 설문조사
-async function initSurvey() {
-  return (await loginApi.get(`user/survey`)).data.data;
+async function initSurvey(userNo: number) {
+  return (await loginApi.get(`user/survey/${userNo}`)).data.data;
 }
 
 export {
@@ -54,5 +60,6 @@ export {
   checkEmail,
   checkNickname,
   rateGame,
+  addDelLike,
   initSurvey,
 };
