@@ -28,7 +28,6 @@ function reducer(currentState: any, action: any) {
 
   if (action.type === "login") {
     newState.user = action.userData;
-    // console.log(newState.user, "store");
     newState.isLogin = true;
     return newState;
   }
@@ -39,9 +38,9 @@ function reducer(currentState: any, action: any) {
     return newState;
   }
   if (action.type === "join") {
+    //return newState;
     newState.user = action.userData;
-    newState.isLogin = true; //자동으로 로그인되게 해야 함
-    return newState;
+    newState.isLogin = true;
   }
 
   return newState;
