@@ -30,7 +30,7 @@ pipeline {
 		stage('React Deploy') {
 			steps{
 				sh 'docker stop nginx && docker rm nginx'
-				sh 'docker run -d --name nginx -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt -u root basepage/nginx'
+				sh 'docker run --network backend -d --name nginx -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt -u root basepage/nginx'
 			}
 		}
 		stage('Springboot Build') {
