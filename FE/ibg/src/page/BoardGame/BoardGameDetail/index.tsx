@@ -35,12 +35,11 @@ export default function BoardGameDetail() {
 
   // gameNo, userNo를 이용해서 게임 상세 정보 불러오기
   useEffect(() => {
-    // API 연결, (수정 필요) userNo 추가하기
     getGameDetail(gameNo, user.userNo || 0).then((data) => {
       setGame(data);
       setReviewList(data.responseReviewList);
     });
-  }, []);
+  }, [gameNo, user.userNo]);
 
   return (
     <Container>

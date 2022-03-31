@@ -5,7 +5,7 @@ For the application state, we use Redux connect() function with mapStateToProps:
 */
 import Form from "./component/Form";
 import { Grid } from "@mui/material/";
-import React, { useState } from "react";
+// import React, { useState } from "react";
 import { login, userInfo } from "../../../api/user";
 import jwtDecode from "jwt-decode";
 import { useDispatch } from "react-redux";
@@ -29,7 +29,7 @@ export default function SignIn() {
 
     await login(email, password).then((response) => {
       // console.log(response.data);
-      if (response.data.code == 200) {
+      if (response.data.code === 200) {
         token = response.headers.authorization;
         let decode_token = jwtDecode<MyToken>(token);
         sessionStorage.setItem("accessToken", token);
