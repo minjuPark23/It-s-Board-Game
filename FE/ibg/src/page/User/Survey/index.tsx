@@ -8,7 +8,7 @@ import ConfirmDialog from "./component/ConfirmDialog";
 import { initSurvey } from "../../../api/user";
 //네비게이션
 import { useNavigate } from "react-router-dom";
-
+import { RootStateOrAny, useSelector } from "react-redux";
 // Game 객체
 export interface Game {
   gameNo: number;
@@ -29,6 +29,7 @@ export default function Survey() {
   const [open, setOpen] = useState(false); //modal
   const navigate = useNavigate();
 
+  const userno = useSelector((state: RootStateOrAny) => state.user.userNo);
   // function to handle modal open
   const handleOpen = () => {
     setOpen(true);
@@ -47,13 +48,14 @@ export default function Survey() {
 
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
-    setGameList(tempData.gameList);
-    // const init = async () => {
-    //   const data = await initSurvey();
-    //   setGameList(data);
-    //   console.log(data);
-    // };
-    // init();
+    //  setGameList(tempData.gameList);
+    const init = async () => {
+      console.log("userno : " + userno);
+      const data = await initSurvey(userno);
+      //  setGameList(data);
+      console.log(data);
+    };
+    init();
   }, []);
 
   // count 업데이트하는 method
