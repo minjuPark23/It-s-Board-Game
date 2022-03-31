@@ -13,8 +13,10 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int gameNo;
 
-    @Column(name = "gameName", unique = true)
+    @Column(unique = true)
     private String gameName;
+
+    private String gameKorName;
 
     private int gameMinPlayer;
 
@@ -36,8 +38,11 @@ public class Game {
 
     private double gameWeight;
 
-    @Column(name = "gameDesc", length = 6000)
-    private String gameDescription;
+    @Column(length = 6000)
+    private String gameDesc;
+
+    @Column(length = 6000)
+    private String gameKorDesc;
 
     @OneToMany(mappedBy = "game")
     private List<Review> review;
