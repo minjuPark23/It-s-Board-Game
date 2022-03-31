@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 @Entity
 @Data
@@ -35,8 +36,12 @@ public class Review {
         this.user = user;
         this.game = game;
         this.reviewContent = reviewContent;
-        SimpleDateFormat date = new SimpleDateFormat("yyyy MM");
-        this.reviewReg = date.toString();
+        Date now = new Date();
+        SimpleDateFormat date = new SimpleDateFormat("MMM yyyy", Locale.US);
+        String strDate = date.format(now);
+        this.reviewReg = strDate;
     }
+
+
 
 }
