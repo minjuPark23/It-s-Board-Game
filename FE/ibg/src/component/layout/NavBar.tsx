@@ -41,7 +41,7 @@ const userNav = [
   {
     label: "관심목록",
     icon: <FavoriteBorderIcon />,
-    link: "/",
+    link: "/mygames",
   },
   {
     label: "채팅",
