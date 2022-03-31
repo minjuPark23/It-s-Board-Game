@@ -49,4 +49,5 @@ public class GameService {
     public List<Game> getGameByFilter(String gameName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
         return gameRepository.findGameByFilter(gameName, gamePlayer, gameTime, gameWeight, gameAge, gameScore, gameCategory);
     }
+
 }

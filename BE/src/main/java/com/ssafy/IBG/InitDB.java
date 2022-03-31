@@ -1,6 +1,5 @@
 package com.ssafy.IBG;
 
-import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.User;
 import com.ssafy.IBG.domain.auth.UserAuthType;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +17,12 @@ public class InitDB {
 
     private final InitService initService;
 
+    // DB Create 설정일 때만 수행
 //    @PostConstruct
-    public void init(){
-        initService.dbInit();
-    }
-
+//    public void init(){
+//        initService.dbInit();
+//    }
+    
     @Component
     @RequiredArgsConstructor
     @Transactional
@@ -37,10 +37,8 @@ public class InitDB {
             User testUser = setUser("test01@ssafy.com", "123", "test");
             em.persist(testUser);
 
-//            Game game = new Game();
-//            game.setGameName("testGame");
-//            em.persist(game);
         }
+
 
         private User setUser(String user_email, String user_pwd, String user_nickname) {
             User user = new User();

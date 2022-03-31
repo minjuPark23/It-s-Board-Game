@@ -25,7 +25,7 @@ public class Score {
     @JoinColumn(name = "gameNo")
     private Game game;
 
-    private int scoreRating;
+    private double scoreRating;
 
     public Score(User user, Game game, int scoreRating){
         this.user = user;

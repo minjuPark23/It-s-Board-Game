@@ -25,16 +25,18 @@ public class Review {
     @JoinColumn(name = "gameNo")
     private Game game;
 
+    @Column(length = 6000)
     private String reviewContent;
 
-    @Column(name = "reviewReg", columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date reviewReg;
+    //    @Temporal(TemporalType.TIMESTAMP)
+    private String reviewReg;
 
     public Review(User user, Game game, String reviewContent) {
         this.user = user;
         this.game = game;
         this.reviewContent = reviewContent;
+        SimpleDateFormat date = new SimpleDateFormat("yyyy MM");
+        this.reviewReg = date.toString();
     }
 
 }

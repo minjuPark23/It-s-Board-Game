@@ -22,6 +22,8 @@ public class ReviewRepository {
         List<Review> reviewList = em.createQuery("select r from Review r where r.game.gameNo = :gameNo", Review.class)
                 .setParameter("gameNo", gameNo)
                 .getResultList();
+        if(reviewList.size() > 50)
+            reviewList = reviewList.subList(0,50);
         return reviewList;
     }
 
