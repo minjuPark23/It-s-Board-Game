@@ -94,9 +94,8 @@ export default function GameInfo(props: { game: GameDetail }) {
       </Grid>
       <Grid item xs={12} sm={8}>
         <InfoWrapper>
-          {/* (수정 필요) 한글 이름 넣기 */}
           <Typography sx={{ fontSize: { xs: 18, md: 25 }, fontWeight: "bold" }}>
-            {props.game.gameName}
+            {props.game.gameKorName}
             <Typography component="span">({props.game.gameYear})</Typography>
           </Typography>
           <Typography
@@ -128,7 +127,7 @@ export default function GameInfo(props: { game: GameDetail }) {
             </InfoIcon>
             카테고리: {props.game.gameCategory}
           </InfoText>
-          <InfoText sx={{ mt: 1.5 }}>{props.game.gameDesc}</InfoText>
+          <InfoText sx={{ mt: 1.5 }}>{props.game.gameKorDesc}</InfoText>
           <AvgRate>
             {props.game.gameTotalScore}
             {/* <Typography component="span"> 점</Typography> */}

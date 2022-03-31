@@ -24,8 +24,6 @@ export default function StarRating({
   const navigate = useNavigate();
 
   const setScore = (score: number) => {
-    console.log(userNo, gameNo, score);
-
     // 로그인하지 않은 경우 로그인 페이지로 이동
     if (!userNo) {
       navigate("/signin");
