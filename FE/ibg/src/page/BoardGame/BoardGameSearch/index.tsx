@@ -15,7 +15,11 @@ export default function Main() {
     <Container style={{ marginTop: 20, padding: 20 }}>
       <Grid container spacing={2}>
         {gameList.map((game) => (
-          <BoardCardMain key={game.gameNo} game={game}></BoardCardMain>
+          <BoardCardMain
+            key={game.gameNo}
+            game={game}
+            responsive
+          ></BoardCardMain>
         ))}
       </Grid>
     </Container>

@@ -1,5 +1,6 @@
 import { RootStateOrAny, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import LikeButton from "./LikeButton";
 import { Game } from "../page/Main";
 import { styled } from "@mui/material/styles";
 import {
@@ -8,14 +9,15 @@ import {
   CardMedia,
   CardActionArea,
   Grid,
+  Box,
 } from "@mui/material";
-import LikeButton from "./LikeButton";
 import PersonIcon from "@mui/icons-material/Person";
 import StarIcon from "@mui/icons-material/Star";
 
 // 카드 효과 스타일
 const StyledCard = styled(Card)(() => ({
   position: "relative",
+  minWidth: "178px",
   "&:hover": {
     animation: "circlemove 1.5s infinite linear",
   },
@@ -70,14 +72,15 @@ const LikeButtonPosition = styled("span")(() => ({
   bottom: "10px",
 }));
 
-export default function BoardCard(props: { game: Game }) {
+export default function BoardCard(props: { game: Game; responsive?: boolean }) {
   const user = useSelector((state: RootStateOrAny) => state.user);
   const navigate = useNavigate();
   const moveToDetail = () => {
     navigate(`/detail/${props.game.gameNo}`);
   };
-  return (
-    <Grid item xs={12} sm={4} md={3} lg={2.5}>
+
+  const insideInfo = () => {
+    return (
       <StyledCard variant="outlined" onClick={moveToDetail}>
         <CardActionArea>
           <ImgWrapper>
@@ -105,7 +108,7 @@ export default function BoardCard(props: { game: Game }) {
             <LikeButtonPosition>
               <LikeButton
                 initLike={props.game.like}
-                size={30}
+                size={28}
                 gameNo={props.game.gameNo}
                 userNo={user.userNo}
               />
@@ -113,6 +116,13 @@ export default function BoardCard(props: { game: Game }) {
           </CardContent>
         </CardActionArea>
       </StyledCard>
+    );
+  };
+  return props.responsive ? (
+    <Grid item xs={12} sm={4} md={3} lg={2.5}>
+      {insideInfo()}
     </Grid>
+  ) : (
+    <Box sx={{ width: "178px", mx: 1 }}>{insideInfo()}</Box>
   );
 }
