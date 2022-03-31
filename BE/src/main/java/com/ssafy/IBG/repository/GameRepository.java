@@ -99,4 +99,5 @@ public class GameRepository {
                 .fetch();
         return gameList;
     }
+
 }

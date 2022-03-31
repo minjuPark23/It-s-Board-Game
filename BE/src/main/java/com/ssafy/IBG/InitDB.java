@@ -18,10 +18,11 @@ public class InitDB {
 
     private final InitService initService;
 
+    // DB Create 설정일 때만 수행
 //    @PostConstruct
-    public void init(){
-        initService.dbInit();
-    }
+//    public void init(){
+//        initService.dbInit();
+//    }
 
     @Component
     @RequiredArgsConstructor
