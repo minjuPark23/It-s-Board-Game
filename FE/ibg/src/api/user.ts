@@ -49,8 +49,8 @@ async function addDelLike(userNo: number, gameNo: number) {
 }
 
 // 회원가입 설문조사
-async function initSurvey() {
-  return (await loginApi.get(`user/survey`)).data.data;
+async function initSurvey(userNo: number) {
+  return (await loginApi.get(`user/survey/${userNo}`)).data.data;
 }
 
 export {
