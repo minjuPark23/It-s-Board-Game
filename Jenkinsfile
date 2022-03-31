@@ -51,6 +51,13 @@ pipeline {
 				sh 'docker run --network backend -d --name springboot -p 7777:7777 -v /etc/letsencrypt:/etc/letsencrypt -u root basepage/springboot'
 			}
 		}
+		stage('Django Build'){
+			steps {
+				dir('./django/ibg') {
+					sh 'docker build -t basepage/django ./django/ibg'
+				}
+			}
+		}
 		stage('Finish') {
 			steps{
 				sh 'docker restart nginx'

@@ -92,7 +92,7 @@ DATABASES = {
         'USER': 'ibg',  # 유저 ID
         'PASSWORD': 'ssafyB101!',  # 유저 비밀번호
         'HOST': 'localhost',    # 현재 DB 연결 HOST
-        'PORT': '7779'  # 현재 DB 연결 포트번호
+        'PORT': '3306'  # 현재 DB 연결 포트번호
     }
 }
 
