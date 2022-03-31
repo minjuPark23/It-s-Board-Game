@@ -43,8 +43,10 @@ async function rateGame(userNo: number, gameNo: number, scoreRating: number) {
 }
 
 // 회원가입 설문조사
-async function initSurvey() {
-  return (await loginApi.get(`user/survey`)).data.data;
+async function initSurvey(userNo: number) {
+  //return await loginApi.get("user/survey", { data: { userNo: userNo } });
+  return await loginApi.get("user/survey", { params: { userNo: userNo } });
+  // return await loginApi.get("user/survey", { params: { userNo } });
 }
 
 export {

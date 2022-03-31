@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Game } from "../index";
 import { styled } from "@mui/material/styles";
 import StarRating from "../../../../component/StarRating";
-import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
+import { RootStateOrAny, useSelector } from "react-redux";
 import {
   Card,
   CardContent,
