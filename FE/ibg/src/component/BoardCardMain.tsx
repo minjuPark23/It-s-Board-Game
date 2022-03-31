@@ -97,7 +97,7 @@ export default function BoardCard(props: { game: Game; responsive?: boolean }) {
             />
           </ImgWrapper>
           <CardContent>
-            <GameTitle>{props.game.gameName}</GameTitle>
+            <GameTitle>{props.game.gameKorName}</GameTitle>
             <Category>{props.game.gameCategory}</Category>
             <AddInfo>
               <PersonIcon color="warning" fontSize="small" sx={{ mr: 0.5 }} />
