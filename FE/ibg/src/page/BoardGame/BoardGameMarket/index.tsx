@@ -4,18 +4,18 @@ import {
   Grid,
   Box,
   Container,
-  ThemeProvider,
-  Typography,
   Divider,
   InputBase,
+  Button,
 } from "@mui/material";
 import { styled, alpha, createTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import BoardCard from "./component/BoardCard";
-import MarketUpload from "./component/MarketUpload";
-
+import MarketUploadDialog from "./component/MarketUploadDialog";
+import Title from "./component/Title";
 export default function BoardGameMarket() {
   const [dealList] = useState(tempData.dealList);
+  const [open, setOpen] = useState(false); //modal
 
   /* 검색 */
   const Search = styled("div")(({ theme }) => ({
@@ -78,7 +78,32 @@ export default function BoardGameMarket() {
       fontSize: "2.4rem",
     },
   };
+  // function to handle modal open
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
+  // function to handle modal close
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  //navigate when "Yes" is pressed on dialog OR pressed Complete
+  const handleSubmit = async (
+    title: string,
+    price: number,
+    contents: string,
+    file: File | undefined
+  ) => {
+    setOpen(false);
+    //api 연결하기 : 등록
+    // alert(title + " " + price);
+    //navigate("/complete");
+  };
+
+  const viewDetail = (dealNo: number) => {
+    console.log(dealNo);
+  };
   return (
     <Container style={{ marginTop: 20, padding: 20 }}>
       {/* BGM 상단 */}
@@ -86,24 +111,21 @@ export default function BoardGameMarket() {
         style={{ marginBottom: 10 }}
         sx={{ display: "flex", justifyContent: "space-between" }}
       >
-        <ThemeProvider theme={theme}>
-          <Typography variant="h3" sx={{ display: "flex" }}>
-            <Typography variant="h3" color="error">
-              B
-            </Typography>
-            oard&nbsp;
-            <Typography variant="h3" color="#FCB500">
-              G
-            </Typography>
-            ame&nbsp;
-            <Typography variant="h3" color="primary">
-              M
-            </Typography>
-            arket
-          </Typography>
-        </ThemeProvider>
         {/* 거래 업로드 버튼 */}
-        <MarketUpload />
+        <Title />
+        <Button
+          style={{ height: 20 }}
+          sx={{ top: { md: 28, xs: 10 } }}
+          color="primary"
+          onClick={handleOpen}
+        >
+          거래 등록
+        </Button>
+        <MarketUploadDialog
+          open={open}
+          handleClose={handleClose}
+          sendDataToParent={handleSubmit}
+        />
       </Box>
       <Divider />
       <Search sx={{ width: { xs: "100%", sm: 330 } }}>
@@ -117,7 +139,11 @@ export default function BoardGameMarket() {
       </Search>
       <Grid container spacing={1} style={{ marginTop: 14 }}>
         {dealList.map((deal) => (
-          <BoardCard key={deal.gameNo} deal={deal}></BoardCard>
+          <BoardCard
+            key={deal.dealNo}
+            deal={deal}
+            
+          ></BoardCard>
         ))}
       </Grid>
     </Container>
@@ -130,56 +156,10 @@ const tempData = {
     {
       dealTitle: "보드게임 팝니다.",
       dealState: false,
-      gameNo: 1,
-      gameImg:
+      dealNo: 1,
+      dealImage:
         "https://ae01.alicdn.com/kf/H886df0f1371840bc8607e8eccd08a84bd/Mattel-Games-UNO-Kartenspiel-UNO.jpg_Q90.jpg_.webp",
-      gameName: "UNO",
-      gamePrice: 5000,
-    },
-    {
-      dealTitle: "얍얍",
-      dealState: false,
-      gameNo: 2,
-      gameImg:
-        "http://openimage.interpark.com/goods_image_big/3/1/9/1/8358463191_l.jpg",
-      gameName: "CATAN",
-      gamePrice: 15000,
-    },
-    {
-      dealTitle: "[젠가]저렴하다.",
-      dealState: true,
-      gameNo: 3,
-      gameImg:
-        "https://target.scene7.com/is/image/Target/GUEST_2ff3e3eb-c38d-4c5a-a6bc-7b95b96c3fec?wid=488&hei=488&fmt=pjpeg",
-      gameName: "Jenga",
-      gamePrice: 3000,
-    },
-    {
-      dealTitle: "부루마블 판매",
-      dealState: false,
-      gameNo: 4,
-      gameImg:
-        "http://openimage.interpark.com/goods_image/1/7/9/3/8297011793s.jpg",
-      gameName: "부루마블",
-      gamePrice: 20000,
-    },
-    {
-      dealTitle: "루미큐브 판매한다",
-      dealState: false,
-      gameNo: 5,
-      gameImg:
-        "http://rummikubshop.co.kr/web/product/big/202010/e1b94b790fb40aa849a74028e44f803f.jpg",
-      gameName: "Rummikub",
-      gamePrice: 4500,
-    },
-    {
-      dealTitle: "[할리갈리]잼씀",
-      dealState: true,
-      gameNo: 6,
-      gameImg:
-        "https://www.koreaboardgames.com/upload/uploaded/prd/415051482112635.png",
-      gameName: "Halli Galli",
-      gamePrice: 25000,
+      dealPrice: 5000,
     },
   ],
 };
