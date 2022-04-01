@@ -36,6 +36,17 @@ public class ScoreService {
 
     /**
     * @author : 박민주
+    * @date : 2022-04-01 오후 3:49
+    * @desc : 유저의 스코어 정보 개수 찾기
+    **/
+    public int getScoreCnt(Integer userNo){
+        int scoreCntByUserNo = scoreRepository.findScoreCntByUserNo(userNo);
+        System.out.println("총 평점 개수"+ scoreCntByUserNo);
+        return scoreCntByUserNo;
+    }
+
+    /**
+    * @author : 박민주
     * @date : 2022-03-28 오후 5:53
     * @desc : userNo와 GameNo로 score 찾기
     **/
