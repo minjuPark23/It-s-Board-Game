@@ -1,6 +1,7 @@
 package com.ssafy.IBG.service;
 
 import com.ssafy.IBG.domain.Game;
+import com.ssafy.IBG.domain.Recommend;
 import com.ssafy.IBG.repository.RecommendRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,4 +47,12 @@ public class RecommendService {
        return recommendRepository.findRecommendByRanking(limit);
     }
 
+    /**
+    * @author : 박민주
+    * @date : 2022-04-01 오후 3:56
+    * @desc : 추천 테이블에 저장된 추천리스트 반환하기
+    **/
+    public List<Recommend> getRecommendByUserNo(int userNo){
+        return recommendRepository.findRecommendByUserNo(userNo);
+    }
 }
