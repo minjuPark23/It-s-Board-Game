@@ -5,13 +5,18 @@ import { ThemeProvider } from "@emotion/react";
 import NavBar from "./component/layout/NavBar";
 import Footer from "./component/layout/Footer";
 
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
 function App() {
   return (
     <ThemeProvider theme={CustomTheme}>
       <BrowserRouter>
         <NavBar />
         <Router />
-        {window.location.pathname === "/survey" ? null: <Footer/>}
+        {window.location.pathname === "/survey" ? null : <Footer />}
       </BrowserRouter>
     </ThemeProvider>
   );
