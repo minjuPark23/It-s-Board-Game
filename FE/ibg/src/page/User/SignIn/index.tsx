@@ -49,7 +49,7 @@ export default function SignIn() {
             let userNo = response.userNo;
             //alert("dispatch");
             init(email, password, userNick, userNo);
-            //     alert("navigate");
+            // alert("navigate");
             navigate("/");
             setLoading(false);
           })

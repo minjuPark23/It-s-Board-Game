@@ -14,6 +14,7 @@ export interface Game {
   gameCategory: string;
   gameTotalScore: number;
   like: boolean;
+  gameKorName: string;
 }
 
 // 테마별 게임리스트: sm(600) 이상(pc)에서는 버튼으로, 이하(모바일)에서는 스크롤로 동작
@@ -22,7 +23,7 @@ export default function MyGames() {
   const [userno] = useState(
     useSelector((state: RootStateOrAny) => state.user.userNo)
   );
-// 관심 게임이 없는 경우 추가해야함
+  // 관심 게임이 없는 경우 추가해야함
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
     const init = async () => {
