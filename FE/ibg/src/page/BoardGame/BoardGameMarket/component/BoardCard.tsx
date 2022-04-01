@@ -9,15 +9,14 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 interface Deal {
   deal: {
     dealTitle: string;
     dealState: boolean;
-    gameNo: number;
-    gameImg: string;
-    gameName: string;
-    gamePrice: number;
+    dealNo: number;
+    dealImage: string; // File | null;
+    dealPrice: number;
   };
 }
 
@@ -90,9 +89,13 @@ const StateWrapper = styled(CardActions)(({ theme }) => ({
 }));
 
 export default function BoardCard({ deal }: Deal) {
+  const navigate = useNavigate();
+  const moveToDetail = () => {
+    navigate(`/market/detail/${deal.dealNo}`);
+  };
   return (
     <Grid item xs={6} sm={4} md={3} lg={2.4}>
-      <StyledCard variant="outlined">
+      <StyledCard variant="outlined" onClick={moveToDetail}>
         <CardActionArea>
           <ImgWrapper>
             <CardMedia
@@ -103,16 +106,16 @@ export default function BoardCard({ deal }: Deal) {
                 objectFit: "contain",
               }}
               component="img"
-              image={deal.gameImg}
-              alt={deal.gameName}
+              image={deal.dealImage}
+              alt={deal.dealTitle}
             />
           </ImgWrapper>
           <CardContent>
             <DealTitle>{deal.dealTitle}</DealTitle>
-            <Category>{deal.gameName}</Category>
+
             <StateWrapper>
               <MarketState>{deal.dealState}거래중</MarketState>
-              <Price variant="body2">{deal.gamePrice}원</Price>
+              <Price variant="body2">{deal.dealPrice}원</Price>
             </StateWrapper>
           </CardContent>
         </CardActionArea>
