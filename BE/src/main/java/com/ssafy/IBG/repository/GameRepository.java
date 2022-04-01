@@ -73,14 +73,18 @@ public class GameRepository {
      * @author : 박민주
      * @date : 2022-03-23 오후 5:52
      **/
-    public List<Game> findGameByFilter(String gameName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
+    public List<Game> findGameByFilter(String gameName, String gameKorName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
 
+        System.out.println(gameCategory);
         JPQLQuery<Game> query = new JPAQuery<>(em);
         QGame qGame = new QGame("Game");
 
         BooleanBuilder builder = new BooleanBuilder();
         if(gameName != null){
             builder.and(qGame.gameName.contains(gameName));
+        }
+        if (gameKorName != null){
+            builder.and(qGame.gameKorName.contains(gameKorName));
         }
         if(gamePlayer != null){
             builder.and(qGame.gameMinPlayer.goe(gamePlayer));
@@ -97,7 +101,7 @@ public class GameRepository {
         if(gameScore != null){
             builder.and(qGame.gameTotalScore.goe(gameScore));
         }
-        if(!gameCategory.isEmpty()){
+        if(gameCategory != null){
             for (String c : gameCategory) {
                 builder.and(qGame.gameCategory.contains(c));
             }
