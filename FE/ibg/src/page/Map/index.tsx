@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Map from "./component/Map";
 import { Box, Container, Typography } from "@mui/material";
-//여기서 위치를 넘겨줘야할것같다!
+import FmdGoodIcon from "@mui/icons-material/FmdGood";
+
 export default function Index() {
   const [long, setLong] = useState(0);
   const [lat, setLat] = useState(0);
@@ -31,7 +32,7 @@ export default function Index() {
       };
       geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
     }
-   // setLoading(false);
+    // setLoading(false);
   });
   return (
     <>
@@ -43,10 +44,11 @@ export default function Index() {
             mb: 1,
           }}
         >
-          주변 보드 게임 카페
+          주변 보드게임 카페 찾기
+          <FmdGoodIcon sx={{ verticalAlign: "-0.2rem", ml: 1 }} />
         </Typography>
 
-        <Box style={{}}>
+        <Box>
           <Map long={long} lat={lat} addr={addr} />
         </Box>
       </Container>
