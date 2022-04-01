@@ -1,4 +1,5 @@
 import { apiInstance } from ".";
+import { ISearchFilter } from "../page/BoardGame/BoardGameSearch/component/GameFilter";
 
 const api = apiInstance();
 
@@ -17,4 +18,9 @@ async function searchAuto(searchName: string, userNo: number) {
   ).data.data;
 }
 
-export { getGameDetail, searchAuto };
+// 필터 검색
+async function searchFilter(data: ISearchFilter) {
+  return (await api.post(`/search/filter`, data)).data;
+}
+
+export { getGameDetail, searchAuto, searchFilter };
