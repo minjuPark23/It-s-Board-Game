@@ -29,7 +29,7 @@ public class DealApiController {
 
     private final DealService dealService;
     private final UserService userService;
-    private final GameService gameService;
+//    private final GameService gameService;
 
     private final DealUtil dealUtil;
 
@@ -44,10 +44,10 @@ public class DealApiController {
         Deal deal = new Deal();
 
         User user = userService.getUserByUserNo(request.getUserNo());
-        Game game = gameService.getGameByGameNo(request.getGameNo());
+//        Game game = gameService.getGameByGameNo(request.getGameNo());
 
         deal.setUser(user);
-        deal.setGame(game);
+//        deal.setGame(game);
         deal.setDealTitle(request.getDealTitle());
         deal.setDealContent(request.getDealContent());
         deal.setDealPrice(request.getDealPrice());
@@ -125,7 +125,7 @@ public class DealApiController {
                 .map(deal -> new DealResponse(
                         deal.getDealNo(),
                         deal.getUser().getUserNo(),
-                        deal.getGame().getGameNo(),
+//                        deal.getGame().getGameNo(),
                         deal.getDealTitle(),
                         deal.getDealContent(),
                         deal.getDealFileName(),
@@ -152,7 +152,7 @@ public class DealApiController {
                 .map(deal -> new DealResponse(
                         deal.getDealNo(),
                         deal.getUser().getUserNo(),
-                        deal.getGame().getGameNo(),
+//                        deal.getGame().getGameNo(),
                         deal.getDealTitle(),
                         deal.getDealContent(),
                         deal.getDealFileName(),
@@ -178,7 +178,7 @@ public class DealApiController {
         DealResponse dealResponse = new DealResponse(
                 deal.getDealNo(),
                 deal.getUser().getUserNo(),
-                deal.getGame().getGameNo(),
+//                deal.getGame().getGameNo(),
                 deal.getDealTitle(),
                 deal.getDealContent(),
                 deal.getDealFileName(),

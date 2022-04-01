@@ -18,9 +18,9 @@ public class Deal {
     @JoinColumn(name = "userNo")
     private User user;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "gameNo")
-    private Game game;
+//    @ManyToOne(fetch = LAZY)
+//    @JoinColumn(name = "gameNo")
+//    private Game game;
 
     private String dealTitle;
     private String dealContent;
