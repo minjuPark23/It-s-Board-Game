@@ -3,8 +3,9 @@ import { RootStateOrAny, useSelector } from "react-redux";
 import { searchAuto } from "../../../api/game";
 import BoardCardMain from "../../../component/BoardCardMain";
 import { Game } from "../../Main/index";
-import { Box, Container, Grid, Typography } from "@mui/material";
 import CustomSelect, { StyledOption } from "./component/CustomSelect";
+import GameFilter from "./component/GameFilter";
+import { Box, Container, Grid, Typography } from "@mui/material";
 
 export default function BoardGameSearch() {
   const [initGameList, setInitGameList] = useState<Game[]>([]);
@@ -12,13 +13,15 @@ export default function BoardGameSearch() {
   const [sortingOpt, setSortingOpt] = useState<string | null>("recomm");
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
 
+  // 페이지 접속 시 1회 실행
   useEffect(() => {
     searchAuto("", userNo).then((data) => {
       setInitGameList(data);
       setGameList(data);
     });
-  }, []);
+  }, [userNo]);
 
+  // sortingOpt이 변경되면 실행
   useEffect(() => {
     let sortData = [...initGameList];
 
@@ -35,11 +38,20 @@ export default function BoardGameSearch() {
         setGameList(sortData);
         break;
     }
-  }, [sortingOpt]);
+  }, [sortingOpt, initGameList]);
+
+  const getSearchResult = () => {
+    // gameFilter에서 검색 버튼 클릭하면 데이터 받아와서 userNo 포함하고 api 호출
+  };
 
   return (
     <Container style={{ marginTop: 20, padding: 20 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
+      {/* 필터링 박스 */}
+      <GameFilter />
+      {/* 제목, 정렬 선택 박스 */}
+      <Box
+        sx={{ display: "flex", justifyContent: "space-between", mt: 5, mb: 1 }}
+      >
         <Typography
           sx={{
             fontSize: { xs: 20, md: 30 },
@@ -55,6 +67,7 @@ export default function BoardGameSearch() {
           <StyledOption value="name">이름순</StyledOption>
         </CustomSelect>
       </Box>
+      {/* 보드게임 카드 */}
       <Grid container spacing={2}>
         {gameList.map((game) => (
           <BoardCardMain
