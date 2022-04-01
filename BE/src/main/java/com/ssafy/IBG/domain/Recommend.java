@@ -1,9 +1,14 @@
 package com.ssafy.IBG.domain;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table
+@Data
+@NoArgsConstructor
 public class Recommend {
 
     @Id

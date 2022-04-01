@@ -1,6 +1,7 @@
 package com.ssafy.IBG.repository;
 
 import com.ssafy.IBG.domain.Game;
+import com.ssafy.IBG.domain.Recommend;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -72,6 +73,16 @@ public class RecommendRepository {
     public List<Game> findRecommendByRanking(int limit) {
         return em.createQuery("select g from Game g order by g.gameTotalScore desc", Game.class)
                 .setMaxResults(limit)
+                .getResultList();
+    }
+
+    /**
+    * @author : 박민주
+    * @date : 2022-04-01 오후 3:57
+    **/
+    public List<Recommend> findRecommendByUserNo(int userNo){
+        return em.createQuery("select r from Recommend r where r.user.userNo = :userNo order by r.recommendRating desc", Recommend.class)
+                .setParameter("userNo", userNo)
                 .getResultList();
     }
 

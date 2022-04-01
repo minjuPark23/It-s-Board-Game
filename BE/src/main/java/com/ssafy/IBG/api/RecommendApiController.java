@@ -5,11 +5,12 @@ import com.ssafy.IBG.api.dto.Result;
 import com.ssafy.IBG.api.recommend.RecommendRequest;
 import com.ssafy.IBG.api.recommend.RecommendResultResponse;
 import com.ssafy.IBG.api.recommend.RecommendSurveyResponse;
-import com.ssafy.IBG.api.recommend.RecommendTestResponse;
 import com.ssafy.IBG.domain.Game;
+import com.ssafy.IBG.domain.Recommend;
 import com.ssafy.IBG.service.InterestService;
 import com.ssafy.IBG.service.RESTAPIService;
 import com.ssafy.IBG.service.RecommendService;
+import com.ssafy.IBG.service.ScoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -94,12 +95,25 @@ public class RecommendApiController {
      * @author : 권오범
      * @date : 2022-03-25 오전 15:00
      * @desc: 예측 평점으로 추천
+     * @modify :
+     * - author : 박민주
+     * - date : 2022-04-01 오후 4:01
+     * - desc : 추천 테이블 평점별로 가져오기 추후)셔플해서 가져오기 추가해야한다.
      * */
     @GetMapping("/game/score/{userNo}")
-    public Result getRecommendByScore(@PathVariable(name = "userNo") Integer userNo) throws JsonProcessingException {
-        restapiService.requestGETAPI("/user", userNo);
-
-        return new Result(HttpStatus.OK.value(), null);
+    public Result getRecommendByScore(@PathVariable(name = "userNo") Integer userNo) {
+        List<Recommend> recommendList = recommendService.getRecommendByUserNo(userNo);
+        if (recommendList == null) {
+            System.out.println("아직 평점 데이터 10개가 안된다.");
+            return new Result(HttpStatus.OK.value(), null);
+        }
+        List<RecommendResultResponse> collect = recommendList.stream()
+                .map(rl -> {
+                    boolean isLike = interestService.getIsLike(rl.getUser().getUserNo(), rl.getGame().getGameNo());
+                    return new RecommendResultResponse(rl, isLike);
+                }).collect(Collectors.toList());
+        System.out.println("평점 데이터 충분해 추천 데이터 반환.");
+        return new Result(HttpStatus.OK.value(), collect);
     }
 
     /**

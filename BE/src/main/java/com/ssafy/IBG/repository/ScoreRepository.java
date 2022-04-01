@@ -44,4 +44,14 @@ public class ScoreRepository {
         }
     }
 
+    /**
+    * @author : 박민주
+    * @date : 2022-04-01 오후 3:59
+    **/
+    public int findScoreCntByUserNo(Integer userNo){
+        return em.createQuery("select s from Score s where s.user.userNo = :userNo", Score.class)
+                .setParameter("userNo", userNo)
+                .getResultList().size();
+    }
+
 }
