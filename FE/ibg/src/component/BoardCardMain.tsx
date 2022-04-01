@@ -64,6 +64,9 @@ const AddInfo = styled("div")(() => ({
   fontSize: "0.8rem",
   display: "flex",
   alignItems: "center",
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+  overflow: "hidden",
 }));
 
 // 관심 버튼 위치
