@@ -17,7 +17,7 @@ export default function BoardGameSearch() {
       setInitGameList(data);
       setGameList(data);
     });
-  }, []);
+  }, [userNo]);
 
   useEffect(() => {
     let sortData = [...initGameList];
@@ -35,7 +35,7 @@ export default function BoardGameSearch() {
         setGameList(sortData);
         break;
     }
-  }, [sortingOpt]);
+  }, [sortingOpt, initGameList]);
 
   return (
     <Container style={{ marginTop: 20, padding: 20 }}>
