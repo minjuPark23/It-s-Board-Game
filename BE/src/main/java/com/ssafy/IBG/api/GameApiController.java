@@ -131,7 +131,7 @@ public class GameApiController {
     **/
     @PostMapping("/search/filter")
     public Result getGameByFilter(@RequestBody SearchFilterRequest request){
-        List<Game> gameList = gameService.getGameByFilter(request.getGameName(), request.getGamePlayer(), request.getGameTime(), request.getGameWeight(), request.getGameAge(), request.getGameScore(), request.getGameCategory());
+        List<Game> gameList = gameService.getGameByFilter(request.getGameName(), request.getGameKorName(), request.getGamePlayer(), request.getGameTime(), request.getGameWeight(), request.getGameAge(), request.getGameScore(), request.getGameCategory());
         return getSearchResult(gameList,request.getUserNo());
 
     }
