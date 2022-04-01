@@ -35,7 +35,6 @@ public class RESTAPIService {
 //        HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
 
         String res_url = BASE_URL+url+"/"+userNo;
-        System.out.println(res_url);
 
         // Request and getResponse
         HttpEntity<String> response = restTemplate.getForEntity(res_url, String.class);
@@ -43,7 +42,7 @@ public class RESTAPIService {
         // Response Body 파싱
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-//        System.out.println(response.getBody());
+        System.out.println(response.getBody());
 //        List<RecommendTestResponse> list = objectMapper.readValue(response.getBody());
 //        return list;
 //        response.getBody().

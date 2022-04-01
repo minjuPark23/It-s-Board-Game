@@ -1,13 +1,9 @@
 from django.db import models
 
+
 # Create your models here.
 # JPA의 엔티티 같은 개념
-class Post(models.Model):
-    id = models.IntegerField(primary_key=True)
-    title = models.CharField(max_length=144)
-    subtitle = models.CharField(max_length=144, blank=True)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+
 
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
@@ -195,18 +191,6 @@ class Log(models.Model):
         db_table = 'log'
 
 
-class RecommendPost(models.Model):
-    id = models.IntegerField(primary_key=True)
-    title = models.CharField(max_length=144)
-    subtitle = models.CharField(max_length=144)
-    content = models.TextField()
-    created_at = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'recommend_post'
-
-
 class Review(models.Model):
     review_no = models.AutoField(primary_key=True)
     review_content = models.CharField(max_length=255, blank=True, null=True)
@@ -241,3 +225,14 @@ class User(models.Model):
         managed = False
         db_table = 'user'
         unique_together = (('user_email', 'user_nick'),)
+
+
+class Recommend(models.Model):
+    recommend_no = models.AutoField(primary_key=True)
+    recommend_rating = models.FloatField()
+    game_no = models.ForeignKey(Game, models.DO_NOTHING, db_column='game_no', blank=True, null=True)
+    user_no = models.ForeignKey('User', models.DO_NOTHING, db_column='user_no', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'recommend'
