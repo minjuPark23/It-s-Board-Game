@@ -24,6 +24,15 @@ public class GameService {
     }
 
     /**
+    * @author : 박민주
+    * @date : 2022-04-01 오후 9:51
+    * @desc : 자동 완성을 위한 전체 게임 리스트
+    **/
+    public List<Game> getGameList(){
+        return gameRepository.findGameList();
+    }
+
+    /**
      * @author : 박민주
      * @date : 2022-03-23 오후 5:49
      * @desc: 게임 이름 검색 상세보기
