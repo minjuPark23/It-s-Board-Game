@@ -1,8 +1,6 @@
-from django.shortcuts import render
 from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework import viewsets
-from .serializers import RecommendListSerializer
-from .models import User, Score, Game
+from .models import Score, Game, Recommend, User
 from rest_framework import permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -15,13 +13,14 @@ import numpy as np
 # Create your views here.
 
 class UserView(viewsets.ModelViewSet):
-    # queryset = User.objects.all()
-    # serializer_class = UserSerializer
 
     @api_view(['GET'])
     def recommend_user(request, user_no):
         print("평점 추천")
         # 추천 받아서 결과 반환
+
+        # 이미 Recommend에 저장된 것 다 지우기
+        Recommend.objects.filter(user_no=user_no).delete()
 
         games = Game.objects.all()
         game_list = pd.DataFrame(games.values("game_no", "game_category")).set_index("game_no")
@@ -50,7 +49,7 @@ class UserView(viewsets.ModelViewSet):
         # print("해당 카테고리에 대한 유저의 평균값 프로필: ")
         # print(user_profile)
 
-        # 모든 게임에 대해서 predict 구하기기
+        # 모든 게임에 대해서 predict 구하기
         # print(category_dummies)
 
         # 이미 한 게임은 지우자
@@ -77,16 +76,23 @@ class UserView(viewsets.ModelViewSet):
 
         predict = predict.fillna(score_list['score_rating'].mean())
 
-        predict = predict.reset_index()
+        # predict = predict.reset_index()
         # print(predict)
-        predict['user_no'] = user_no
+        # predict['user_no'] = user_no
 
-        print(predict)
+        # print(predict)
 
-        for i in predict.iterrows():
-            
+        findUser = get_object_or_404(User, pk=user_no)
+        for idx, row in predict.iterrows():
+            # print(idx, row['recommend_rating'])
+            findGame = get_object_or_404(Game, pk=idx)
+            r = Recommend(game_no=findGame, user_no=findUser, recommend_rating=row['recommend_rating']);
+            # print(r)
+            r.save()
 
-       # 유저별 추천 결과를 DB에 넣고 스프링이 DB에 접근
+
+
+        # 유저별 추천 결과를 DB에 넣고 스프링이 DB에 접근
         # 유저별 추천 결과를 장고에서 받아서 스프링이 DB에 접근
 
         # pk로 하나만 가져오기
@@ -99,4 +105,4 @@ class UserView(viewsets.ModelViewSet):
 
         # user_no로 score데이터 가져오기
 
-        return Response(predict)
+        return Response()

@@ -5,5 +5,5 @@ from .views import UserView
 
 urlpatterns = format_suffix_patterns([
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path("user/<int:user_no>/",  UserView.recommend_user)
+    path("user/predict/<int:user_no>/",  UserView.recommend_user)
 ])
