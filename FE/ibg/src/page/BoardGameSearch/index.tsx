@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { RootStateOrAny, useSelector } from "react-redux";
-import { searchAuto, searchFilter } from "../../../api/game";
+import { SearchByName, searchByFilter } from "../../../api/game";
 import BoardCardMain from "../../../component/BoardCardMain";
 import { Game } from "../../Main/index";
 import CustomSelect, { StyledOption } from "./component/CustomSelect";
@@ -15,7 +15,7 @@ export default function BoardGameSearch() {
 
   // 페이지 접속 시 1회 실행
   useEffect(() => {
-    searchAuto("", userNo).then((data) => {
+    SearchByName("", userNo).then((data) => {
       setInitGameList(data);
       setGameList(data);
     });
@@ -43,7 +43,7 @@ export default function BoardGameSearch() {
   const getSearchResult = (filter: ISearchFilter) => {
     if (userNo) filter.userNo = userNo;
 
-    searchFilter(filter).then((data) => {
+    searchByFilter(filter).then((data) => {
       if (data.code === 200) {
         setInitGameList(data.data);
         setGameList(data.data);
