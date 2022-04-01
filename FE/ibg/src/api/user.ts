@@ -1,7 +1,6 @@
 import { apiInstance, loginApiInstance } from "./index";
 
 const api = apiInstance();
-const loginApi = loginApiInstance();
 
 // 회원 가입
 async function join(email: string, nickname: string, password: string) {
@@ -14,11 +13,13 @@ async function join(email: string, nickname: string, password: string) {
 
 //로그인
 async function login(email: string, password: string) {
-  return await api.post(`/login`, { userEmail: email, userPwd: password });
+  const loginApi = loginApiInstance();
+  return await loginApi.post(`/login`, { userEmail: email, userPwd: password });
 }
 
 // 회원 정보
 async function userInfo(userNo: number) {
+  const loginApi = loginApiInstance();
   return (await loginApi.get(`/user/account/${userNo}`)).data.data; //유저 객체라 data 썼는데 일단 자료가 들어와바야 알겠다.
 }
 
@@ -33,6 +34,7 @@ async function checkNickname(nickname: string) {
 
 //회원 별점 등록
 async function rateGame(userNo: number, gameNo: number, scoreRating: number) {
+  const loginApi = loginApiInstance();
   return (
     await loginApi.post(`/user/score`, {
       userNo: userNo,
@@ -44,6 +46,7 @@ async function rateGame(userNo: number, gameNo: number, scoreRating: number) {
 
 // 관심목록 추가 및 제거
 async function addDelLike(userNo: number, gameNo: number) {
+  const loginApi = loginApiInstance();
   return await (
     await loginApi.post(`user/like`, { userNo: userNo, gameNo: gameNo })
   ).data;
@@ -51,11 +54,13 @@ async function addDelLike(userNo: number, gameNo: number) {
 
 // 회원가입 설문조사
 async function initSurvey(userNo: number) {
+  const loginApi = loginApiInstance();
   return (await loginApi.get(`user/survey/${userNo}`)).data.data;
 }
 
 // 관심 목록 가져오기
 async function getLikedList(userNo: number) {
+  const loginApi = loginApiInstance();
   return await (
     await loginApi.get(`user/like/${userNo}`)
   ).data.data;
