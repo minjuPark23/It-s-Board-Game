@@ -8,6 +8,7 @@ import BoardGameSearch from "./page/BoardGame/BoardGameSearch/index";
 import BoardGameMarket from "./page/BoardGame/BoardGameMarket/index";
 import Survey from "./page/User/Survey/index";
 import MyGames from "./page/User/Interest/index";
+import Map from "./page/Map/index";
 
 function Router() {
   return (
@@ -21,6 +22,7 @@ function Router() {
       <Route path="/market" element={<BoardGameMarket />} />
       <Route path="/survey" element={<Survey />} />
       <Route path="/mygames" element={<MyGames />} />
+      <Route path="/map" element={<Map />} />
     </Routes>
   );
 }
