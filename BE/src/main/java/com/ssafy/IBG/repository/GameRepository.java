@@ -32,6 +32,15 @@ public class GameRepository {
     }
 
     /**
+    * @author : 박민주
+    * @date : 2022-04-01 오후 9:52
+    **/
+    public List<Game> findGameList(){
+        return em.createQuery("select g from Game g", Game.class)
+                .getResultList();
+    }
+
+    /**
      * @author : 박민주
      * @date : 2022-03-23 오후 5:51
      **/
