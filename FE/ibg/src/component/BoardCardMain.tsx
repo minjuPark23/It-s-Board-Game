@@ -17,7 +17,8 @@ import StarIcon from "@mui/icons-material/Star";
 // 카드 효과 스타일
 const StyledCard = styled(Card)(() => ({
   position: "relative",
-  minWidth: "178px",
+  width: "inherit",
+  minWidth: "140px",
   "&:hover": {
     animation: "circlemove 1.5s infinite linear",
   },
@@ -66,10 +67,14 @@ const AddInfo = styled("div")(() => ({
 }));
 
 // 관심 버튼 위치
-const LikeButtonPosition = styled("span")(() => ({
+const LikeButtonPosition = styled("span")(({ theme }) => ({
   position: "absolute",
-  right: "16px",
-  bottom: "10px",
+  right: "10px",
+  top: "10px",
+  [theme.breakpoints.up("sm")]: {
+    top: "auto",
+    bottom: "10px",
+  },
 }));
 
 export default function BoardCard(props: { game: Game; responsive?: boolean }) {
@@ -87,7 +92,6 @@ export default function BoardCard(props: { game: Game; responsive?: boolean }) {
             <CardMedia
               sx={{
                 position: "absolute",
-                width: "100%",
                 height: "100%",
                 objectFit: "contain",
               }}
@@ -97,7 +101,7 @@ export default function BoardCard(props: { game: Game; responsive?: boolean }) {
             />
           </ImgWrapper>
           <CardContent>
-            <GameTitle>{props.game.gameName}</GameTitle>
+            <GameTitle>{props.game.gameKorName}</GameTitle>
             <Category>{props.game.gameCategory}</Category>
             <AddInfo>
               <PersonIcon color="warning" fontSize="small" sx={{ mr: 0.5 }} />
@@ -119,7 +123,7 @@ export default function BoardCard(props: { game: Game; responsive?: boolean }) {
     );
   };
   return props.responsive ? (
-    <Grid item xs={12} sm={4} md={3} lg={2.5}>
+    <Grid item xs={6} sm={4} md={3} lg={2.4}>
       {insideInfo()}
     </Grid>
   ) : (

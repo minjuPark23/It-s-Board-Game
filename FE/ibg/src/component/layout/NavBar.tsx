@@ -31,17 +31,19 @@ import LoginIcon from "@mui/icons-material/Login";
 import Logout from "@mui/icons-material/Logout";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import MapIcon from "@mui/icons-material/Map";
 
 // Nav 항목 - link가 존재하면 페이지 이동, method가 존재하면 해당 함수 실행(handleNavMethod 추가 필요)
 const pages = [
   { label: "보드게임", icon: <ExtensionOutlinedIcon />, link: "/search" },
   { label: "BGM", icon: <StorefrontOutlinedIcon />, link: "/market" },
+  { label: "보드게임 카페", icon: <MapIcon />, link: "/map" },
 ];
 const userNav = [
   {
     label: "관심목록",
     icon: <FavoriteBorderIcon />,
-    link: "/",
+    link: "/mygames",
   },
   {
     label: "채팅",
