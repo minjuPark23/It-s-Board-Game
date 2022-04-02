@@ -110,7 +110,7 @@ export default function BoardCard(props: { game: Game; responsive?: boolean }) {
               <PersonIcon color="warning" fontSize="small" sx={{ mr: 0.5 }} />
               {props.game.gameMinPlayer}~{props.game.gameMaxPlayer}명
               <StarIcon color="warning" fontSize="small" sx={{ mx: 0.5 }} />
-              {props.game.gameTotalScore}
+              {Math.floor(props.game.gameTotalScore * 100) / 100}
             </AddInfo>
             <LikeButtonPosition>
               <LikeButton
