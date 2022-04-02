@@ -1,15 +1,16 @@
-import * as React from "react";
+import { useState, Fragment, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
+import SearchBar from "./component/SearchBar";
 import AvatarGenerator from "../AvatarGenerator";
+import { getAutoAllGame } from "../../api/game";
 
 // material ui
-import { styled, alpha } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import InputBase from "@mui/material/InputBase";
 import Menu from "@mui/material/Menu";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import List from "@mui/material/List";
@@ -18,7 +19,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
@@ -26,7 +26,6 @@ import ImageListItem from "@mui/material/ImageListItem";
 
 // 아이콘
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
 import ExtensionOutlinedIcon from "@mui/icons-material/ExtensionOutlined";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import LoginIcon from "@mui/icons-material/Login";
@@ -61,61 +60,28 @@ const StyledAppBar = styled(AppBar)(() => ({
   boxShadow: "rgba(33, 35, 38, 0.1) 0px 10px 10px -10px",
 }));
 
-// 검색창 스타일
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: 18,
-  backgroundColor: alpha(theme.palette.warning.main, 0.2),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.warning.main, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: theme.spacing(2),
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-  boxShadow: "rgba(0, 0, 0, 0.04) 0px 3px 5px",
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  right: 0,
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  color: "grey",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  fontSize: 13.5,
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(1)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "40ch",
-    },
-  },
-}));
-
 export default function NavBar() {
   const dispatch = useDispatch();
   // 로그인 여부
   const auth = useSelector((state: RootStateOrAny) => state.isLogin);
   const userName = useSelector((state: RootStateOrAny) => state.user.userNick);
   // 사용자 메뉴 Open/Close(PC)
-  const [userMenu, setUserMenu] = React.useState<null | HTMLElement>(null);
+  const [userMenu, setUserMenu] = useState<null | HTMLElement>(null);
   // Mobild 메뉴 Open/Close
-  const [mobileMenu, setMobileMenu] = React.useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
+  // 자동완성을 위한 게임 목록
+  const [autoGameList, setAutoGameList] = useState([]);
+
   // 페이지 이동
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getAutoAllGame().then((data) => {
+      if (data.code === 200) {
+        setAutoGameList(data.data);
+      }
+    });
+  }, []);
 
   //로그아웃 메서드
   const logoutMethod = () => {
@@ -250,15 +216,11 @@ export default function NavBar() {
             ))}
           </Box>
           {/* 검색창 */}
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="보드게임 검색"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
+          <SearchBar
+            placeholder="보드게임 검색"
+            gameList={autoGameList}
+            onClickItem={(no: number) => movePage(`/detail/${no}`)}
+          />
           {/* 오른쪽 메뉴(사용자) auth: 로그인 여부 */}
           {auth ? (
             <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
@@ -338,7 +300,7 @@ export default function NavBar() {
           )}
           {/* Nav 반응형 Mobile --------------------------------------- */}
           <Box sx={{ display: { xs: "block", md: "none" } }}>
-            <React.Fragment key="right">
+            <Fragment key="right">
               <IconButton size="large" onClick={toggleMobileMenu(true)}>
                 <MenuIcon />
               </IconButton>
@@ -351,7 +313,7 @@ export default function NavBar() {
               >
                 {MobileMenuList()}
               </SwipeableDrawer>
-            </React.Fragment>
+            </Fragment>
           </Box>
         </Toolbar>
       </Container>
