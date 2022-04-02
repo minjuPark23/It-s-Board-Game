@@ -1,4 +1,3 @@
-import * as React from "react";
 import { styled } from "@mui/material/styles";
 import {
   Card,
@@ -13,10 +12,13 @@ import { useNavigate } from "react-router-dom";
 interface Deal {
   deal: {
     dealTitle: string;
-    dealState: boolean;
+    dealGame: string;
+    dealStatus: boolean;
     dealNo: number;
-    dealImage: string; // File | null;
+    dealPath: string;
+    dealSavedName: string;
     dealPrice: number;
+    gameNo: number;
   };
 }
 
@@ -50,7 +52,7 @@ const DealTitle = styled("div")(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }));
 
-const Category = styled("div")(({ theme }) => ({
+const DealGame = styled("div")(({ theme }) => ({
   fontSize: "0.85rem",
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
@@ -59,15 +61,15 @@ const Category = styled("div")(({ theme }) => ({
 }));
 
 /* 거래 상태 */
-const MarketState = styled("span")(({ theme }) => ({
-  width: 80,
+const MarketState = styled("span")(({ theme, color }) => ({
+  width: 74,
   height: 30,
   lineHeight: 1,
   textAlign: "center",
-  fontSize: 12,
-  color: "#FCB500",
-  borderRadius: 10,
-  border: "1px solid #FCB500",
+  fontSize: 11,
+  color: color,
+  borderRadius: 12,
+  border: "1px solid " + color,
   backgroundColor: "transparent",
   padding: theme.spacing(1),
 }));
@@ -77,7 +79,7 @@ const Price = styled(Typography)(({ theme }) => ({
   width: 80,
   height: 30,
   textAlign: "right",
-  padding: theme.spacing(0.8, 0, 0, 0),
+  padding: theme.spacing(0.5, 0, 0, 0),
 }));
 
 /* 하단 틀 */
@@ -98,6 +100,7 @@ export default function BoardCard({ deal }: Deal) {
       <StyledCard variant="outlined" onClick={moveToDetail}>
         <CardActionArea>
           <ImgWrapper>
+            {/* BE 오류 수정 후, image={dealDetail?.dealPath + "/" + dealDetail?.dealSavedName} 변경필수!!! */}
             <CardMedia
               sx={{
                 position: "absolute",
@@ -106,16 +109,19 @@ export default function BoardCard({ deal }: Deal) {
                 objectFit: "contain",
               }}
               component="img"
-              image={deal.dealImage}
+              image="https://cf.geekdo-images.com/original/img/o07K8ZVh0PkOpOnSZs1TuABb7I4=/0x0/pic4001505.jpg"
               alt={deal.dealTitle}
             />
           </ImgWrapper>
           <CardContent>
             <DealTitle>{deal.dealTitle}</DealTitle>
-
+            {/* gameNo -> gameName으로 변경해야 함 */}
+            <DealGame>{deal.gameNo}</DealGame>
             <StateWrapper>
-              <MarketState>{deal.dealState}거래중</MarketState>
-              <Price variant="body2">{deal.dealPrice}원</Price>
+              <MarketState color={deal.dealStatus ? "#67B6FF" : "#FCB500"}>
+                {deal.dealStatus ? "거래완료" : "거래중"}
+              </MarketState>
+              <Price variant="body2">{deal.dealPrice.toLocaleString()}원</Price>
             </StateWrapper>
           </CardContent>
         </CardActionArea>
