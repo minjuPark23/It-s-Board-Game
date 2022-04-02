@@ -129,7 +129,7 @@ export default function GameInfo(props: { game: GameDetail }) {
           </InfoText>
           <InfoText sx={{ mt: 1.5 }}>{props.game.gameKorDesc}</InfoText>
           <AvgRate>
-            {props.game.gameTotalScore}
+            {Math.floor(props.game.gameTotalScore * 100) / 100}
             {/* <Typography component="span"> 점</Typography> */}
           </AvgRate>
           <ScoreAndLike>
