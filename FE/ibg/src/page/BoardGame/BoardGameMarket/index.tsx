@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getDealLists, getDealSearch, writeDeal } from "../../../api/deal";
 import {
   Grid,
   Box,
@@ -7,15 +7,31 @@ import {
   Divider,
   InputBase,
   Button,
+  Modal,
+  Typography,
 } from "@mui/material";
 import { styled, alpha, createTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import BoardCard from "./component/BoardCard";
 import MarketUploadDialog from "./component/MarketUploadDialog";
 import Title from "./component/Title";
+import { RootStateOrAny, useSelector } from "react-redux";
+
 export default function BoardGameMarket() {
-  const [dealList] = useState(tempData.dealList);
+  const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
+  const [dealList, setDealList] = useState([]);
   const [open, setOpen] = useState(false); //modal
+
+  const fetchDealLists = () => {
+    getDealLists().then((data) => {
+      console.log(data);
+      setDealList(data.data);
+    });
+  };
+
+  useEffect(() => {
+    fetchDealLists();
+  }, []);
 
   /* 검색 */
   const Search = styled("div")(({ theme }) => ({
@@ -78,6 +94,7 @@ export default function BoardGameMarket() {
       fontSize: "2.4rem",
     },
   };
+
   // function to handle modal open
   const handleOpen = () => {
     setOpen(true);
@@ -91,19 +108,43 @@ export default function BoardGameMarket() {
   //navigate when "Yes" is pressed on dialog OR pressed Complete
   const handleSubmit = async (
     title: string,
-    price: number,
+    price: string,
     contents: string,
-    file: File | undefined
+    file: File | Blob
   ) => {
-    setOpen(false);
-    //api 연결하기 : 등록
-    // alert(title + " " + price);
-    //navigate("/complete");
+    console.log(file);
+    writeDeal("1", userNo, title, contents, file, price).then((data) => {
+      console.log(data);
+      setOpen(false);
+      fetchDealLists();
+    });
   };
 
-  const viewDetail = (dealNo: number) => {
-    console.log(dealNo);
+  const handleSearchKeyUp = (e: any) => {
+    if (e.keyCode === 13) {
+      if (e.target.value.trim().length === 0) {
+        fetchDealLists();
+      } else {
+        getDealSearch(e.target.value).then((data) => {
+          console.log(data);
+          setDealList(data.data);
+        });
+      }
+    }
   };
+
+  // 로그인 팝업
+  const modalStyle = {
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+  };
+
   return (
     <Container style={{ marginTop: 20, padding: 20 }}>
       {/* BGM 상단 */}
@@ -121,11 +162,29 @@ export default function BoardGameMarket() {
         >
           거래 등록
         </Button>
-        <MarketUploadDialog
-          open={open}
-          handleClose={handleClose}
-          sendDataToParent={handleSubmit}
-        />
+        {userNo ? (
+          <MarketUploadDialog
+            open={open}
+            handleClose={handleClose}
+            sendDataToParent={handleSubmit}
+          />
+        ) : (
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={modalStyle}>
+              <Typography
+                id="modal-modal-description"
+                variant="h6"
+                component="h2"
+              >
+                로그인 후 가능한 서비스입니다.
+              </Typography>
+            </Box>
+          </Modal>
+        )}
       </Box>
       <Divider />
       <Search sx={{ width: { xs: "100%", sm: 330 } }}>
@@ -133,17 +192,14 @@ export default function BoardGameMarket() {
           <SearchIcon />
         </SearchIconWrapper>
         <StyledInputBase
-          placeholder="마켓 검색"
+          placeholder="보드게임 이름으로 검색"
           inputProps={{ "aria-label": "search" }}
+          onKeyUp={handleSearchKeyUp}
         />
       </Search>
       <Grid container spacing={1} style={{ marginTop: 14 }}>
-        {dealList.map((deal) => (
-          <BoardCard
-            key={deal.dealNo}
-            deal={deal}
-            
-          ></BoardCard>
+        {dealList.map((deal, index) => (
+          <BoardCard key={index} deal={deal}></BoardCard>
         ))}
       </Grid>
     </Container>
@@ -151,15 +207,16 @@ export default function BoardGameMarket() {
 }
 
 // 임시 데이터
-const tempData = {
-  dealList: [
-    {
-      dealTitle: "보드게임 팝니다.",
-      dealState: false,
-      dealNo: 1,
-      dealImage:
-        "https://ae01.alicdn.com/kf/H886df0f1371840bc8607e8eccd08a84bd/Mattel-Games-UNO-Kartenspiel-UNO.jpg_Q90.jpg_.webp",
-      dealPrice: 5000,
-    },
-  ],
-};
+// const tempData = {
+//   dealList: [
+//     {
+//       dealTitle: "보드게임 팝니다.",
+//       dealGame: "UNO",
+//       dealState: false,
+//       dealNo: 1,
+//       dealImage:
+//         "https://ae01.alicdn.com/kf/H886df0f1371840bc8607e8eccd08a84bd/Mattel-Games-UNO-Kartenspiel-UNO.jpg_Q90.jpg_.webp",
+//       dealPrice: 5000,
+//     },
+//   ],
+// };
