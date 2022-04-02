@@ -1,14 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import {
-  Grid,
-  Box,
-  Container,
-  Divider,
-  Avatar,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Grid, Avatar, Typography } from "@mui/material";
 
 interface Deal {
   dealer: string;
