@@ -83,7 +83,7 @@ export default function Map({ long, lat, addr }: Location) {
         infowindow.open(map, marker);
       });
     }
-  }, []);
+  });
 
   return (
     <>
