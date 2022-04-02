@@ -1,8 +1,17 @@
+import { useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 
 export default function Title() {
+  // 페이지 이동
+  const navigate = useNavigate();
+
+  // 페이지 이동
+  const movePage = (page: string) => {
+    navigate(page);
+  };
+
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex" }} onClick={() => movePage("/market")}>
       <Typography
         sx={{
           fontSize: { xs: 24, md: 30 },
