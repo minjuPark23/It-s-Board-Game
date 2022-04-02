@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
+import AvatarGenerator from "../AvatarGenerator";
 
 // material ui
 import { styled, alpha } from "@mui/material/styles";
@@ -22,6 +23,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import ImageListItem from "@mui/material/ImageListItem";
+
 // 아이콘
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
@@ -107,6 +109,7 @@ export default function NavBar() {
   const dispatch = useDispatch();
   // 로그인 여부
   const auth = useSelector((state: RootStateOrAny) => state.isLogin);
+  const userName = useSelector((state: RootStateOrAny) => state.user.userNick);
   // 사용자 메뉴 Open/Close(PC)
   const [userMenu, setUserMenu] = React.useState<null | HTMLElement>(null);
   // Mobild 메뉴 Open/Close
@@ -261,8 +264,7 @@ export default function NavBar() {
             <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
               <Tooltip title="사용자 메뉴">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  {/* 수정필요 - 사용자 닉네임에 따라 변경 */}
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <AvatarGenerator userName={userName} />
                 </IconButton>
               </Tooltip>
               <Menu
