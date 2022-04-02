@@ -44,15 +44,15 @@ const weightItems = [
 ];
 
 const ageItems = [
-  { value: 5, label: "5+" },
-  { value: 6, label: "6+" },
-  { value: 7, label: "7+" },
-  { value: 8, label: "8+" },
-  { value: 9, label: "9+" },
-  { value: 10, label: "10+" },
-  { value: 11, label: "11+" },
-  { value: 15, label: "15+" },
-  { value: 17, label: "17+" },
+  { value: 5, label: "5-" },
+  { value: 6, label: "6-" },
+  { value: 7, label: "7-" },
+  { value: 8, label: "8-" },
+  { value: 9, label: "9-" },
+  { value: 10, label: "10-" },
+  { value: 11, label: "11-" },
+  { value: 15, label: "15-" },
+  { value: 17, label: "17-" },
 ];
 
 const scoreItems = [
@@ -350,6 +350,7 @@ export default function GameFilter(props: { searchCallback: Function }) {
             <ListItem component="div" sx={{ px: { xs: 0, sm: 2 } }}>
               <Autocomplete
                 multiple
+                filterSelectedOptions
                 options={CategoryData}
                 renderInput={(params) => (
                   <TextField
