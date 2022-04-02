@@ -90,7 +90,7 @@ export default function Main() {
         setScoreGameList(data.data);
       }
     });
-  }, []);
+  }, [userNo]);
 
   return (
     <Container style={{ padding: 20 }}>

@@ -9,13 +9,12 @@ import {
   CardMedia,
   CardActionArea,
   Grid,
-  Box,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import StarIcon from "@mui/icons-material/Star";
 
 // 카드 효과 스타일
-const StyledCard = styled(Card)(() => ({
+const StyledCard = styled(Card)(({ theme }) => ({
   position: "relative",
   width: "inherit",
   minWidth: "140px",
@@ -80,7 +79,7 @@ const LikeButtonPosition = styled("span")(({ theme }) => ({
   },
 }));
 
-export default function BoardCard(props: { game: Game; responsive?: boolean }) {
+export default function BoardCard(props: { game: Game; marginX?: number }) {
   const user = useSelector((state: RootStateOrAny) => state.user);
   const navigate = useNavigate();
   const moveToDetail = () => {
@@ -89,7 +88,11 @@ export default function BoardCard(props: { game: Game; responsive?: boolean }) {
 
   const insideInfo = () => {
     return (
-      <StyledCard variant="outlined" onClick={moveToDetail}>
+      <StyledCard
+        variant="outlined"
+        onClick={moveToDetail}
+        sx={{ mx: props.marginX }}
+      >
         <CardActionArea>
           <ImgWrapper>
             <CardMedia
@@ -125,11 +128,9 @@ export default function BoardCard(props: { game: Game; responsive?: boolean }) {
       </StyledCard>
     );
   };
-  return props.responsive ? (
+  return (
     <Grid item xs={6} sm={4} md={3} lg={2.4}>
       {insideInfo()}
     </Grid>
-  ) : (
-    <Box sx={{ width: "178px", mx: 1 }}>{insideInfo()}</Box>
   );
 }
