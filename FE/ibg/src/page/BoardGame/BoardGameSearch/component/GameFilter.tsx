@@ -208,7 +208,7 @@ export default function GameFilter(props: { searchCallback: Function }) {
         <List dense>
           <FilterItem>
             <FilterTitle>보드게임명</FilterTitle>
-            <ListItem sx={{ px: { xs: 0, sm: 2 } }}>
+            <ListItem component="div" sx={{ px: { xs: 0, sm: 2 } }}>
               <Search>
                 <StyledInputBase
                   placeholder="보드게임 명"
@@ -227,7 +227,10 @@ export default function GameFilter(props: { searchCallback: Function }) {
           <Divider />
           <FilterItem>
             <FilterTitle>인원 수</FilterTitle>
-            <ListItem sx={{ flexWrap: "wrap", px: { xs: 0, sm: 2 } }}>
+            <ListItem
+              component="div"
+              sx={{ flexWrap: "wrap", px: { xs: 0, sm: 2 } }}
+            >
               {playerItems.map((i) => (
                 <Chip
                   key={i.value}
@@ -248,7 +251,10 @@ export default function GameFilter(props: { searchCallback: Function }) {
           <Divider />
           <FilterItem>
             <FilterTitle>플레이 시간</FilterTitle>
-            <ListItem sx={{ flexWrap: "wrap", px: { xs: 0, sm: 2 } }}>
+            <ListItem
+              component="div"
+              sx={{ flexWrap: "wrap", px: { xs: 0, sm: 2 } }}
+            >
               {timeItems.map((i) => (
                 <Chip
                   key={i.value}
@@ -269,7 +275,10 @@ export default function GameFilter(props: { searchCallback: Function }) {
           <Divider />
           <FilterItem>
             <FilterTitle>난이도</FilterTitle>
-            <ListItem sx={{ flexWrap: "wrap", px: { xs: 0, sm: 2 } }}>
+            <ListItem
+              component="div"
+              sx={{ flexWrap: "wrap", px: { xs: 0, sm: 2 } }}
+            >
               {weightItems.map((i) => (
                 <Chip
                   key={i.value}
@@ -290,7 +299,10 @@ export default function GameFilter(props: { searchCallback: Function }) {
           <Divider />
           <FilterItem>
             <FilterTitle>나이</FilterTitle>
-            <ListItem sx={{ flexWrap: "wrap", px: { xs: 0, sm: 2 } }}>
+            <ListItem
+              component="div"
+              sx={{ flexWrap: "wrap", px: { xs: 0, sm: 2 } }}
+            >
               {ageItems.map((i) => (
                 <Chip
                   key={i.value}
@@ -311,7 +323,10 @@ export default function GameFilter(props: { searchCallback: Function }) {
           <Divider />
           <FilterItem>
             <FilterTitle>평점</FilterTitle>
-            <ListItem sx={{ flexWrap: "wrap", px: { xs: 0, sm: 2 } }}>
+            <ListItem
+              component="div"
+              sx={{ flexWrap: "wrap", px: { xs: 0, sm: 2 } }}
+            >
               {scoreItems.map((i) => (
                 <Chip
                   key={i.value}
@@ -332,7 +347,7 @@ export default function GameFilter(props: { searchCallback: Function }) {
           <Divider />
           <FilterItem>
             <FilterTitle>카테고리</FilterTitle>
-            <ListItem sx={{ px: { xs: 0, sm: 2 } }}>
+            <ListItem component="div" sx={{ px: { xs: 0, sm: 2 } }}>
               <Autocomplete
                 multiple
                 options={CategoryData}
