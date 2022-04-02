@@ -81,11 +81,7 @@ export default function BoardGameSearch() {
       {gameList.length > 0 ? (
         <Grid container spacing={2}>
           {gameList.map((game) => (
-            <BoardCardMain
-              key={game.gameNo}
-              game={game}
-              responsive
-            ></BoardCardMain>
+            <BoardCardMain key={game.gameNo} game={game}></BoardCardMain>
           ))}
         </Grid>
       ) : (
