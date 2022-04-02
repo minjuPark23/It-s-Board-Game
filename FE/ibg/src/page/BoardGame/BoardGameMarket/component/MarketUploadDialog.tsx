@@ -14,9 +14,9 @@ interface IProps {
   handleClose: () => void;
   sendDataToParent: (
     title: string,
-    price: number,
+    price: string,
     contents: string,
-    file: File | undefined
+    file: File | Blob
   ) => void; //여기에 정보 담아서 주기
 }
 
@@ -28,22 +28,26 @@ const MarketUploadDialog = ({
   const Input = styled("input")({
     display: "none",
   });
+  const Img = styled("img")({
+    width: "100%",
+  });
 
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [contents, setContents] = useState("");
-  // const [file, setFile] = useState<FileList | undefined>();
   const [file, setFile] = useState<File>();
+  const [preview, setPreview] = useState<any>();
+
   const callHandleSubmit = () => {
-    //handleSubmit();
     /* 예외 상황 처리 */
-    if (title.length < 2) alert("제목을 확인해주세요");
-    else if (!parseInt(price)) alert("가격은 숫자만 입력해주세요");
-    else if (contents.length === 0) alert("내용을 확인해주세요");
-    else if (file === null) alert("파일을 업로드해주세요");
+    if (title.length < 2) return alert("제목을 확인해주세요");
+    if (!parseInt(price)) return alert("가격은 숫자만 입력해주세요");
+    if (file === undefined || file === null)
+      return alert("파일을 업로드해주세요");
+    if (contents.length === 0) return alert("내용을 확인해주세요");
 
     /* 부모에게 제목,가격,내용, 파일 전달*/
-    sendDataToParent(title, parseInt(price), contents, file);
+    sendDataToParent(title, price, contents, file);
   };
   /* 제목 지정 */
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,8 +74,17 @@ const MarketUploadDialog = ({
       alert("이미지 파일을 선택해주세요");
     }
     //파일 저장
-    else setFile(e.target.files[0]);
-    //console.log(file);
+    else {
+      const selectedFile = e.target.files[0];
+      console.log(selectedFile);
+      setFile(selectedFile);
+      // 미리보기
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        setPreview(fileReader.result);
+      };
+      fileReader.readAsDataURL(selectedFile);
+    }
   };
   return (
     <Dialog
@@ -135,6 +148,7 @@ const MarketUploadDialog = ({
                 autoFocus
               />
               <DialogContentText>파일추가</DialogContentText>
+              {preview && <Img src={preview} />}
               <DialogContentText>
                 <label htmlFor="contained-button-file">
                   <Input
