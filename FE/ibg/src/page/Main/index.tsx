@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container } from "@mui/material";
+import { Box, Container, Skeleton } from "@mui/material";
 import ThemeList from "./component/ThemeList";
 import {
   getRecommByAge,
@@ -13,6 +13,8 @@ import {
   getRecommByWeight,
 } from "../../api/recommend";
 import { RootStateOrAny, useSelector } from "react-redux";
+import SkelBoardCard from "../../component/SkelBoardCard";
+import AliceCarousel from "react-alice-carousel";
 
 // Game 객체 => types파일로 빼는 것이 좋음
 export interface Game {
@@ -30,6 +32,7 @@ export interface Game {
 // 테마별 게임리스트: sm(600) 이상(pc)에서는 버튼으로, 이하(모바일)에서는 스크롤로 동작
 export default function Main() {
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
+  const [loading, setLoading] = useState(true);
   const [userGameList, setUserGameList] = useState<Game[]>([]);
   const [categoryGameList, setCategoryGameList] = useState<Game[]>([]);
   const [weightGameList, setWeightGameList] = useState<Game[]>([]);
@@ -46,31 +49,37 @@ export default function Main() {
       getRecommByUser(userNo).then((data) => {
         if (data.code === 200) {
           setUserGameList(data.data);
+          setLoading(false);
         }
       });
       getRecommByCategory().then((data) => {
         if (data.code === 200) {
           setCategoryGameList(data.data);
+          setLoading(false);
         }
       });
       getRecommByWeight().then((data) => {
         if (data.code === 200) {
           setWeightGameList(data.data);
+          setLoading(false);
         }
       });
       getRecommByPlayer().then((data) => {
         if (data.code === 200) {
           setPlayerGameList(data.data);
+          setLoading(false);
         }
       });
       getRecommByTime().then((data) => {
         if (data.code === 200) {
           setTimeGameList(data.data);
+          setLoading(false);
         }
       });
       getRecommByAge().then((data) => {
         if (data.code === 200) {
           setAgeGameList(data.data);
+          setLoading(false);
         }
       });
     }
@@ -78,22 +87,58 @@ export default function Main() {
     getRecommByNewbie().then((data) => {
       if (data.code === 200) {
         setNewbieGameList(data.data);
+        setLoading(false);
       }
     });
     getRecommByReviews().then((data) => {
       if (data.code === 200) {
         setReviewGameList(data.data);
+        setLoading(false);
       }
     });
     getRecommByScore().then((data) => {
       if (data.code === 200) {
         setScoreGameList(data.data);
+        setLoading(false);
       }
     });
   }, [userNo]);
 
+  const skelCards = [1, 1, 1, 1, 1, 1].map(() => (
+    <SkelBoardCard marginX={0.5} />
+  ));
+
+  const SkelTheme = () => {
+    return (
+      <>
+        <Skeleton width="30%" height={50} sx={{ mt: 4 }} />
+        <AliceCarousel
+          paddingLeft={15}
+          paddingRight={15}
+          items={skelCards}
+          disableDotsControls
+          controlsStrategy="responsive"
+          responsive={{
+            0: { items: 1.5 },
+            400: { items: 2 },
+            550: { items: 3 },
+            700: { items: 4 },
+            900: { items: 5 },
+            1200: { items: 6 },
+          }}
+        />
+      </>
+    );
+  };
+
   return (
     <Container style={{ padding: 20 }}>
+      {loading && (
+        <>
+          <SkelTheme />
+          <SkelTheme />
+        </>
+      )}
       {userGameList.length > 0 && (
         <ThemeList title="나의 맞춤 추천 게임" gameList={userGameList} />
       )}
