@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5f598818-359f-4587-bc7c-38ee8d08c707" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../BE/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../BE/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,7 +33,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/ibg" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -104,7 +103,8 @@
       <option name="presentableId" value="Default" />
       <updated>1648395100809</updated>
       <workItem from="1648395109364" duration="55575000" />
-      <workItem from="1648979082345" duration="1195000" />
+      <workItem from="1648979082345" duration="1207000" />
+      <workItem from="1649004960193" duration="23000" />
     </task>
     <servers />
   </component>
@@ -129,11 +129,6 @@
           <url>file://$PROJECT_DIR$/ibg/ibg/urls.py</url>
           <line>15</line>
           <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>8</line>
-          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
