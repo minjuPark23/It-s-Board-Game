@@ -10,35 +10,37 @@ import java.util.stream.Collectors;
 
 @Data
 public class GameResponse{
-    private Integer gameNo;
+    private int gameNo;
     private String gameImg;
     private String gameName;
-    private Integer gameYear;
-    private Double gameTotalScore;
+    private int gameYear;
+    private double gameTotalScore;
     private boolean isLike;
-    private Integer gameMinPlayer;
-    private Integer gameMaxPlayer;
-    private Integer gameMinTime;
-    private Integer gameMaxTime;
-    private Double gameWeight;
+    private double myScore;
+    private int gameMinPlayer;
+    private int gameMaxPlayer;
+    private int gameMinTime;
+    private int gameMaxTime;
+    private double gameWeight;
     private String gameCategory;
+    private String gameDesc;
     private List<ReviewResponse> ResponseReviewList;
 
-    public GameResponse(Game game, boolean isLike, List<Review> reviewList) {
+    public GameResponse(Game game, boolean isLike, List<ReviewResponse> ResponseReviewList, double myScore) {
         this.gameNo = game.getGameNo();
         this.gameImg = game.getGameImg();
         this.gameName = game.getGameName();
         this.gameYear = game.getGameYear();
         this.gameTotalScore = game.getGameTotalScore();
         this.isLike = isLike;
+        this.myScore = myScore;
         this.gameMinPlayer = game.getGameMinPlayer();
         this.gameMaxPlayer = game.getGameMaxPlayer();
         this.gameMinTime = game.getGameMinTime();
         this.gameMaxTime = game.getGameMaxTime();
         this.gameWeight = game.getGameWeight();
         this.gameCategory = game.getGameCategory();
-        this.ResponseReviewList = reviewList.stream()
-                .map(rl -> new ReviewResponse(rl))
-                .collect(Collectors.toList());
+        this.gameDesc = game.getGameDescription();
+        this.ResponseReviewList = ResponseReviewList;
     }
 }
