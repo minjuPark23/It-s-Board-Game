@@ -10,12 +10,13 @@ spring:
 #      ddl-auto: create
     properties:
       hibernate:
-        #        show_sql: true
+#        show_sql: true
         format_sql: true
   servlet:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
+      #test
 
 server:
   port: 7777

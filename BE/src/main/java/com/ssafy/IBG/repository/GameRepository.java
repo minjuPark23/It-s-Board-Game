@@ -18,33 +18,19 @@ public class GameRepository {
 
     private final EntityManager em;
 
-    /**
-     * @author : 박민주
-     * @date : 2022-03-23 오후 5:51
-     **/
-    public List<Game> findGameBySearchGame(String searchName){
+    public List<Game> findSearchGame(String searchName){
+//        return em.createQuery("select g from Game g where g.gameName like :searchName", Game.class)
+//                .setParameter("searchName", "%"+searchName+"%")
+//                .getResultList();
         JPQLQuery<Game> query = new JPAQuery<>(em);
         QGame qGame = new QGame("Game");
         List<Game> gameList = query.from(qGame)
-                .where(qGame.gameName.contains(searchName))
+                .where(qGame.gameName.like("%"+searchName+"%"))
                 .fetch();
         return gameList;
     }
 
-    /**
-    * @author : 박민주
-    * @date : 2022-04-01 오후 9:52
-    **/
-    public List<Game> findGameList(){
-        return em.createQuery("select g from Game g", Game.class)
-                .getResultList();
-    }
-
-    /**
-     * @author : 박민주
-     * @date : 2022-03-23 오후 5:51
-     **/
-    public Game findGameByGameName(String gameName){
+    public Game findByGameName(String gameName){
         try{
             Game game = em.createQuery("select g from Game g where g.gameName = :gameName", Game.class)
                     .setParameter("gameName", gameName)
@@ -55,13 +41,11 @@ public class GameRepository {
         }
     }
 
-    /**
-     * @author : 박민주
-     * @date : 2022-03-23 오후 5:52
-     **/
-    public Game findGameByGameNo(int gameNo){
+    public Game findByGameNo(int gameNo){
         try{
-            Game game = em.find(Game.class, gameNo);
+            Game game = em.createQuery("select g from Game g where g.gameNo = :gameNo", Game.class)
+                    .setParameter("gameNo", gameNo)
+                    .getSingleResult();
             return game;
         }catch (NoResultException e){
             return null;
@@ -69,22 +53,14 @@ public class GameRepository {
 
     }
 
-    /**
-     * @author : 박민주
-     * @date : 2022-03-23 오후 5:52
-     **/
-    public List<Game> findGameByFilter(String gameName, String gameKorName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
+    public List<Game> findByFilter(String gameName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
 
-        System.out.println(gameCategory);
         JPQLQuery<Game> query = new JPAQuery<>(em);
         QGame qGame = new QGame("Game");
 
         BooleanBuilder builder = new BooleanBuilder();
         if(gameName != null){
             builder.and(qGame.gameName.contains(gameName));
-        }
-        if (gameKorName != null){
-            builder.and(qGame.gameKorName.contains(gameKorName));
         }
         if(gamePlayer != null){
             builder.and(qGame.gameMinPlayer.goe(gamePlayer));
@@ -101,7 +77,7 @@ public class GameRepository {
         if(gameScore != null){
             builder.and(qGame.gameTotalScore.goe(gameScore));
         }
-        if(gameCategory != null){
+        if(!gameCategory.isEmpty()){
             for (String c : gameCategory) {
                 builder.and(qGame.gameCategory.contains(c));
             }
