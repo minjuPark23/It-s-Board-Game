@@ -4,6 +4,7 @@ import { ThemeProvider } from "@emotion/react";
 import { CustomTheme } from "./component/CustomTheme";
 import CssBaseline from "@mui/material/CssBaseline";
 import NavBar from "./component/layout/NavBar";
+import ScrollToTop from "./component/ScrollToTop";
 import Footer from "./component/layout/Footer";
 
 declare global {
@@ -19,6 +20,7 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Router />
+        <ScrollToTop />
         {window.location.pathname === "/survey" ? null : <Footer />}
       </BrowserRouter>
     </ThemeProvider>
