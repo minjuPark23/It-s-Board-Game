@@ -46,7 +46,6 @@ export default function ThemeList(props: { title: string; gameList: Game[] }) {
           550: { items: 3 },
           700: { items: 4 },
           900: { items: 5 },
-          1200: { items: 6 },
         }}
         renderPrevButton={() => (
           <ArrowBox
