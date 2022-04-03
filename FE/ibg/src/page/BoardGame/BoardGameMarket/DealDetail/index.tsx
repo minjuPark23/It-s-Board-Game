@@ -25,7 +25,7 @@ export default function DealDetail() {
       console.log(data);
       setDealDetail(data.data);
     });
-  }, []);
+  }, [params.dealNo]);
 
   const handleChangeStatus = () => {
     closeDeal(Number(params.dealNo)).then((data) => {
