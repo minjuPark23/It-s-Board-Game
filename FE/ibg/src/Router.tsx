@@ -1,16 +1,13 @@
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SignIn from "./page/User/SignIn/index";
-import SignUp from "./page/User/SignUp/index";
+import { Route, Routes } from "react-router-dom";
+import Main from "./page/Main/index";
+import BoardGameSearch from "./page/BoardGameSearch/index";
 
 function Router() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Main />} />
+      <Route path="/search" element={<BoardGameSearch />} />
+    </Routes>
   );
 }
 
