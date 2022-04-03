@@ -7,12 +7,21 @@ import Dialog from "@mui/material/Dialog";
 import { styled } from "@mui/material/styles";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import { Button, Grid, TextField, DialogContentText } from "@mui/material";
+import {
+  Button,
+  Grid,
+  TextField,
+  DialogContentText,
+  Autocomplete,
+  Box,
+} from "@mui/material";
 
 interface IProps {
   open: boolean;
+  gameList: { gameKorName: string; gameName: string; gameNo: string }[];
   handleClose: () => void;
   sendDataToParent: (
+    gameNo: string,
     title: string,
     price: string,
     contents: string,
@@ -22,6 +31,7 @@ interface IProps {
 
 const MarketUploadDialog = ({
   open,
+  gameList,
   handleClose,
   sendDataToParent,
 }: IProps) => {
@@ -32,6 +42,7 @@ const MarketUploadDialog = ({
     width: "100%",
   });
 
+  const [gameNo, setGameNo] = useState("");
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [contents, setContents] = useState("");
@@ -47,8 +58,28 @@ const MarketUploadDialog = ({
     if (contents.length === 0) return alert("내용을 확인해주세요");
 
     /* 부모에게 제목,가격,내용, 파일 전달*/
-    sendDataToParent(title, price, contents, file);
+    sendDataToParent(gameNo, title, price, contents, file);
   };
+  /* 거래할 보드게임 지정 */
+  const onChangeGame = (value: string) => {
+    // 검색창에 값이 있을 경우에만 수행
+    if (value) {
+      let extractName: string;
+      extractName = value.match(/\(.*\)/gi)?.toString() as string;
+      // 괄호가 있는 완전한 값일 때만 수행(괄호가 짝이 안맞거나 없으면 undefined가 뜸)
+      if (extractName) {
+        extractName = extractName.split("(").join("").split(")").join("");
+
+        const extractGame = gameList.filter(
+          (game) => game.gameName === extractName
+        );
+
+        // 게임을 목록에서 정상적으로 찾았다면, 해당 번호를 저장
+        setGameNo(extractGame[0].gameNo);
+      }
+    }
+  };
+
   /* 제목 지정 */
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -123,6 +154,25 @@ const MarketUploadDialog = ({
         <Grid container item xs={10} sm={8} sx={{ mt: 3 }}>
           <DialogContent>
             <form>
+              <DialogContentText>거래할 보드게임</DialogContentText>
+              <Autocomplete
+                autoComplete
+                clearOnEscape
+                options={gameList}
+                getOptionLabel={(option) =>
+                  `${option.gameKorName}(${option.gameName})`
+                }
+                renderOption={(props, option) => (
+                  <Box component="li" {...props} sx={{ fontSize: "0.8rem" }}>
+                    {option.gameKorName}({option.gameName})
+                  </Box>
+                )}
+                renderInput={(params) => (
+                  <TextField {...params} placeholder="보드게임을 선택하세요." />
+                )}
+                onInputChange={(e, value) => onChangeGame(value)}
+              />
+
               <DialogContentText>제목</DialogContentText>
               <TextField
                 variant="outlined"
