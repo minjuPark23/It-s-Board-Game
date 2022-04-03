@@ -1,10 +1,8 @@
 package com.ssafy.IBG.domain;
 
 import lombok.Data;
-
 import javax.persistence.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -20,34 +18,34 @@ public class Game {
     private String gameName;
 
     @Column(name = "gameMinPlayer")
-    private int gameMinPlayer;
+    private Integer gameMinPlayer;
 
     @Column(name = "gameMaxPlayer")
-    private int gameMaxPlayer;
+    private Integer gameMaxPlayer;
 
     @Column(name = "gameMinTime")
-    private int gameMinTime;
+    private Integer gameMinTime;
 
     @Column(name = "gameMaxTime")
-    private int gameMaxTime;
+    private Integer gameMaxTime;
 
     @Column(name = "gameYear")
-    private int gameYear;
+    private Integer gameYear;
 
     @Column(name = "gameTotalScore")
-    private double gameTotalScore;
+    private Double gameTotalScore;
 
     @Column(name = "gameImg")
     private String gameImg;
 
     @Column(name = "gameAge")
-    private int gameAge;
+    private Integer gameAge;
 
     @Column(name = "gameCategory")
     private String gameCategory;
 
     @Column(name = "gameWeight")
-    private double gameWeight;
+    private Double gameWeight;
 
     @Column(name = "gameDesc")
     private String gameDescription;

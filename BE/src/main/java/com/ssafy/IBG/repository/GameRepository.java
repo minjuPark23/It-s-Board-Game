@@ -18,19 +18,24 @@ public class GameRepository {
 
     private final EntityManager em;
 
-    public List<Game> findSearchGame(String searchName){
-//        return em.createQuery("select g from Game g where g.gameName like :searchName", Game.class)
-//                .setParameter("searchName", "%"+searchName+"%")
-//                .getResultList();
+    /**
+     * @author : 박민주
+     * @date : 2022-03-23 오후 5:51
+     **/
+    public List<Game> findGameSearchGame(String searchName){
         JPQLQuery<Game> query = new JPAQuery<>(em);
         QGame qGame = new QGame("Game");
         List<Game> gameList = query.from(qGame)
-                .where(qGame.gameName.like("%"+searchName+"%"))
+                .where(qGame.gameName.contains(searchName))
                 .fetch();
         return gameList;
     }
 
-    public Game findByGameName(String gameName){
+    /**
+     * @author : 박민주
+     * @date : 2022-03-23 오후 5:51
+     **/
+    public Game findGameByGameName(String gameName){
         try{
             Game game = em.createQuery("select g from Game g where g.gameName = :gameName", Game.class)
                     .setParameter("gameName", gameName)
@@ -41,11 +46,13 @@ public class GameRepository {
         }
     }
 
-    public Game findByGameNo(int gameNo){
+    /**
+     * @author : 박민주
+     * @date : 2022-03-23 오후 5:52
+     **/
+    public Game findGameByGameNo(Integer gameNo){
         try{
-            Game game = em.createQuery("select g from Game g where g.gameNo = :gameNo", Game.class)
-                    .setParameter("gameNo", gameNo)
-                    .getSingleResult();
+            Game game = em.find(Game.class, gameNo);
             return game;
         }catch (NoResultException e){
             return null;
@@ -53,7 +60,11 @@ public class GameRepository {
 
     }
 
-    public List<Game> findByFilter(String gameName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
+    /**
+     * @author : 박민주
+     * @date : 2022-03-23 오후 5:52
+     **/
+    public List<Game> findGameByFilter(String gameName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
 
         JPQLQuery<Game> query = new JPAQuery<>(em);
         QGame qGame = new QGame("Game");
@@ -88,5 +99,4 @@ public class GameRepository {
                 .fetch();
         return gameList;
     }
-
 }
