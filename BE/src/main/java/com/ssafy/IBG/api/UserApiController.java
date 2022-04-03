@@ -1,5 +1,6 @@
 package com.ssafy.IBG.api;
 
+import com.ssafy.IBG.api.game.GameListResponse;
 import com.ssafy.IBG.api.user.*;
 import com.ssafy.IBG.domain.Interest;
 import com.ssafy.IBG.api.dto.Result;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +40,7 @@ public class UserApiController {
         user.setUserNick(request.getUserNick());
         user.setUserPwd(encPwd);
 
-        if(userService.join(user) != null){
+        if(userService.join(user)){
             return new Result(HttpStatus.OK.value());
         }else{
             return new Result(HttpStatus.CONFLICT.value());
@@ -113,6 +115,13 @@ public class UserApiController {
 
         if(list.isEmpty())
             return new Result(HttpStatus.NO_CONTENT.value());
+
+        List<UserInterestResponse> collect = list.stream()
+                .map(i -> {
+                    /** game에 대한 user like 전달 **/
+                    return new UserInterestResponse(i.getGame(), true);
+                })
+                .collect(Collectors.toList());
 
         return new Result(HttpStatus.OK.value(), list);
     }

@@ -1,8 +1,6 @@
 package com.ssafy.IBG.service;
 
-import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Interest;
-import com.ssafy.IBG.domain.User;
 import com.ssafy.IBG.repository.GameRepository;
 import com.ssafy.IBG.repository.InterestRepository;
 import com.ssafy.IBG.repository.UserRepository;
@@ -14,7 +12,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class InterestService {
 
     private final InterestRepository interestRepository;
@@ -33,13 +30,7 @@ public class InterestService {
 
         try{
             if(interest == null) {
-                User user = userRepository.findUserByUserNo(userNo);
-                Game game = gameRepository.findGameByGameNo(gameNo);
-
-                if(user == null || game == null)
-                    return false;
-
-                interestRepository.saveInterest(new Interest(user, game));
+                interestRepository.saveInterest(new Interest(userRepository.findUserByUserNo(userNo), gameRepository.findGameByGameNo(gameNo)));
             }
             else
                 interestRepository.removeInterest(interest);
@@ -57,22 +48,9 @@ public class InterestService {
      * @date : 2022-03-23
      * @desc: 해당 유저가 좋아요 표시한 모든 데이터를 가져온다.
      **/
+    @Transactional(readOnly = true)
     public List<Interest> getInterestList(Integer userNo){
         return interestRepository.findInterestListByUserNo(userNo);
-    }
-
-    /**
-     * @author : 박민주
-     * @date : 2022-03-25 오전 10:42
-     * @desc : userNo와 gameNo로 좋아요 했는지 찾기
-     **/
-    public boolean getIsLike(Integer userNo, Integer gameNo){
-        if (userNo == null || gameNo == null){
-            return false;
-        }
-        Interest interest = interestRepository.findInterestByUserNoGameNo(userNo, gameNo);
-        if (interest == null) return false;
-        else return true;
     }
 
 }
