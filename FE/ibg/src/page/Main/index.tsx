@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Container, Skeleton } from "@mui/material";
+import { Container, Skeleton } from "@mui/material";
 import ThemeList from "./component/ThemeList";
 import {
   getRecommByAge,
