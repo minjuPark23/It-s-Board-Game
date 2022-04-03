@@ -134,7 +134,6 @@ export default function Main() {
             550: { items: 3 },
             700: { items: 4 },
             900: { items: 5 },
-            1200: { items: 6 },
           }}
         />
       </>
