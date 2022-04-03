@@ -8,47 +8,40 @@ import java.util.List;
 @Data
 @Table
 public class Game {
-
     @Id
-    @Column(name = "gameNo")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer gameNo;
+    private int gameNo;
 
-    @Column(name = "gameName", unique = true)
+    @Column(unique = true)
     private String gameName;
 
-    @Column(name = "gameMinPlayer")
-    private Integer gameMinPlayer;
+    private String gameKorName;
 
-    @Column(name = "gameMaxPlayer")
-    private Integer gameMaxPlayer;
+    private int gameMinPlayer;
 
-    @Column(name = "gameMinTime")
-    private Integer gameMinTime;
+    private int gameMaxPlayer;
 
-    @Column(name = "gameMaxTime")
-    private Integer gameMaxTime;
+    private int gameMinTime;
 
-    @Column(name = "gameYear")
-    private Integer gameYear;
+    private int gameMaxTime;
 
-    @Column(name = "gameTotalScore")
-    private Double gameTotalScore;
+    private int gameYear;
 
-    @Column(name = "gameImg")
+    private double gameTotalScore;
+
     private String gameImg;
 
-    @Column(name = "gameAge")
-    private Integer gameAge;
+    private int gameAge;
 
-    @Column(name = "gameCategory")
     private String gameCategory;
 
-    @Column(name = "gameWeight")
-    private Double gameWeight;
+    private double gameWeight;
 
-    @Column(name = "gameDesc")
-    private String gameDescription;
+    @Column(length = 6000)
+    private String gameDesc;
+
+    @Column(length = 6000)
+    private String gameKorDesc;
 
     @OneToMany(mappedBy = "game")
     private List<Review> review;

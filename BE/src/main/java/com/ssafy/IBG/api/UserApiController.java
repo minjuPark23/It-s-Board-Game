@@ -108,7 +108,12 @@ public class UserApiController {
      * @author : 권오범
      * @date : 2022-03-23
      * @desc: 유저가 좋아요한 목록 가져오기
+     * @modify :
+     * - author : 박민주
+     * - date : 2022-03-25 오전 11:45
+     * - desc : gameNo에 대한 user isLike 전달
      **/
+
     @GetMapping("/user/like/{userNo}")
     public Result getInterestListByUserNo(@PathVariable("userNo") Integer userNo){
         List<Interest> list = interestService.getInterestList(userNo);
@@ -123,7 +128,7 @@ public class UserApiController {
                 })
                 .collect(Collectors.toList());
 
-        return new Result(HttpStatus.OK.value(), list);
+        return new Result(HttpStatus.OK.value(), collect);
     }
 
     /**

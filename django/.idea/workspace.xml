@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5f598818-359f-4587-bc7c-38ee8d08c707" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../util/crawling/reviews.py" beforeDir="false" afterPath="$PROJECT_DIR$/../util/crawling/reviews.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BE/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../BE/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +104,7 @@
       <option name="presentableId" value="Default" />
       <updated>1648395100809</updated>
       <workItem from="1648395109364" duration="55575000" />
-      <workItem from="1648979082345" duration="601000" />
+      <workItem from="1648979082345" duration="1195000" />
     </task>
     <servers />
   </component>
