@@ -16,11 +16,14 @@ import BoardCard from "./component/BoardCard";
 import MarketUploadDialog from "./component/MarketUploadDialog";
 import Title from "./component/Title";
 import { RootStateOrAny, useSelector } from "react-redux";
+import { getAutoAllGame } from "../../../api/game";
 
 export default function BoardGameMarket() {
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
   const [dealList, setDealList] = useState([]);
   const [open, setOpen] = useState(false); //modal
+  // 거래 등록 자동완성용 게임리스트, Navbar와 동일하므로 추후 redux 등으로 관리할 수 있는 방법 고민해보기
+  const [gameList, setGameList] = useState([]);
 
   const fetchDealLists = () => {
     getDealLists().then((data) => {
@@ -29,8 +32,15 @@ export default function BoardGameMarket() {
     });
   };
 
+  const fetchGameList = () => {
+    getAutoAllGame().then((data) => {
+      setGameList(data.data);
+    });
+  };
+
   useEffect(() => {
     fetchDealLists();
+    fetchGameList();
   }, []);
 
   /* 검색 */
@@ -107,13 +117,14 @@ export default function BoardGameMarket() {
 
   //navigate when "Yes" is pressed on dialog OR pressed Complete
   const handleSubmit = async (
+    gameNo: string,
     title: string,
     price: string,
     contents: string,
     file: File | Blob
   ) => {
     console.log(file);
-    writeDeal("1", userNo, title, contents, file, price).then((data) => {
+    writeDeal(gameNo, userNo, title, contents, file, price).then((data) => {
       console.log(data);
       setOpen(false);
       fetchDealLists();
@@ -165,6 +176,7 @@ export default function BoardGameMarket() {
         {userNo ? (
           <MarketUploadDialog
             open={open}
+            gameList={gameList}
             handleClose={handleClose}
             sendDataToParent={handleSubmit}
           />
