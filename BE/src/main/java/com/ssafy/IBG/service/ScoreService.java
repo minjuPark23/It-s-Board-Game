@@ -1,8 +1,6 @@
 package com.ssafy.IBG.service;
 
-import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Score;
-import com.ssafy.IBG.domain.User;
 import com.ssafy.IBG.repository.GameRepository;
 import com.ssafy.IBG.repository.ScoreRepository;
 import com.ssafy.IBG.repository.UserRepository;
@@ -12,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ScoreService {
 
     private final ScoreRepository scoreRepository;
