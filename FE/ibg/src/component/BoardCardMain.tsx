@@ -118,7 +118,7 @@ export default function BoardCard(props: { game: Game; marginX?: number }) {
             <LikeButtonPosition>
               <LikeButton
                 initLike={props.game.like}
-                size={28}
+                size={24}
                 gameNo={props.game.gameNo}
                 userNo={user.userNo}
               />
