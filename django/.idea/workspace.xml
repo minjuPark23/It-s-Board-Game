@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5f598818-359f-4587-bc7c-38ee8d08c707" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../BE/src/main/java/com/ssafy/IBG/api/RecommendApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../BE/src/main/java/com/ssafy/IBG/api/RecommendApiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../BE/src/main/java/com/ssafy/IBG/service/RESTAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../BE/src/main/java/com/ssafy/IBG/service/RESTAPIService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../util/crawling/reviews.py" beforeDir="false" afterPath="$PROJECT_DIR$/../util/crawling/reviews.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,6 +103,7 @@
       <option name="presentableId" value="Default" />
       <updated>1648395100809</updated>
       <workItem from="1648395109364" duration="55575000" />
+      <workItem from="1648979082345" duration="601000" />
     </task>
     <servers />
   </component>
@@ -128,6 +128,11 @@
           <url>file://$PROJECT_DIR$/ibg/ibg/urls.py</url>
           <line>15</line>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>8</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

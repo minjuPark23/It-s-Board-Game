@@ -53,4 +53,19 @@ public class InterestService {
         return interestRepository.findInterestListByUserNo(userNo);
     }
 
+    /**
+     * @author : 박민주
+     * @date : 2022-03-25 오전 10:42
+     * @desc : userNo와 gameNo로 좋아요 했는지 찾기
+     **/
+    public boolean getIsLike(Integer userNo, Integer gameNo){
+        if (userNo == null || gameNo == null){
+            return false;
+        }
+        Interest interest = interestRepository.findInterestByUserNoGameNo(userNo, gameNo);
+        if (interest == null) return false;
+        else return true;
+    }
+
+
 }
