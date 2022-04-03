@@ -6,18 +6,21 @@ import { Game } from "../../Main/index";
 import CustomSelect, { StyledOption } from "./component/CustomSelect";
 import GameFilter, { ISearchFilter } from "./component/GameFilter";
 import { Box, Container, Grid, Typography } from "@mui/material";
+import SkelBoardCard from "../../../component/SkelBoardCard";
 
 export default function BoardGameSearch() {
+  const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
+  const [loading, setLoading] = useState(true);
   const [initGameList, setInitGameList] = useState<Game[]>([]);
   const [gameList, setGameList] = useState<Game[]>([]);
   const [sortingOpt, setSortingOpt] = useState<string | null>("recomm");
-  const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
 
   // 페이지 접속 시 1회 실행
   useEffect(() => {
     SearchByName("", userNo).then((data) => {
       setInitGameList(data);
       setGameList(data);
+      setLoading(false);
     });
   }, [userNo]);
 
@@ -41,6 +44,8 @@ export default function BoardGameSearch() {
   }, [sortingOpt, initGameList]);
 
   const getSearchResult = (filter: ISearchFilter) => {
+    setLoading(true);
+
     if (userNo) filter.userNo = userNo;
 
     searchByFilter(filter).then((data) => {
@@ -51,6 +56,7 @@ export default function BoardGameSearch() {
         setInitGameList([]);
         setGameList([]);
       }
+      setLoading(false);
     });
   };
 
@@ -78,7 +84,13 @@ export default function BoardGameSearch() {
         </CustomSelect>
       </Box>
       {/* 보드게임 카드 */}
-      {gameList.length > 0 ? (
+      {loading ? (
+        <Grid container spacing={2}>
+          {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(() => (
+            <SkelBoardCard />
+          ))}
+        </Grid>
+      ) : gameList.length > 0 ? (
         <Grid container spacing={2}>
           {gameList.map((game) => (
             <BoardCardMain key={game.gameNo} game={game}></BoardCardMain>

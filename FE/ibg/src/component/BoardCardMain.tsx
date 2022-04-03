@@ -14,7 +14,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import StarIcon from "@mui/icons-material/Star";
 
 // 카드 효과 스타일
-const StyledCard = styled(Card)(({ theme }) => ({
+const StyledCard = styled(Card)(() => ({
   position: "relative",
   width: "inherit",
   minWidth: "140px",
