@@ -10,9 +10,14 @@ function apiInstance() {
   });
   return instance;
 }
-
+function randomColor() {
+  let hex = Math.floor(Math.random() * 0xffffff);
+  let color = "#" + hex.toString(16);
+  return color;
+}
 function loginApiInstance() {
   const jwtToken = sessionStorage.getItem("accessToken");
+  sessionStorage.setItem("avatarColor", randomColor());
   const instance = axios.create({
     baseURL: API_BASE_URL,
     headers: {

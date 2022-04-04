@@ -107,6 +107,7 @@ export default function DealDetail() {
                 <Typography variant="subtitle1">
                   <AvatarGenerator
                     userName={dealDetail ? String(dealDetail.userNo) : ""}
+                    isNav={false}
                   />
                 </Typography>
                 <Typography style={{ marginLeft: 8, marginTop: 8 }}>
