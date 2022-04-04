@@ -19,7 +19,9 @@ function App() {
 
       <BrowserRouter>
         <NavBar />
-        <Router />
+        <div id="ibgContent">
+          <Router />
+        </div>
         <ScrollToTop />
         {window.location.pathname === "/survey" ? null : <Footer />}
       </BrowserRouter>

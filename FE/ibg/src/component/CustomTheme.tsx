@@ -17,6 +17,16 @@ const CustomTheme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: `
+      html, body, #root {
+        height: 100%;
+      }
+
+      #ibgContent {
+        heignt: auto;
+        min-height: 96%;
+        padding-bottom: 20vh;
+      }
+
       ::-webkit-scrollbar {
         width: 0.6em;
         z-index: 99;
