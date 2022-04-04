@@ -5,12 +5,13 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 const StyledFooter = styled(AppBar)(({ theme }) => ({
-  position: "static",
-  height: "100%",
+  position: "relative",
+  transform: "translateY(-100%)",
   padding: theme.spacing(2, 0),
   backgroundColor: theme.palette.warning.main,
   boxShadow: "none",
   color: theme.palette.common.black,
+  zIndex: 1,
 }));
 
 const FooterLink = styled("span")(({ theme }) => ({
@@ -39,16 +40,15 @@ export default function Footer() {
             <FooterLink sx={{ fontWeight: "bold" }}>
               개인정보 처리방침
             </FooterLink>
-            <FooterLink>IBG</FooterLink>
           </Typography>
           <Typography variant="caption" gutterBottom>
-            (주)IBG 공동대표 곽현준 권오범 박민주 박혜준 신미래 정하은
+            (주)IBG 현준 오범 민주 혜준 미래 하은
           </Typography>
           <Typography variant="caption" component="div">
-            사업자등록번호 102-93-84756
+            사업자등록번호 202-26-13211
           </Typography>
           <Typography variant="caption" gutterBottom>
-            © 2022 by SSAFY 6기 대전 1반 1팀, Inc. All rights reserved.
+            © 2022 by SSAFY 6기 대전 1반 1팀, All rights reserved.
           </Typography>
           <StyledImage src="img/puzzle.png"></StyledImage>
         </Toolbar>

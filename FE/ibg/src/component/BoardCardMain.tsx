@@ -9,7 +9,6 @@ import {
   CardMedia,
   CardActionArea,
   Grid,
-  Box,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import StarIcon from "@mui/icons-material/Star";
@@ -64,6 +63,9 @@ const AddInfo = styled("div")(() => ({
   fontSize: "0.8rem",
   display: "flex",
   alignItems: "center",
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+  overflow: "hidden",
 }));
 
 // 관심 버튼 위치
@@ -77,7 +79,7 @@ const LikeButtonPosition = styled("span")(({ theme }) => ({
   },
 }));
 
-export default function BoardCard(props: { game: Game; responsive?: boolean }) {
+export default function BoardCard(props: { game: Game; marginX?: number }) {
   const user = useSelector((state: RootStateOrAny) => state.user);
   const navigate = useNavigate();
   const moveToDetail = () => {
@@ -86,7 +88,11 @@ export default function BoardCard(props: { game: Game; responsive?: boolean }) {
 
   const insideInfo = () => {
     return (
-      <StyledCard variant="outlined" onClick={moveToDetail}>
+      <StyledCard
+        variant="outlined"
+        onClick={moveToDetail}
+        sx={{ mx: props.marginX }}
+      >
         <CardActionArea>
           <ImgWrapper>
             <CardMedia
@@ -107,12 +113,12 @@ export default function BoardCard(props: { game: Game; responsive?: boolean }) {
               <PersonIcon color="warning" fontSize="small" sx={{ mr: 0.5 }} />
               {props.game.gameMinPlayer}~{props.game.gameMaxPlayer}명
               <StarIcon color="warning" fontSize="small" sx={{ mx: 0.5 }} />
-              {props.game.gameTotalScore}
+              {Math.floor(props.game.gameTotalScore * 100) / 100}
             </AddInfo>
             <LikeButtonPosition>
               <LikeButton
                 initLike={props.game.like}
-                size={28}
+                size={24}
                 gameNo={props.game.gameNo}
                 userNo={user.userNo}
               />
@@ -122,11 +128,9 @@ export default function BoardCard(props: { game: Game; responsive?: boolean }) {
       </StyledCard>
     );
   };
-  return props.responsive ? (
+  return (
     <Grid item xs={6} sm={4} md={3} lg={2.4}>
       {insideInfo()}
     </Grid>
-  ) : (
-    <Box sx={{ width: "178px", mx: 1 }}>{insideInfo()}</Box>
   );
 }

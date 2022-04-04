@@ -1,21 +1,47 @@
-import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getDealLists, getDealSearch, writeDeal } from "../../../api/deal";
 import {
   Grid,
   Box,
   Container,
-  ThemeProvider,
-  Typography,
   Divider,
   InputBase,
+  Button,
+  Modal,
+  Typography,
 } from "@mui/material";
 import { styled, alpha, createTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import BoardCard from "./component/BoardCard";
-import MarketUpload from "./component/MarketUpload";
+import MarketUploadDialog from "./component/MarketUploadDialog";
+import Title from "./component/Title";
+import { RootStateOrAny, useSelector } from "react-redux";
+import { getAutoAllGame } from "../../../api/game";
 
 export default function BoardGameMarket() {
-  const [dealList] = useState(tempData.dealList);
+  const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
+  const [dealList, setDealList] = useState([]);
+  const [open, setOpen] = useState(false); //modal
+  // 거래 등록 자동완성용 게임리스트, Navbar와 동일하므로 추후 redux 등으로 관리할 수 있는 방법 고민해보기
+  const [gameList, setGameList] = useState([]);
+
+  const fetchDealLists = () => {
+    getDealLists().then((data) => {
+      console.log(data);
+      setDealList(data.data);
+    });
+  };
+
+  const fetchGameList = () => {
+    getAutoAllGame().then((data) => {
+      setGameList(data.data);
+    });
+  };
+
+  useEffect(() => {
+    fetchDealLists();
+    fetchGameList();
+  }, []);
 
   /* 검색 */
   const Search = styled("div")(({ theme }) => ({
@@ -79,6 +105,57 @@ export default function BoardGameMarket() {
     },
   };
 
+  // function to handle modal open
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  // function to handle modal close
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  //navigate when "Yes" is pressed on dialog OR pressed Complete
+  const handleSubmit = async (
+    gameNo: string,
+    title: string,
+    price: string,
+    contents: string,
+    file: File | Blob
+  ) => {
+    console.log(file);
+    writeDeal(gameNo, userNo, title, contents, file, price).then((data) => {
+      console.log(data);
+      setOpen(false);
+      fetchDealLists();
+    });
+  };
+
+  const handleSearchKeyUp = (e: any) => {
+    if (e.keyCode === 13) {
+      if (e.target.value.trim().length === 0) {
+        fetchDealLists();
+      } else {
+        getDealSearch(e.target.value).then((data) => {
+          console.log(data);
+          setDealList(data.data);
+        });
+      }
+    }
+  };
+
+  // 로그인 팝업
+  const modalStyle = {
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+  };
+
   return (
     <Container style={{ marginTop: 20, padding: 20 }}>
       {/* BGM 상단 */}
@@ -86,24 +163,40 @@ export default function BoardGameMarket() {
         style={{ marginBottom: 10 }}
         sx={{ display: "flex", justifyContent: "space-between" }}
       >
-        <ThemeProvider theme={theme}>
-          <Typography variant="h3" sx={{ display: "flex" }}>
-            <Typography variant="h3" color="error">
-              B
-            </Typography>
-            oard&nbsp;
-            <Typography variant="h3" color="#FCB500">
-              G
-            </Typography>
-            ame&nbsp;
-            <Typography variant="h3" color="primary">
-              M
-            </Typography>
-            arket
-          </Typography>
-        </ThemeProvider>
         {/* 거래 업로드 버튼 */}
-        <MarketUpload />
+        <Title />
+        <Button
+          style={{ height: 20 }}
+          sx={{ top: { md: 28, xs: 10 } }}
+          color="primary"
+          onClick={handleOpen}
+        >
+          거래 등록
+        </Button>
+        {userNo ? (
+          <MarketUploadDialog
+            open={open}
+            gameList={gameList}
+            handleClose={handleClose}
+            sendDataToParent={handleSubmit}
+          />
+        ) : (
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={modalStyle}>
+              <Typography
+                id="modal-modal-description"
+                variant="h6"
+                component="h2"
+              >
+                로그인 후 가능한 서비스입니다.
+              </Typography>
+            </Box>
+          </Modal>
+        )}
       </Box>
       <Divider />
       <Search sx={{ width: { xs: "100%", sm: 330 } }}>
@@ -111,13 +204,14 @@ export default function BoardGameMarket() {
           <SearchIcon />
         </SearchIconWrapper>
         <StyledInputBase
-          placeholder="마켓 검색"
+          placeholder="보드게임 이름으로 검색"
           inputProps={{ "aria-label": "search" }}
+          onKeyUp={handleSearchKeyUp}
         />
       </Search>
       <Grid container spacing={1} style={{ marginTop: 14 }}>
-        {dealList.map((deal) => (
-          <BoardCard key={deal.gameNo} deal={deal}></BoardCard>
+        {dealList.map((deal, index) => (
+          <BoardCard key={index} deal={deal}></BoardCard>
         ))}
       </Grid>
     </Container>
@@ -125,61 +219,16 @@ export default function BoardGameMarket() {
 }
 
 // 임시 데이터
-const tempData = {
-  dealList: [
-    {
-      dealTitle: "보드게임 팝니다.",
-      dealState: false,
-      gameNo: 1,
-      gameImg:
-        "https://ae01.alicdn.com/kf/H886df0f1371840bc8607e8eccd08a84bd/Mattel-Games-UNO-Kartenspiel-UNO.jpg_Q90.jpg_.webp",
-      gameName: "UNO",
-      gamePrice: 5000,
-    },
-    {
-      dealTitle: "얍얍",
-      dealState: false,
-      gameNo: 2,
-      gameImg:
-        "http://openimage.interpark.com/goods_image_big/3/1/9/1/8358463191_l.jpg",
-      gameName: "CATAN",
-      gamePrice: 15000,
-    },
-    {
-      dealTitle: "[젠가]저렴하다.",
-      dealState: true,
-      gameNo: 3,
-      gameImg:
-        "https://target.scene7.com/is/image/Target/GUEST_2ff3e3eb-c38d-4c5a-a6bc-7b95b96c3fec?wid=488&hei=488&fmt=pjpeg",
-      gameName: "Jenga",
-      gamePrice: 3000,
-    },
-    {
-      dealTitle: "부루마블 판매",
-      dealState: false,
-      gameNo: 4,
-      gameImg:
-        "http://openimage.interpark.com/goods_image/1/7/9/3/8297011793s.jpg",
-      gameName: "부루마블",
-      gamePrice: 20000,
-    },
-    {
-      dealTitle: "루미큐브 판매한다",
-      dealState: false,
-      gameNo: 5,
-      gameImg:
-        "http://rummikubshop.co.kr/web/product/big/202010/e1b94b790fb40aa849a74028e44f803f.jpg",
-      gameName: "Rummikub",
-      gamePrice: 4500,
-    },
-    {
-      dealTitle: "[할리갈리]잼씀",
-      dealState: true,
-      gameNo: 6,
-      gameImg:
-        "https://www.koreaboardgames.com/upload/uploaded/prd/415051482112635.png",
-      gameName: "Halli Galli",
-      gamePrice: 25000,
-    },
-  ],
-};
+// const tempData = {
+//   dealList: [
+//     {
+//       dealTitle: "보드게임 팝니다.",
+//       dealGame: "UNO",
+//       dealState: false,
+//       dealNo: 1,
+//       dealImage:
+//         "https://ae01.alicdn.com/kf/H886df0f1371840bc8607e8eccd08a84bd/Mattel-Games-UNO-Kartenspiel-UNO.jpg_Q90.jpg_.webp",
+//       dealPrice: 5000,
+//     },
+//   ],
+// };

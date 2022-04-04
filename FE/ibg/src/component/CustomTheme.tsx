@@ -14,6 +14,37 @@ const CustomTheme = createTheme({
       main: "#FCB500",
     },
   },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+      html, body, #root {
+        height: 100%;
+      }
+
+      #ibgContent {
+        heignt: auto;
+        min-height: 96%;
+        padding-bottom: 20vh;
+      }
+
+      ::-webkit-scrollbar {
+        width: 0.6em;
+        z-index: 99;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background-color: LightBlue;
+      }
+
+      ::-webkit-scrollbar-track {
+        margin: $size-regular;
+        border-radius: 4px;
+        background-color: WhiteSmoke;
+      }
+      `,
+    },
+  },
 });
 
 export { CustomTheme };

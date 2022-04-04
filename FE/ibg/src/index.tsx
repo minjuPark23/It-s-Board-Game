@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import CssBaseline from "@mui/material/CssBaseline";
 
 //redux
 import { createStore } from "redux";
@@ -54,7 +53,6 @@ ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <React.StrictMode>
-        <CssBaseline />
         <App />
       </React.StrictMode>
     </PersistGate>
