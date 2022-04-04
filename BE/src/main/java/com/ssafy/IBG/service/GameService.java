@@ -59,4 +59,12 @@ public class GameService {
         return gameRepository.findGameByFilter(gameName, gameKorName, gamePlayer, gameTime, gameWeight, gameAge, gameScore, gameCategory);
     }
 
+    /**
+     * @author : 권오범
+     * @date : 2022-04-03 오후 3:49
+     * @desc: 게임 평균 난이도
+     **/
+    public double getAvgWeight(){
+        return gameRepository.findAvgWeight();
+    }
 }

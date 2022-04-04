@@ -122,4 +122,11 @@ public class RecommendRepository {
                 .getResultList();
     }
 
+    public List<Game> findRecommendByNewbie(Integer userNo, double gameAgeWeight, int limit) {
+        gameAgeWeight = gameAgeWeight * 0.5d;
+        return em.createQuery("select g from Game g where g.gameWeight < :gameAgeWeight order by g.gameTotalScore desc", Game.class)
+                .setParameter("gameAgeWeight", gameAgeWeight)
+                .setMaxResults(limit)
+                .getResultList();
+    }
 }
