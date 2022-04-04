@@ -1,17 +1,11 @@
 package com.ssafy.IBG.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.IBG.api.recommend.RecommendJsonResponse;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 @Service
 public class RESTAPIService {
@@ -34,14 +28,47 @@ public class RESTAPIService {
 
         String res_url = BASE_URL+url+"/"+userNo;
 
+        HttpEntity<String> response = restTemplate.getForEntity(res_url, String.class);
+
+    }
+
+    public String[] requestGETAPI2(String url) throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Header set
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        String res_url = BASE_URL+url;
+
+        HttpEntity<String> response = restTemplate.getForEntity(res_url, String.class);
+
+        String body = response.getBody();
+        body = body.replace("[", "");
+        body = body.replace("]", "");
+        String[] game_no_list = body.split(",");
+
+        return game_no_list;
+    }
+
+    public String[] requestGETAPI3(String url, Integer gameNo) throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Header set
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        String res_url = BASE_URL+url+"/"+gameNo;
+
         // Request and getResponse
         HttpEntity<String> response = restTemplate.getForEntity(res_url, String.class);
 
         // Response Body 파싱
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-//        System.out.println(response.getBody());
-//        List<RecommendJsonResponse> list = objectMapper.readValue(response.getBody(), new TypeReference<List<RecommendJsonResponse>>() {});
-//        System.out.println(list);
+        String body = response.getBody();
+        body = body.replace("[", "");
+        body = body.replace("]", "");
+        String[] game_no_list = body.split(",");
+
+        return game_no_list;
     }
 }
