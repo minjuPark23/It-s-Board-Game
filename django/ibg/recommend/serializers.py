@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Recommend
+from .models import Recommend, Game
 
 
 # django는 기존에 HTML로 렌더링되어 Response로 응답을 보내게 되는데
@@ -27,6 +27,13 @@ from .models import Recommend
 #             'user_nick',
 #             'user_pwd',
 #         ]
+
+class GameListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Game
+        fields = [
+            'game_no',
+        ]
 
 
 class RecommendListSerializer(serializers.ModelSerializer):
