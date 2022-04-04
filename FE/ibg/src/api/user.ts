@@ -57,6 +57,11 @@ async function initSurvey(userNo: number) {
   const loginApi = loginApiInstance();
   return (await loginApi.get(`user/survey/${userNo}`)).data.data;
 }
+// 회원가입 설문조사 : 백앤드 완료되면 이것으로 대체하기
+// async function initSurvey() {
+//   const loginApi = loginApiInstance();
+//   return (await loginApi.get(`user/survey/${userNo}`)).data.data;
+// }
 
 // 관심 목록 가져오기
 async function getLikedList(userNo: number) {
