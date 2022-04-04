@@ -10,7 +10,9 @@ import java.util.Date;
 public class DealResponse {
     private Integer dealNo;
     private Integer userNo;
+    private String userNick;
     private Integer gameNo;
+    private String gameName;
     private String dealTitle;
     private String dealContent;
     private String dealFileName;
@@ -20,10 +22,12 @@ public class DealResponse {
     private Date dealReg;
     private boolean dealStatus;
 
-    public DealResponse(int dealNo, int userNo, int gameNo, String dealTitle, String dealContent, String dealFileName, String dealSavedName, String dealPath, int dealPrice, Date dealReg, boolean dealStatus) {
+    public DealResponse(int dealNo, int userNo, String userNick, int gameNo, String gameName, String dealTitle, String dealContent, String dealFileName, String dealSavedName, String dealPath, int dealPrice, Date dealReg, boolean dealStatus) {
         this.dealNo = dealNo;
         this.userNo = userNo;
+        this.userNick = userNick;
         this.gameNo = gameNo;
+        this.gameName = gameName;
         this.dealTitle = dealTitle;
         this.dealContent = dealContent;
         this.dealFileName = dealFileName;
