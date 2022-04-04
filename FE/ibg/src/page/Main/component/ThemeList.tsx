@@ -1,11 +1,11 @@
 import BoardCardMain from "../../../component/BoardCardMain";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
+import { IGame } from "../../../types/IGame";
 import { Box, styled, Typography } from "@mui/material";
 // import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import { Game } from "..";
 
 const ArrowBox = styled(Box)(({ theme }) => ({
   width: 35,
@@ -16,7 +16,7 @@ const ArrowBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
 }));
 
-export default function ThemeList(props: { title: string; gameList: Game[] }) {
+export default function ThemeList(props: { title: string; gameList: IGame[] }) {
   const cards = props.gameList.map((game) => (
     <BoardCardMain key={game.gameNo} game={game} marginX={0.5}></BoardCardMain>
   ));

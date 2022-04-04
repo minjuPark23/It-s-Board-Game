@@ -1,7 +1,8 @@
 import { RootStateOrAny, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LikeButton from "./LikeButton";
-import { Game } from "../page/Main";
+import { IGame } from "../types/IGame";
+
 import { styled } from "@mui/material/styles";
 import {
   Card,
@@ -79,7 +80,7 @@ const LikeButtonPosition = styled("span")(({ theme }) => ({
   },
 }));
 
-export default function BoardCard(props: { game: Game; marginX?: number }) {
+export default function BoardCard(props: { game: IGame; marginX?: number }) {
   const user = useSelector((state: RootStateOrAny) => state.user);
   const navigate = useNavigate();
   const moveToDetail = () => {

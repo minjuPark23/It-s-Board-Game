@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import { RootStateOrAny, useSelector } from "react-redux";
+import { IGame } from "../../../types/IGame";
 import { SearchByName, searchByFilter } from "../../../api/game";
 import BoardCardMain from "../../../component/BoardCardMain";
-import { Game } from "../../Main/index";
 import CustomSelect, { StyledOption } from "./component/CustomSelect";
 import GameFilter, { ISearchFilter } from "./component/GameFilter";
-import { Box, Container, Grid, Typography } from "@mui/material";
 import SkelBoardCard from "../../../component/SkelBoardCard";
+
+import { Box, Container, Grid, Typography } from "@mui/material";
 
 export default function BoardGameSearch() {
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
   const [loading, setLoading] = useState(true);
-  const [initGameList, setInitGameList] = useState<Game[]>([]);
-  const [gameList, setGameList] = useState<Game[]>([]);
+  const [initGameList, setInitGameList] = useState<IGame[]>([]);
+  const [gameList, setGameList] = useState<IGame[]>([]);
   const [sortingOpt, setSortingOpt] = useState<string | null>("recomm");
 
   // 페이지 접속 시 1회 실행
