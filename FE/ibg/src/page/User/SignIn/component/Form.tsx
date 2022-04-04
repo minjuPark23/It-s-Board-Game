@@ -41,7 +41,7 @@ function Form({ sendDataToParent }: User) {
     setIsRemember(e.target.checked);
     if (e.target.checked) {
       //alert("remember" + email + " " + e.target.checked);
-      setCookie("rememberEmail", email, { maxAge: 2000 });
+      setCookie("rememberEmail", email, { maxAge: 31536000 });
     } else {
       removeCookie("rememberEmail");
     }
@@ -59,7 +59,7 @@ function Form({ sendDataToParent }: User) {
       //원래 저장된 이메일과 다른 email을 저장하는 경우 */
       if (isRemember && prevSave !== email) {
         removeCookie("rememberEmail");
-        setCookie("rememberEmail", email, { maxAge: 2000 });
+        setCookie("rememberEmail", email, { maxAge: 31536000 });
       }
       sendDataToParent(email, password); //전달
     }
