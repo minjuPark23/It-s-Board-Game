@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RootStateOrAny, useSelector } from "react-redux";
 import { getGameDetail } from "../../../api/game";
-import { getReviewList } from "../../../api/review";
+import { addReview, getReviewList } from "../../../api/review";
 import GameInfo from "./component/GameInfo";
 import ReviewInfo from "../component/ReviewInfo";
 import PageNotFound from "../../../component/PageNotFound";
@@ -31,6 +31,14 @@ export default function BoardGameDetail() {
       });
   }, [gameNo, userNo]);
 
+  const registerReview = (content: string) => {
+    addReview(gameNo, userNo, content).then((data) => {
+      if (data.code === 200) {
+        refreshReview();
+      }
+    });
+  };
+
   const refreshReview = () => {
     getReviewList(gameNo).then((data) => {
       setReviewList(data);
@@ -47,10 +55,10 @@ export default function BoardGameDetail() {
           <Divider />
 
           <ReviewInfo
+            title="리뷰"
             reviewList={reviewList}
-            gameNo={gameNo}
             userNo={userNo}
-            addCallback={refreshReview}
+            addCallback={registerReview}
           />
         </>
       ) : (

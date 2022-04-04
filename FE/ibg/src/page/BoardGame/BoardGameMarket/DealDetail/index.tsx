@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import Title from "../component/Title";
 import AvatarGenerator from "../../../../component/AvatarGenerator";
+import ReviewInfo from "../../component/ReviewInfo";
 import { RootStateOrAny, useSelector } from "react-redux";
 
 export default function DealDetail() {
@@ -34,6 +35,10 @@ export default function DealDetail() {
         setDealDetail({ ...dealDetail, dealStatus: true });
       }
     });
+  };
+
+  const registerReview = () => {
+    console.log("등록!!");
   };
 
   /* 제목 style */
@@ -81,7 +86,7 @@ export default function DealDetail() {
 
   return (
     <>
-      <Container style={{ marginTop: 20, padding: 20 }}>
+      <Container maxWidth="md" style={{ marginTop: 20, padding: 20 }}>
         {/* BGM */}
         <Box
           style={{ marginBottom: 10 }}
@@ -170,21 +175,23 @@ export default function DealDetail() {
             </Typography>
           </Grid>
         </Grid>
+        <ReviewInfo
+          title="댓글"
+          reviewList={tempReviewList}
+          userNo={userNo}
+          addCallback={registerReview}
+        />
       </Container>
     </>
   );
 }
 
-// 임시 데이터
-// const tempData = {
-//   dealList: [
-//     {
-//       dealTitle: "보드게임 팝니다.",
-//       dealState: false,
-//       dealNo: 1,
-//       dealImage:
-//         "https://ae01.alicdn.com/kf/H886df0f1371840bc8607e8eccd08a84bd/Mattel-Games-UNO-Kartenspiel-UNO.jpg_Q90.jpg_.webp",
-//       dealPrice: 5000,
-//     },
-//   ],
-// };
+// 임시데이터
+const tempReviewList = [
+  {
+    reviewNo: 1,
+    userNick: "ssafffff",
+    reviewContent: "리뷰리뷰",
+    reviewReg: "Mar 2022",
+  },
+];
