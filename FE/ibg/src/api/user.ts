@@ -52,11 +52,16 @@ async function addDelLike(userNo: number, gameNo: number) {
   ).data;
 }
 
-// 회원가입 설문조사: api 수정 -> userno 제거
-async function initSurvey() {
+// 회원가입 설문조사
+async function initSurvey(userNo: number) {
   const loginApi = loginApiInstance();
-  return (await loginApi.get(`user/survey/`)).data.data;
+  return (await loginApi.get(`user/survey/${userNo}`)).data.data;
 }
+// 회원가입 설문조사 : 백앤드 완료되면 이것으로 대체하기
+// async function initSurvey() {
+//   const loginApi = loginApiInstance();
+//   return (await loginApi.get(`user/survey/${userNo}`)).data.data;
+// }
 
 // 관심 목록 가져오기
 async function getLikedList(userNo: number) {
