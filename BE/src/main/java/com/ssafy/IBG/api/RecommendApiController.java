@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -176,10 +177,26 @@ public class RecommendApiController {
      * @date : 2022-03-25 오전 15:00
      * @desc: 난이도별 추천
      * */
-    @GetMapping("/game/weight")
-    public Result getRecommendByWeight(@RequestBody(required = false) RecommendRequest request){
+    @GetMapping("/game/weight/{userNo}")
+    public Result getRecommendByWeight(@PathVariable(name="userNo", required = false) Integer userNo){
+        List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
+        double weight = 0d;
+        for(Score score : scores){
+            weight += score.getGame().getGameWeight();
+        }
+        weight /= scores.size();
 
-        return null;
+        List<Game> list = recommendService.getRecommendByWeight(userNo, weight, 30);
+
+        for(Game g : list){
+            if(scoreService.getScoreByUserNoGameNo(userNo, g.getGameNo()) != null){
+                list.remove(g);
+            }
+        }
+
+        Collections.shuffle(list);
+
+        return getResultList(list, userNo);
     }
 
     /**
