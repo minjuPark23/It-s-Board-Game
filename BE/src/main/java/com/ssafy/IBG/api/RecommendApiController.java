@@ -5,6 +5,7 @@ import com.ssafy.IBG.api.dto.Result;
 import com.ssafy.IBG.api.game.GameListResponse;
 import com.ssafy.IBG.api.recommend.RecommendRequest;
 import com.ssafy.IBG.api.recommend.RecommendResultResponse;
+import com.ssafy.IBG.api.recommend.RecommendResultResponse2;
 import com.ssafy.IBG.api.recommend.RecommendSurveyResponse;
 import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Recommend;
@@ -92,10 +93,11 @@ public class RecommendApiController {
             game_popular_list.add(game);
         }
 
-        List<GameListResponse> collect = game_popular_list.stream()
+        List<RecommendResultResponse> collect = game_popular_list.stream()
                 .map(gpl -> {
-                    boolean isLike = interestService.getIsLike(userNo, gpl.getGameNo());
-                    return new GameListResponse(gpl, isLike);
+                    boolean isLike = false;
+                    if(userNo != 0) isLike = interestService.getIsLike(userNo, gpl.getGameNo());
+                    return new RecommendResultResponse(gpl, isLike);
                 }).collect(Collectors.toList());
 
         if (collect.isEmpty()) return new Result(HttpStatus.BAD_REQUEST.value());
@@ -106,11 +108,13 @@ public class RecommendApiController {
     * @author : 박민주
     * @date : 2022-04-04 오전 2:34
     * @desc : 사용자가 한 게임 중 비슷한 게임(랜덤) 유형별 추천
+     * "Clue"랑 비슷한 게임 추천
     **/
     @GetMapping("/game/desc/{userNo}")
     public Result getRecommendByDesc(@PathVariable(name = "userNo") Integer userNo) throws JsonProcessingException {
+        List<Score> scoreList = new ArrayList<>();
+        if (userNo != 0) scoreList = scoreService.getScoreByUserNo(userNo);
         int gameNo = 1;
-        List<Score> scoreList = scoreService.getScoreByUserNo(userNo);
         if (scoreList.isEmpty()) {
             double random = Math.random();
             gameNo = (int)(random*300)+1;
@@ -122,19 +126,22 @@ public class RecommendApiController {
         String[] game_no_list = restapiService.requestGETAPI3("/desc/predict", gameNo);
 
         List<Game> game_desc_list = new ArrayList<>();
+        Game thisGame = gameService.getGameByGameNo(gameNo);
+        String title = thisGame.getGameKorName();
         for (String s : game_no_list) {
             Game game = gameService.getGameByGameNo(Integer.parseInt(s));
             game_desc_list.add(game);
         }
 
-        List<GameListResponse> collect = game_desc_list.stream()
+        List<RecommendResultResponse> collect = game_desc_list.stream()
                 .map(gpl -> {
-                    boolean isLike = interestService.getIsLike(userNo, gpl.getGameNo());
-                    return new GameListResponse(gpl, isLike);
+                    boolean isLike = false;
+                    if(userNo != 0) isLike = interestService.getIsLike(userNo, gpl.getGameNo());
+                    return new RecommendResultResponse(gpl, isLike);
                 }).collect(Collectors.toList());
 
         if (collect.isEmpty()) return new Result(HttpStatus.BAD_REQUEST.value());
-        return new Result(HttpStatus.OK.value(), collect);
+        return new Result(HttpStatus.OK.value(), new RecommendResultResponse2(title, collect));
 
     }
 
