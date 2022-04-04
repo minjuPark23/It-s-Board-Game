@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -52,6 +53,12 @@ public class ScoreRepository {
         return em.createQuery("select s from Score s where s.user.userNo = :userNo", Score.class)
                 .setParameter("userNo", userNo)
                 .getResultList().size();
+    }
+
+    public List<Score> findScoreListByUserNoOrderByRating(Integer userNo){
+        return em.createQuery("select s from Score s where s.user.userNo =: userNo order by s.scoreRating desc", Score.class)
+                .setParameter("userNo", userNo)
+                .getResultList();
     }
 
 }
