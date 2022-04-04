@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,7 @@ public class RecommendApiController {
      * @desc: 유저에게 설문을 받을 게임 데이터 목록 전송
      * */
     @GetMapping("/user/survey")
-    public Result getSurveyGameList(@RequestBody RecommendRequest request){
+    public Result getSurveyGameList(){
 
         List<Game> list = recommendService.getGameForSurvey(50);
 
@@ -57,10 +58,10 @@ public class RecommendApiController {
     /**
      * @author : 권오범
      * @date : 2022-03-25 오전 14:00
-     * @desc: 리뷰 많은 순서로 추천 / Query 테스트 필요
+     * @desc: 리뷰 많은 순서로 추천
      * */
-    @GetMapping("/game/review")
-    public Result getRecommendByReviews(@RequestBody(required = false) RecommendRequest request){
+    @GetMapping("/game/review/{userNo}")
+    public Result getRecommendByReviews(@PathVariable(name = "userNo") Integer userNo){
 
         List<Game> list = recommendService.getRecommendByReviews(50);
 
@@ -69,10 +70,10 @@ public class RecommendApiController {
             return new Result(HttpStatus.NO_CONTENT.value());
 
         // request.getUserNo()가 null일 때 좋아요 false로 제공
-        if(request == null)
+        if(userNo == 0)
             return getResultList(list, null);
 
-        return getResultList(list, request.getUserNo());
+        return getResultList(list, userNo);
     }
 
     /**
@@ -86,27 +87,17 @@ public class RecommendApiController {
      * */
     @GetMapping("/game/ranking/{userNo}")
     public Result getRecommendByRanking(@PathVariable(name = "userNo") Integer userNo) throws JsonProcessingException {
-        String[] game_no_list = restapiService.requestGETAPI2("/popular/predict");
-        List<Game> game_popular_list = new ArrayList<>();
-        for (String s : game_no_list) {
-            Game game = gameService.getGameByGameNo(Integer.parseInt(s));
-            game_popular_list.add(game);
-        }
+        List<Integer> game_no_list = restapiService.requestGETAPI("/popular");
 
-        List<GameListResponse> collect = game_popular_list.stream()
-                .map(gpl -> {
-                    boolean isLike = interestService.getIsLike(userNo, gpl.getGameNo());
-                    return new GameListResponse(gpl, isLike);
-                }).collect(Collectors.toList());
+        List<Game> game_popular_list = game_no_list.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
 
-        if (collect.isEmpty()) return new Result(HttpStatus.BAD_REQUEST.value());
-        return new Result(HttpStatus.OK.value(), collect);
+        return getResultList(game_popular_list, userNo);
     }
 
     /**
     * @author : 박민주
     * @date : 2022-04-04 오전 2:34
-    * @desc : 사용자가 한 게임 중 비슷한 게임(랜덤) 유형별 추천
+    * @desc : 사용자가 한 게임 중 비슷한 게임(랜덤) 유형별 추천 - Desc 기준
     **/
     @GetMapping("/game/desc/{userNo}")
     public Result getRecommendByDesc(@PathVariable(name = "userNo") Integer userNo) throws JsonProcessingException {
@@ -120,23 +111,12 @@ public class RecommendApiController {
             int n = (int)(random*scoreList.size());
             gameNo = scoreList.get(n).getGame().getGameNo();
         }
-        String[] game_no_list = restapiService.requestGETAPI3("/desc/predict", gameNo);
 
-        List<Game> game_desc_list = new ArrayList<>();
-        for (String s : game_no_list) {
-            Game game = gameService.getGameByGameNo(Integer.parseInt(s));
-            game_desc_list.add(game);
-        }
+        List<Integer> game_no_list = restapiService.requestGETAPI("/desc", gameNo);
 
-        List<GameListResponse> collect = game_desc_list.stream()
-                .map(gpl -> {
-                    boolean isLike = interestService.getIsLike(userNo, gpl.getGameNo());
-                    return new GameListResponse(gpl, isLike);
-                }).collect(Collectors.toList());
+        List<Game> game_popular_list = game_no_list.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
 
-        if (collect.isEmpty()) return new Result(HttpStatus.BAD_REQUEST.value());
-        return new Result(HttpStatus.OK.value(), collect);
-
+        return getResultList(game_popular_list, userNo);
     }
 
 
@@ -152,17 +132,22 @@ public class RecommendApiController {
     @GetMapping("/game/score/{userNo}")
     public Result getRecommendByScore(@PathVariable(name = "userNo") Integer userNo) {
         List<Recommend> recommendList = recommendService.getRecommendByUserNo(userNo);
-        if (recommendList == null) {
+        if (recommendList.size() < 10) {
             System.out.println("아직 평점 데이터 10개가 안된다.");
             return new Result(HttpStatus.OK.value(), null);
         }
-        List<RecommendResultResponse> collect = recommendList.stream()
-                .map(rl -> {
-                    boolean isLike = interestService.getIsLike(rl.getUser().getUserNo(), rl.getGame().getGameNo());
-                    return new RecommendResultResponse(rl, isLike);
-                }).collect(Collectors.toList());
-        System.out.println("평점 데이터 충분해 추천 데이터 반환.");
-        return new Result(HttpStatus.OK.value(), collect);
+//        List<RecommendResultResponse> collect = recommendList.stream()
+//                .map(rl -> {
+//                    boolean isLike = interestService.getIsLike(rl.getUser().getUserNo(), rl.getGame().getGameNo());
+//                    return new RecommendResultResponse(rl, isLike);
+//                }).collect(Collectors.toList());
+        System.out.println("평점 데이터 충분해 추천 데이터 반환. "+ recommendList.size());
+
+        List<Game> collect = recommendList.stream().map(r -> r.getGame()).collect(Collectors.toList());
+
+        Collections.shuffle(collect);
+
+        return getResultList(collect, userNo);
     }
 
     /**
@@ -180,27 +165,36 @@ public class RecommendApiController {
         weight /= scores.size();
 
         List<Game> list = recommendService.getRecommendByWeight(userNo, weight, 30);
-
-        for(Game g : list){
-            if(scoreService.getScoreByUserNoGameNo(userNo, g.getGameNo()) != null){
-                list.remove(g);
-            }
-        }
-
-        Collections.shuffle(list);
-
-        return getResultList(list, userNo);
+        return getRecommendGameList(userNo, list);
     }
 
     /**
      * @author : 권오범
      * @date : 2022-03-25 오전 15:00
-     * @desc: 카테고리별 추천
+     * @desc: 평가했던 게임들과 유사한 게임 추천, 반환 값 중 가장 처음 오는 게임이 유사 게임
      * */
-    @GetMapping("/game/category")
-    public Result getRecommendByCategory(@RequestBody(required = false) RecommendRequest request){
+    @GetMapping("/game/category/{userNo}")
+    public Result getRecommendByCategory(@PathVariable Integer userNo) throws JsonProcessingException {
+        List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
 
-        return null;
+        // list 사이즈로 평가한 게임이 없는 경우 에러 처리리
+
+        int num = (int)(Math.random()*(scores.size()));
+        System.out.println(scores.get(num).getGame().getGameNo());
+        int game_no = scores.get(num).getGame().getGameNo();
+
+        List<Integer> list = restapiService.requestGETAPI("/category", game_no);
+
+        List<Game> gameList = list.stream()
+                .map(no-> {
+
+                    return gameService.getGameByGameNo(no);
+                })
+                .collect(Collectors.toList());
+
+        Collections.shuffle(gameList);
+
+        return getResultList(gameList, userNo);
     }
 
     /**
@@ -216,23 +210,17 @@ public class RecommendApiController {
 
         for(Score score : scores){
             Game game = score.getGame();
-            minPlayers += game.getGameMinPlayer();
-            maxPlayers += game.getGameMaxPlayer();
+            minPlayers += (double) game.getGameMinPlayer();
+            maxPlayers += (double) game.getGameMaxPlayer();
         }
         minPlayers /= scores.size();
         maxPlayers /= scores.size();
 
+        System.out.println(minPlayers);
+        System.out.println(maxPlayers);
+
         List<Game> list = recommendService.getRecommendByPlayer(userNo, minPlayers, maxPlayers, 30);
-
-        for(Game g : list){
-            if(scoreService.getScoreByUserNoGameNo(userNo, g.getGameNo()) != null){
-                list.remove(g);
-            }
-        }
-
-        Collections.shuffle(list);
-
-        return getResultList(list, userNo);
+        return getRecommendGameList(userNo, list);
     }
 
     /**
@@ -256,15 +244,7 @@ public class RecommendApiController {
 
         List<Game> list = recommendService.getRecommendByPlayTime(userNo, minPlayTime*0.5, maxPlayTime*1.5, 30);
 
-        for(Game g : list){
-            if(scoreService.getScoreByUserNoGameNo(userNo, g.getGameNo()) != null){
-                list.remove(g);
-            }
-        }
-
-        Collections.shuffle(list);
-
-        return getResultList(list, userNo);
+        return getRecommendGameList(userNo, list);
     }
 
     /**
@@ -285,15 +265,7 @@ public class RecommendApiController {
 
         List<Game> list = recommendService.getRecommendByAge(userNo, gameAgeAvg, 30);
 
-        for(Game g : list){
-            if(scoreService.getScoreByUserNoGameNo(userNo, g.getGameNo()) != null){
-                list.remove(g);
-            }
-        }
-
-        Collections.shuffle(list);
-
-        return getResultList(list, userNo);
+        return getRecommendGameList(userNo, list);
     }
 
     /**
@@ -307,15 +279,26 @@ public class RecommendApiController {
 
         List<Game> list = recommendService.getRecommendByNewbie(userNo, gameAgeWeight, 30);
 
+        return getRecommendGameList(userNo, list);
+    }
+
+    /**
+     * @author : 권오범
+     * @date : 2022-03-25 오전 15:00
+     * @desc: 추천 게임 리스트 중 플레이해본 게임 제외
+     * */
+    private Result getRecommendGameList(Integer userNo, List<Game> list) {
+        List<Game> recommend_list = new LinkedList<>();
+
         for(Game g : list){
-            if(scoreService.getScoreByUserNoGameNo(userNo, g.getGameNo()) != null){
-                list.remove(g);
+            if(scoreService.getScoreByUserNoGameNo(userNo, g.getGameNo()).getScoreRating() == 0d){
+                recommend_list.add(g);
             }
         }
 
-        Collections.shuffle(list);
+        Collections.shuffle(recommend_list);
 
-        return getResultList(list, userNo);
+        return getResultList(recommend_list, userNo);
     }
 
     /**

@@ -78,4 +78,5 @@ public class ScoreService {
     public List<Score> getScoreListByUserNoOrderByRating(Integer userNo){
         return scoreRepository.findScoreListByUserNoOrderByRating(userNo);
     }
+
 }
