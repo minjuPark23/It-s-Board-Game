@@ -1,40 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { RootStateOrAny, useSelector } from "react-redux";
 import { getGameDetail } from "../../../api/game";
 import { getReviewList } from "../../../api/review";
 import GameInfo from "./component/GameInfo";
-import ReviewInfo from "./component/ReviewInfo";
+import ReviewInfo from "../component/ReviewInfo";
 import PageNotFound from "../../../component/PageNotFound";
-import { Game } from "../../Main";
-import { Container, Divider } from "@mui/material";
-import { RootStateOrAny, useSelector } from "react-redux";
 import SkelGameInfo from "./component/SkelGameInfo";
-
-export interface GameDetail extends Game {
-  gameNameKr: string;
-  gameMinTime: number;
-  gameMaxTime: number;
-  gameYear: number;
-  gameWeight: number;
-  gameAge: number;
-  gameDesc: string;
-  gameKorDesc: string;
-  myScore: number;
-}
-
-export interface Review {
-  reviewNo: number;
-  scoreRating: number;
-  userNick: string;
-  reviewContent: string;
-  reviewReg: string;
-}
+import { IReview } from "../../../types/IReview";
+import { Container, Divider } from "@mui/material";
+import { IGameDetail } from "../../../types/IGame";
 
 export default function BoardGameDetail() {
   const gameNo = Number(useParams().no);
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
-  const [game, setGame] = useState<GameDetail | null>(null);
-  const [reviewList, setReviewList] = useState<Review[]>([]);
+  const [game, setGame] = useState<IGameDetail | null>(null);
+  const [reviewList, setReviewList] = useState<IReview[]>([]);
   const [loading, setLoading] = useState(true);
 
   // gameNo, userNo를 이용해서 게임 상세 정보 불러오기
