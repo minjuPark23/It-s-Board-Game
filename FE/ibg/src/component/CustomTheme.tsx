@@ -24,7 +24,7 @@ const CustomTheme = createTheme({
       #ibgContent {
         heignt: auto;
         min-height: 96%;
-        padding-bottom: 20vh;
+        padding-bottom: 140px;
       }
 
       ::-webkit-scrollbar {
