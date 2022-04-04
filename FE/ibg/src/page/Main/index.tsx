@@ -4,6 +4,7 @@ import ThemeList from "./component/ThemeList";
 import {
   getRecommByAge,
   getRecommByCategory,
+  getRecommByDesc,
   getRecommByNewbie,
   getRecommByPlayer,
   getRecommByReviews,
@@ -15,103 +16,141 @@ import {
 import { RootStateOrAny, useSelector } from "react-redux";
 import SkelBoardCard from "../../component/SkelBoardCard";
 import AliceCarousel from "react-alice-carousel";
-
-// Game 객체 => types파일로 빼는 것이 좋음
-export interface Game {
-  gameNo: number;
-  gameImg: string;
-  gameName: string;
-  gameKorName: string;
-  gameMinPlayer: number;
-  gameMaxPlayer: number;
-  gameCategory: string;
-  gameTotalScore: number;
-  like: boolean;
-}
+import { IGame } from "../../types/IGame";
 
 // 테마별 게임리스트: sm(600) 이상(pc)에서는 버튼으로, 이하(모바일)에서는 스크롤로 동작
 export default function Main() {
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
+  const [similarGame, setSimilarGame] = useState("");
 
-  const [userGameList, setUserGameList] = useState<Game[]>([]);
-  const [categoryGameList, setCategoryGameList] = useState<Game[]>([]);
-  const [weightGameList, setWeightGameList] = useState<Game[]>([]);
-  const [playerGameList, setPlayerGameList] = useState<Game[]>([]);
-  const [timeGameList, setTimeGameList] = useState<Game[]>([]);
-  const [ageGameList, setAgeGameList] = useState<Game[]>([]);
-  const [newbieGameList, setNewbieGameList] = useState<Game[]>([]);
-  const [reviewGameList, setReviewGameList] = useState<Game[]>([]);
-  const [scoreGameList, setScoreGameList] = useState<Game[]>([]);
+  const [userGameList, setUserGameList] = useState<IGame[]>([]);
+  const [descGameList, setDescGameList] = useState<IGame[]>([]);
+  const [categoryGameList, setCategoryGameList] = useState<IGame[]>([]);
+  const [weightGameList, setWeightGameList] = useState<IGame[]>([]);
+  const [playerGameList, setPlayerGameList] = useState<IGame[]>([]);
+  const [timeGameList, setTimeGameList] = useState<IGame[]>([]);
+  const [ageGameList, setAgeGameList] = useState<IGame[]>([]);
+  const [newbieGameList, setNewbieGameList] = useState<IGame[]>([]);
+  const [reviewGameList, setReviewGameList] = useState<IGame[]>([]);
+  const [scoreGameList, setScoreGameList] = useState<IGame[]>([]);
 
   const [userLoading, setUserLoading] = useState<boolean>(userNo);
+  const [descLoading, setDescLoading] = useState<boolean>(userNo);
   const [categoryLoading, setCategoryLoading] = useState<boolean>(userNo);
   const [weightLoading, setWeightLoading] = useState<boolean>(userNo);
   const [playerLoading, setPlayerLoading] = useState<boolean>(userNo);
   const [timeLoading, setTimeLoading] = useState<boolean>(userNo);
   const [ageLoading, setAgeLoading] = useState<boolean>(userNo);
-  const [newbieLoading, setNewbieLoading] = useState<boolean>(true);
+  const [newbieLoading, setNewbieLoading] = useState<boolean>(userNo);
   const [reviewLoading, setReviewLoading] = useState<boolean>(true);
   const [scoreLoading, setScoreLoading] = useState<boolean>(true);
 
   useEffect(() => {
     // 로그인 한 경우
     if (userNo) {
-      getRecommByUser(userNo).then((data) => {
-        if (data.code === 200) {
-          setUserGameList(data.data);
-        }
-        setUserLoading(false);
-      });
-      getRecommByCategory().then((data) => {
-        if (data.code === 200) {
-          setCategoryGameList(data.data);
-        }
-        setCategoryLoading(false);
-      });
-      getRecommByWeight().then((data) => {
-        if (data.code === 200) {
-          setWeightGameList(data.data);
-        }
-        setWeightLoading(false);
-      });
-      getRecommByPlayer().then((data) => {
-        if (data.code === 200) {
-          setPlayerGameList(data.data);
-        }
-        setPlayerLoading(false);
-      });
-      getRecommByTime().then((data) => {
-        if (data.code === 200) {
-          setTimeGameList(data.data);
-        }
-        setTimeLoading(false);
-      });
-      getRecommByAge().then((data) => {
-        if (data.code === 200) {
-          setAgeGameList(data.data);
-        }
-        setAgeLoading(false);
-      });
+      getRecommByUser(userNo)
+        .then((data) => {
+          if (data.code === 200) {
+            setUserGameList(data.data);
+          }
+          setUserLoading(false);
+        })
+        .catch(() => {
+          setUserLoading(false);
+        });
+      getRecommByDesc(userNo)
+        .then((data) => {
+          if (data.code === 200) {
+            setSimilarGame(data.gameName);
+            setDescGameList(data.data);
+          }
+          setDescLoading(false);
+        })
+        .catch(() => {
+          setDescLoading(false);
+        });
+      getRecommByCategory()
+        .then((data) => {
+          if (data.code === 200) {
+            setCategoryGameList(data.data);
+          }
+          setCategoryLoading(false);
+        })
+        .catch(() => {
+          setCategoryLoading(false);
+        });
+      getRecommByWeight()
+        .then((data) => {
+          if (data.code === 200) {
+            setWeightGameList(data.data);
+          }
+          setWeightLoading(false);
+        })
+        .catch(() => {
+          setWeightLoading(false);
+        });
+      getRecommByPlayer()
+        .then((data) => {
+          if (data.code === 200) {
+            setPlayerGameList(data.data);
+          }
+          setPlayerLoading(false);
+        })
+        .catch(() => {
+          setPlayerLoading(false);
+        });
+      getRecommByTime()
+        .then((data) => {
+          if (data.code === 200) {
+            setTimeGameList(data.data);
+          }
+          setTimeLoading(false);
+        })
+        .catch(() => {
+          setTimeLoading(false);
+        });
+      getRecommByAge()
+        .then((data) => {
+          if (data.code === 200) {
+            setAgeGameList(data.data);
+          }
+          setAgeLoading(false);
+        })
+        .catch(() => {
+          setAgeLoading(false);
+        });
+      getRecommByNewbie()
+        .then((data) => {
+          if (data.code === 200) {
+            setNewbieGameList(data.data);
+          }
+          setNewbieLoading(false);
+        })
+        .catch(() => {
+          setNewbieLoading(false);
+        });
     }
     // 공통
-    getRecommByNewbie().then((data) => {
-      if (data.code === 200) {
-        setNewbieGameList(data.data);
-      }
-      setNewbieLoading(false);
-    });
-    getRecommByReviews().then((data) => {
-      if (data.code === 200) {
-        setReviewGameList(data.data);
-      }
-      setReviewLoading(false);
-    });
-    getRecommByScore().then((data) => {
-      if (data.code === 200) {
-        setScoreGameList(data.data);
-      }
-      setScoreLoading(false);
-    });
+    getRecommByReviews()
+      .then((data) => {
+        if (data.code === 200) {
+          setReviewGameList(data.data);
+        }
+        setReviewLoading(false);
+      })
+      .catch(() => {
+        setReviewLoading(false);
+      });
+    getRecommByScore(userNo)
+      .then((data) => {
+        if (data.code === 200) {
+          setScoreGameList(data.data);
+        }
+        setScoreLoading(false);
+      })
+      .catch(() => {
+        setScoreLoading(false);
+      });
   }, [userNo]);
 
   const skelCards = [1, 1, 1, 1, 1, 1].map(() => (
@@ -147,6 +186,16 @@ export default function Main() {
       ) : (
         userGameList.length > 0 && (
           <ThemeList title="나의 맞춤 추천 게임" gameList={userGameList} />
+        )
+      )}
+      {descLoading ? (
+        <SkelTheme />
+      ) : (
+        descGameList.length > 0 && (
+          <ThemeList
+            title={`'${similarGame}'와 비슷한 게임 추천`}
+            gameList={descGameList}
+          />
         )
       )}
       {categoryLoading ? (
