@@ -1,19 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 //모달
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Dialog from "@mui/material/Dialog";
+import { DialogProps } from "@mui/material/Dialog";
 import { styled } from "@mui/material/styles";
-import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import {
   Button,
-  Grid,
   TextField,
   DialogContentText,
   Autocomplete,
   Box,
+  ImageListItem,
+  Typography,
 } from "@mui/material";
 
 interface IProps {
@@ -48,14 +49,29 @@ const MarketUploadDialog = ({
   const [contents, setContents] = useState("");
   const [file, setFile] = useState<File>();
   const [preview, setPreview] = useState<any>();
+  const [scroll, setScroll] = useState<DialogProps["scroll"]>("paper");
+  const [errorText, setErrorText] = useState("");
+
+  useEffect(() => {
+    if (!open) {
+      /* 모달 Data 초기화 */
+      setTitle("");
+      setPrice("");
+      setContents("");
+      setFile(undefined);
+      setPreview("");
+      setErrorText("");
+    }
+  }, [open]); // open state가 변경될 때마다 위 코드 실행
 
   const callHandleSubmit = () => {
     /* 예외 상황 처리 */
-    if (title.length < 2) return alert("제목을 확인해주세요");
-    if (!parseInt(price)) return alert("가격은 숫자만 입력해주세요");
     if (file === undefined || file === null)
-      return alert("파일을 업로드해주세요");
-    if (contents.length === 0) return alert("내용을 확인해주세요");
+      return setErrorText("파일을 업로드해주세요!");
+    if (gameNo === "") return setErrorText("보드게임을 선택해주세요!");
+    if (title.length < 2) return setErrorText("제목을 입력해주세요!");
+    if (!parseInt(price)) return setErrorText("가격은 숫자만 입력해주세요!");
+    if (contents.length === 0) return setErrorText("내용을 입력해주세요!");
 
     /* 부모에게 제목,가격,내용, 파일 전달*/
     sendDataToParent(gameNo, title, price, contents, file);
@@ -73,7 +89,7 @@ const MarketUploadDialog = ({
         const extractGame = gameList.filter(
           (game) => game.gameName === extractName
         );
-
+        console.log("게임번호 : ", extractGame[0].gameNo);
         // 게임을 목록에서 정상적으로 찾았다면, 해당 번호를 저장
         setGameNo(extractGame[0].gameNo);
       }
@@ -122,143 +138,133 @@ const MarketUploadDialog = ({
       fullScreen
       open={open}
       onClose={handleClose}
+      scroll={scroll}
       sx={{
         "& .MuiDialog-paper": {
-          width: { md: "60%" },
-          maxHeight: { md: "80%" },
-          borderRadius: { md: 8, sm: 0 },
+          width: { md: "35%" },
+          maxHeight: { md: "65%" },
+          borderRadius: { md: 4, sm: 0 },
         },
       }}
       maxWidth="xs"
     >
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        style={{ background: "#67B6FF" }}
-      >
-        <DialogTitle
+      <DialogTitle>
+        <ImageListItem
           sx={{
-            fontSize: { xs: 14, md: 16 },
-            fontWeight: "bold",
-            color: "white",
+            top: 10,
+            maxWidth: 40,
+            cursor: "pointer",
+            marginRight: 1,
           }}
         >
-          거래 등록 <AddBusinessIcon sx={{ verticalAlign: "-0.2rem", ml: 1 }} />
-        </DialogTitle>
-      </Grid>
+          <img src="img/logo.png" alt="logo" />
+        </ImageListItem>
+        거래 등록
+      </DialogTitle>
+      <DialogContent dividers={scroll === "paper"}>
+        <DialogContentText style={{ marginBottom: 4 }}>
+          1️⃣&nbsp;이미지
+        </DialogContentText>
+        {preview && <Img src={preview} />}
+        <DialogContentText>
+          <label htmlFor="contained-button-file">
+            <Input
+              accept="image/*"
+              id="contained-button-file"
+              type="file"
+              onChange={onChangeFile}
+              required
+            />
+            <Button
+              variant="outlined"
+              style={{
+                maxHeight: "60px",
+                minHeight: "60px",
+              }}
+              fullWidth
+              size="large"
+              component="span"
+            >
+              사진 업로드
+              <AddAPhotoIcon sx={{ verticalAlign: "-0.2rem", ml: 1 }} />
+            </Button>
+          </label>
+        </DialogContentText>
+        <form>
+          <DialogContentText style={{ marginTop: 20, marginBottom: 4 }}>
+            2️⃣&nbsp;거래할 보드게임
+          </DialogContentText>
+          <Autocomplete
+            autoComplete
+            clearOnEscape
+            options={gameList}
+            getOptionLabel={(option) =>
+              `${option.gameKorName}(${option.gameName})`
+            }
+            renderOption={(props, option) => (
+              <Box component="li" {...props} sx={{ fontSize: "0.8rem" }}>
+                {option.gameKorName}({option.gameName})
+              </Box>
+            )}
+            renderInput={(params) => (
+              <TextField {...params} placeholder="보드게임을 선택해주세요" />
+            )}
+            onInputChange={(e, value) => onChangeGame(value)}
+          />
 
-      <Grid direction="row" container spacing={2} justifyContent="center">
-        <Grid container item xs={10} sm={8} sx={{ mt: 3 }}>
-          <DialogContent>
-            <form>
-              <DialogContentText>거래할 보드게임</DialogContentText>
-              <Autocomplete
-                autoComplete
-                clearOnEscape
-                options={gameList}
-                getOptionLabel={(option) =>
-                  `${option.gameKorName}(${option.gameName})`
-                }
-                renderOption={(props, option) => (
-                  <Box component="li" {...props} sx={{ fontSize: "0.8rem" }}>
-                    {option.gameKorName}({option.gameName})
-                  </Box>
-                )}
-                renderInput={(params) => (
-                  <TextField {...params} placeholder="보드게임을 선택하세요." />
-                )}
-                onInputChange={(e, value) => onChangeGame(value)}
-              />
+          <DialogContentText style={{ marginTop: 20, marginBottom: 4 }}>
+            3️⃣&nbsp;제목
+          </DialogContentText>
+          <TextField
+            variant="outlined"
+            required
+            fullWidth
+            value={title}
+            onChange={onChangeTitle}
+            id="title"
+            placeholder="제목을 입력해주세요"
+            name="title"
+          />
 
-              <DialogContentText>제목</DialogContentText>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                value={title}
-                onChange={onChangeTitle}
-                id="title"
-                placeholder="제목을 입력해주세요"
-                name="title"
-                autoFocus
-              />
+          <DialogContentText style={{ marginTop: 20, marginBottom: 4 }}>
+            4️⃣&nbsp;가격(원)
+          </DialogContentText>
+          <TextField
+            variant="outlined"
+            required
+            fullWidth
+            value={price}
+            onChange={onChangePrice}
+            placeholder="가격을 입력해주세요"
+            name="price"
+          />
 
-              <DialogContentText>가격(원)</DialogContentText>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                value={price}
-                onChange={onChangePrice}
-                placeholder="가격을 입력해주세요"
-                name="price"
-                autoFocus
-              />
-              <DialogContentText>파일추가</DialogContentText>
-              {preview && <Img src={preview} />}
-              <DialogContentText>
-                <label htmlFor="contained-button-file">
-                  <Input
-                    accept="image/*"
-                    id="contained-button-file"
-                    type="file"
-                    onChange={onChangeFile}
-                    required
-                  />
-                  <Button
-                    variant="outlined"
-                    style={{
-                      maxHeight: "60px",
-                      minHeight: "60px",
-                    }}
-                    fullWidth
-                    size="large"
-                    component="span"
-                  >
-                    사진 업로드
-                    <AddAPhotoIcon sx={{ verticalAlign: "-0.2rem", ml: 1 }} />
-                  </Button>
-                </label>
-              </DialogContentText>
-
-              <DialogContentText>내용</DialogContentText>
-              <TextField
-                placeholder="상품 상세 정보를 입력해주세요"
-                multiline
-                rows={5}
-                required
-                value={contents}
-                onChange={onChangeContents}
-                name="content"
-                fullWidth
-              />
-            </form>
-          </DialogContent>
-        </Grid>
-      </Grid>
-      <Grid
-        direction="row"
-        container
-        alignItems="center"
-        justifyContent="center"
-        spacing={1}
-      >
-        <DialogActions>
-          <Button variant="outlined" color="primary" onClick={handleClose}>
-            취소
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={callHandleSubmit}
-          >
-            등록
-          </Button>
-        </DialogActions>
-      </Grid>
+          <DialogContentText style={{ marginTop: 20, marginBottom: 4 }}>
+            5️⃣&nbsp;내용
+          </DialogContentText>
+          <TextField
+            placeholder="거래 상세 정보를 입력해주세요"
+            multiline
+            rows={5}
+            required
+            value={contents}
+            onChange={onChangeContents}
+            name="content"
+            fullWidth
+          />
+        </form>
+      </DialogContent>
+      <DialogActions sx={{ margin: 0.6 }}>
+        <Typography sx={{ marginRight: 2 }} color="error">
+          {errorText}
+        </Typography>
+        <Button variant="outlined" color="primary" onClick={handleClose}>
+          취소
+        </Button>
+        <Button variant="contained" color="primary" onClick={callHandleSubmit}>
+          등록
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };

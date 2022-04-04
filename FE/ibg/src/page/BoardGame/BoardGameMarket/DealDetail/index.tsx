@@ -76,12 +76,12 @@ export default function DealDetail() {
   /* 거래 상태 */
   const MarketState = styled("span")(({ theme, color }) => ({
     lineHeight: 2,
-    fontSize: 18,
+    fontSize: 14,
     color: color,
-    borderRadius: 10,
+    borderRadius: 8,
     border: "1px solid " + color,
     backgroundColor: "transparent",
-    padding: theme.spacing(1, 2, 1, 2),
+    padding: theme.spacing(0.5, 1.4, 0.6, 1.4),
   }));
 
   return (
@@ -138,7 +138,10 @@ export default function DealDetail() {
             <DealTitle>{dealDetail?.dealTitle}</DealTitle>
           </Grid>
           <Grid item direction="row">
-            <MarketState color={dealDetail?.dealStatus ? "#67B6FF" : "#FCB500"}>
+            <MarketState
+              sx={{ cursor: "pointer" }}
+              color={dealDetail?.dealStatus ? "#67B6FF" : "#FCB500"}
+            >
               {dealDetail?.dealStatus ? (
                 "거래완료"
               ) : dealDetail?.userNo === userNo ? (
@@ -176,6 +179,7 @@ export default function DealDetail() {
             </Typography>
           </Grid>
         </Grid>
+        <Divider sx={{ marginTop: 2 }} />
         <ReviewInfo
           title="댓글"
           reviewList={tempReviewList}

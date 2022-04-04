@@ -11,7 +11,10 @@ export default function Title() {
   };
 
   return (
-    <Box sx={{ display: "flex" }} onClick={() => movePage("/market")}>
+    <Box
+      sx={{ display: "flex", cursor: "pointer" }}
+      onClick={() => movePage("/market")}
+    >
       <Typography
         sx={{
           fontSize: { xs: 24, md: 30 },
