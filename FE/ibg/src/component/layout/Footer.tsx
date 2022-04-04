@@ -5,13 +5,13 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 const StyledFooter = styled(AppBar)(({ theme }) => ({
-  position: "static",
-  height: "100%",
+  position: "relative",
+  transform: "translateY(-100%)",
   padding: theme.spacing(2, 0),
   backgroundColor: theme.palette.warning.main,
   boxShadow: "none",
   color: theme.palette.common.black,
-  marginTop: theme.spacing(5),
+  zIndex: 1,
 }));
 
 const FooterLink = styled("span")(({ theme }) => ({
