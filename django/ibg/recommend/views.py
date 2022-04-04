@@ -8,16 +8,10 @@ import pandas as pd
 import numpy as np
 from sklearn.decomposition import TruncatedSVD
 from scipy.sparse.linalg import svds
-#Import TfIdfVectorizer from scikit-learn
+# Import TfIdfVectorizer from scikit-learn
 from sklearn.feature_extraction.text import TfidfVectorizer
 # Import linear_kernel
 from sklearn.metrics.pairwise import linear_kernel
-
-
-# 요청을 받아 응답을 반환해주는 객체
-
-# Create your views here.
-from .serializers import GameListSerializer
 
 
 class UserView(viewsets.ModelViewSet):
@@ -108,11 +102,6 @@ class UserView(viewsets.ModelViewSet):
 
         game_list = list(q_games['game_no'])
         print(game_list)
-
-        # print(q_games)
-        # user = User.objects.filter(user_no=user_no)
-        # game = Game.objects.filter(game_no__in=game_list)
-        # serializer = GameListSerializer(game, many=True)
 
         return Response(game_list)
 
@@ -245,12 +234,6 @@ class UserView(viewsets.ModelViewSet):
         predict = game_list.drop(['game_category'], axis=1)
 
         predict = predict.fillna(score_list['score_rating'].mean())
-
-        # predict = predict.reset_index()
-        # print(predict)
-        # predict['user_no'] = user_no
-
-        # print(predict)
 
         findUser = get_object_or_404(User, pk=user_no)
         for idx, row in predict.iterrows():
