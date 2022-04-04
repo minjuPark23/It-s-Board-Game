@@ -43,20 +43,6 @@ public class GameApiController {
 
     /**
     * @author : 박민주
-    * @date : 2022-04-01 오후 9:48
-    * @desc : 자동완성을 위한 전체 게임 목록(이름, 번호)
-    **/
-    @GetMapping("/search/auto")
-    public Result getSearchAutoList(){
-        List<Game> gameList = gameService.getGameList();
-        List<SearchAutoResponse> collect = gameList.stream()
-                .map(gl -> new SearchAutoResponse(gl))
-                .collect(Collectors.toList());
-        return new Result(HttpStatus.OK.value(), collect);
-    }
-
-    /**
-    * @author : 박민주
     * @date : 2022-03-23 오후 5:47
     * @desc: 게임 이름 검색 상세보기
     * @modify :
@@ -131,7 +117,8 @@ public class GameApiController {
     **/
     @PostMapping("/search/filter")
     public Result getGameByFilter(@RequestBody SearchFilterRequest request){
-        List<Game> gameList = gameService.getGameByFilter(request.getGameName(), request.getGameKorName(), request.getGamePlayer(), request.getGameTime(), request.getGameWeight(), request.getGameAge(), request.getGameScore(), request.getGameCategory());
+        List<Game> gameList = gameService.getGameByFilter(request.getGameName(), request.getGamePlayer(), request.getGameTime(), request.getGameWeight(), request.getGameAge(), request.getGameScore(), request.getGameCategory());
+        System.out.println(gameList.size());
         return getSearchResult(gameList,request.getUserNo());
 
     }

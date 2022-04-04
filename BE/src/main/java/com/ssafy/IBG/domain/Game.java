@@ -8,7 +8,6 @@ import java.util.List;
 @Data
 @Table
 public class Game {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int gameNo;

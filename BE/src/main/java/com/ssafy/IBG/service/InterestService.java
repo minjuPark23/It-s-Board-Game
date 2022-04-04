@@ -1,8 +1,6 @@
 package com.ssafy.IBG.service;
 
-import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Interest;
-import com.ssafy.IBG.domain.User;
 import com.ssafy.IBG.repository.GameRepository;
 import com.ssafy.IBG.repository.InterestRepository;
 import com.ssafy.IBG.repository.UserRepository;
@@ -33,13 +31,7 @@ public class InterestService {
 
         try{
             if(interest == null) {
-                User user = userRepository.findUserByUserNo(userNo);
-                Game game = gameRepository.findGameByGameNo(gameNo);
-
-                if(user == null || game == null)
-                    return false;
-
-                interestRepository.saveInterest(new Interest(user, game));
+                interestRepository.saveInterest(new Interest(userRepository.findUserByUserNo(userNo), gameRepository.findGameByGameNo(gameNo)));
             }
             else
                 interestRepository.removeInterest(interest);
@@ -74,5 +66,6 @@ public class InterestService {
         if (interest == null) return false;
         else return true;
     }
+
 
 }

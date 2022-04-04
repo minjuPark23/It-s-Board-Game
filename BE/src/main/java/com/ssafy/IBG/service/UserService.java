@@ -49,5 +49,4 @@ public class UserService {
     public User getUserByUserNo(Integer userNo){
         return userRepository.findUserByUserNo(userNo);
     }
-
 }

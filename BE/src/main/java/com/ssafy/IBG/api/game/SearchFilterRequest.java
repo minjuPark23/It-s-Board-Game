@@ -16,4 +16,5 @@ public class SearchFilterRequest {
     private Double gameScore;
     private List<String> gameCategory;
     private Integer userNo;
+
 }

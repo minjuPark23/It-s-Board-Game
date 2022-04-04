@@ -47,4 +47,5 @@ public class GameResponse{
         this.gameKorDesc = game.getGameKorDesc();
         this.ResponseReviewList = ResponseReviewList;
     }
+
 }

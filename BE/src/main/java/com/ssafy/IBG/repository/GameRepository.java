@@ -22,22 +22,13 @@ public class GameRepository {
      * @author : 박민주
      * @date : 2022-03-23 오후 5:51
      **/
-    public List<Game> findGameBySearchGame(String searchName){
+    public List<Game> findGameSearchGame(String searchName){
         JPQLQuery<Game> query = new JPAQuery<>(em);
         QGame qGame = new QGame("Game");
         List<Game> gameList = query.from(qGame)
                 .where(qGame.gameName.contains(searchName))
                 .fetch();
         return gameList;
-    }
-
-    /**
-    * @author : 박민주
-    * @date : 2022-04-01 오후 9:52
-    **/
-    public List<Game> findGameList(){
-        return em.createQuery("select g from Game g", Game.class)
-                .getResultList();
     }
 
     /**
@@ -59,7 +50,7 @@ public class GameRepository {
      * @author : 박민주
      * @date : 2022-03-23 오후 5:52
      **/
-    public Game findGameByGameNo(int gameNo){
+    public Game findGameByGameNo(Integer gameNo){
         try{
             Game game = em.find(Game.class, gameNo);
             return game;
@@ -73,18 +64,14 @@ public class GameRepository {
      * @author : 박민주
      * @date : 2022-03-23 오후 5:52
      **/
-    public List<Game> findGameByFilter(String gameName, String gameKorName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
+    public List<Game> findGameByFilter(String gameName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
 
-        System.out.println(gameCategory);
         JPQLQuery<Game> query = new JPAQuery<>(em);
         QGame qGame = new QGame("Game");
 
         BooleanBuilder builder = new BooleanBuilder();
         if(gameName != null){
             builder.and(qGame.gameName.contains(gameName));
-        }
-        if (gameKorName != null){
-            builder.and(qGame.gameKorName.contains(gameKorName));
         }
         if(gamePlayer != null){
             builder.and(qGame.gameMinPlayer.goe(gamePlayer));
@@ -101,7 +88,7 @@ public class GameRepository {
         if(gameScore != null){
             builder.and(qGame.gameTotalScore.goe(gameScore));
         }
-        if(gameCategory != null){
+        if(!gameCategory.isEmpty()){
             for (String c : gameCategory) {
                 builder.and(qGame.gameCategory.contains(c));
             }
@@ -113,4 +100,8 @@ public class GameRepository {
         return gameList;
     }
 
+    public double findAvgWeight() {
+        return (Double)em.createQuery("select avg(g.gameWeight) from Game g")
+                .getSingleResult();
+    }
 }

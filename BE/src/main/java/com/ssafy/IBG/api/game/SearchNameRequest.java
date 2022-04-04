@@ -6,4 +6,5 @@ import lombok.Data;
 public class SearchNameRequest{
     private String searchName;
     private Integer userNo;
+
 }
