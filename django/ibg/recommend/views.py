@@ -7,6 +7,12 @@ from rest_framework.response import Response
 import pandas as pd
 import numpy as np
 
+from sklearn.decomposition import TruncatedSVD
+from scipy.sparse.linalg import svds
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import logging
+from rest_framework import status
 
 # 요청을 받아 응답을 반환해주는 객체
 
@@ -106,3 +112,55 @@ class UserView(viewsets.ModelViewSet):
         # user_no로 score데이터 가져오기
 
         return Response()
+
+    @api_view(['GET'])
+    def recommend_by_category_similartiy(request, game_no):
+        print(game_no)
+        scores = Score.objects.all()
+        score_data = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating"))
+
+        games = Game.objects.all()
+        game_data = pd.DataFrame(games.values("game_no", 'game_name', 'game_category', 'game_total_score'))
+
+        game_data['vote_count'] = score_data.groupby('game_no')["user_no"].count()
+
+        c = game_data['game_total_score'].mean()
+        m = game_data['vote_count'].quantile(0.008)
+
+        def weighted_rating(x, m=m, c=c):
+            v = x['vote_count']
+            r = x['game_total_score']
+
+            return (v / (v + m) * r) + (m / (m + v) * c)
+
+        game_data = game_data.loc[game_data['vote_count'] >= m]
+        game_data['game_weighted_score'] = game_data.apply(weighted_rating, axis=1) # 함수 인자로 m, c 넘겨줌
+
+        game_data = game_data[game_data['game_category'] != 'nan']
+
+        game_data['game_category'] = game_data['game_category'].apply(
+            lambda x: x.replace('|', '/').replace(' ', '').replace('/', ' '))
+
+        print(game_data)
+
+        count_vector = CountVectorizer(ngram_range=(1, 3))
+        c_vector_category = count_vector.fit_transform(game_data['game_category'])
+        category_c_sim = cosine_similarity(c_vector_category, c_vector_category).argsort()[:, ::-1]
+
+        game = Game.objects.get(game_no=game_no)
+        print(type(game.game_name))
+        print(game.game_name)
+        game_name = game.game_name
+
+        target_game_index = game_data[game_data['game_name'] == game_name].index.values
+
+        sim_index = category_c_sim[target_game_index, :30].reshape(-1)
+
+        sim_index = sim_index[sim_index != target_game_index]
+
+        response = game_data.iloc[sim_index].sort_values('game_total_score', ascending=False)[:10]   # 게임 번호로 수정
+        response = response['game_no'].tolist()
+        response.insert(0, game_no)
+        print(response)
+        # response.iloc[0] = game_no
+        return Response(response)
