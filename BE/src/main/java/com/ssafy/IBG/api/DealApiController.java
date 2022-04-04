@@ -40,7 +40,6 @@ public class DealApiController {
     **/
     @PostMapping("/deal")
     public Result saveDeal(DealSaveRequest request){
-
         Deal deal = new Deal();
 
         User user = userService.getUserByUserNo(request.getUserNo());
@@ -82,13 +81,22 @@ public class DealApiController {
             String dateStr = new SimpleDateFormat("yyyyMMdd").format(date);
             String timeStr = new SimpleDateFormat("HHmmss").format(date);
 
-            // 날짜 경로 지정, 경로 없는 경우 폴더 만듦
-            String filePath = System.getProperty("user.dir") + File.separator + "image" + File.separator + dateStr;
+            // 날짜 경로 지정, 경로 없는 경우 폴더 만듦, 상대 경로로 프로젝트 내부에 생성
+            String filePath = System.getProperty("user.dir") + File.separator  + "image";
+            System.out.println("1. --------------------------- : " + filePath);
+            dealUtil.makeDir(filePath);
+
+            filePath = filePath + File.separator + dateStr;
+            System.out.println("1. --------------------------- : " + filePath);
             dealUtil.makeDir(filePath);
 
             // 시간 경로 지정, 경로 없는 경우 폴더 만듦
             filePath += File.separator + timeStr;
+            System.out.println("2. --------------------------- : " + filePath);
+
             dealUtil.makeDir(filePath);
+
+            System.out.println("3. --------------------------- : " + filePath);
 
             // 해당 파일 객체 생성
             File savedFile = new File(filePath + File.separator + storedFileName);
