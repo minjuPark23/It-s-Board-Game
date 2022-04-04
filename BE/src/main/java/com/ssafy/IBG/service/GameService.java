@@ -49,4 +49,13 @@ public class GameService {
     public List<Game> getGameByFilter(String gameName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
         return gameRepository.findGameByFilter(gameName, gamePlayer, gameTime, gameWeight, gameAge, gameScore, gameCategory);
     }
+
+    /**
+     * @author : 권오범
+     * @date : 2022-03-23 오후 5:49
+     * @desc: 게임 평균 난이도
+     **/
+    public double getAvgWeight(){
+        return gameRepository.findAvgWeight();
+    }
 }

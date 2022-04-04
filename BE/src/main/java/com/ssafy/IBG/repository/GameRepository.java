@@ -99,4 +99,9 @@ public class GameRepository {
                 .fetch();
         return gameList;
     }
+
+    public double findAvgWeight() {
+        return (Double)em.createQuery("select avg(g.gameWeight) from Game g")
+                .getSingleResult();
+    }
 }
