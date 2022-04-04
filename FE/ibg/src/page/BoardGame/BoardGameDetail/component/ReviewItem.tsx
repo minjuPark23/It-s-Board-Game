@@ -29,7 +29,9 @@ export default function ReviewItem(props: { review: Review }) {
             <StarIcon color="warning" /> {props.review.scoreRating}
           </Typography>
         </Box>
-        <Typography sx={{ fontSize: { xs: 12, md: 15 }, mt: 0.7 }}>
+        <Typography
+          sx={{ fontSize: { xs: 12, md: 15 }, mt: 0.7, whiteSpace: "pre-line" }}
+        >
           {props.review.reviewContent}
         </Typography>
         <Typography

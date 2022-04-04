@@ -8,6 +8,7 @@ import PageNotFound from "../../../component/PageNotFound";
 import { Game } from "../../Main";
 import { Container, Divider } from "@mui/material";
 import { RootStateOrAny, useSelector } from "react-redux";
+import SkelGameInfo from "./component/SkelGameInfo";
 
 export interface GameDetail extends Game {
   gameNameKr: string;
@@ -34,13 +35,19 @@ export default function BoardGameDetail() {
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
   const [game, setGame] = useState<GameDetail | null>(null);
   const [reviewList, setReviewList] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // gameNo, userNo를 이용해서 게임 상세 정보 불러오기
   useEffect(() => {
-    getGameDetail(gameNo, userNo || 0).then((data) => {
-      setGame(data);
-      setReviewList(data.responseReviewList);
-    });
+    getGameDetail(gameNo, userNo || 0)
+      .then((data) => {
+        setGame(data);
+        setReviewList(data.responseReviewList);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   }, [gameNo, userNo]);
 
   const refreshReview = () => {
@@ -51,15 +58,23 @@ export default function BoardGameDetail() {
 
   return (
     <Container>
-      {game ? <GameInfo game={game} /> : <PageNotFound />}
-      <Divider />
+      {loading ? (
+        <SkelGameInfo />
+      ) : game ? (
+        <>
+          <GameInfo game={game} />
+          <Divider />
 
-      <ReviewInfo
-        reviewList={reviewList}
-        gameNo={gameNo}
-        userNo={userNo}
-        addCallback={refreshReview}
-      />
+          <ReviewInfo
+            reviewList={reviewList}
+            gameNo={gameNo}
+            userNo={userNo}
+            addCallback={refreshReview}
+          />
+        </>
+      ) : (
+        <PageNotFound />
+      )}
     </Container>
   );
 }
