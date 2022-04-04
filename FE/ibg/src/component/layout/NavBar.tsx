@@ -226,7 +226,7 @@ export default function NavBar() {
             <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
               <Tooltip title="사용자 메뉴">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <AvatarGenerator userName={userName} />
+                  <AvatarGenerator userName={userName} isNav={true} />
                 </IconButton>
               </Tooltip>
               <Menu
