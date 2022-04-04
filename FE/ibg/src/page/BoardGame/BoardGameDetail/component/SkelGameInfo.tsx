@@ -24,29 +24,25 @@ export default function SkelGameInfo() {
           >
             <Skeleton />
           </Typography>
-          <Skeleton width="50%" />
-          <Skeleton width="50%" />
-          <Skeleton width="50%" />
+          <Skeleton width="40%" />
+          <Skeleton width="40%" />
+          <Skeleton width="40%" />
           <Skeleton />
           <Skeleton />
           <Skeleton />
           <Skeleton />
-          <Skeleton />
+          <Skeleton width="80%" />
         </Grid>
       </Grid>
       <Divider />
 
-      {[1, 1, 1].map(() => (
-        <>
-          <Typography sx={{ fontSize: 17, mt: 5 }}>
-            <Skeleton width="15%" />
-          </Typography>
-          <Skeleton />
-          <Skeleton />
-          <Skeleton width="80%" />
-          <Divider />
-        </>
-      ))}
+      <Typography sx={{ fontSize: 20, mt: 5 }}>
+        <Skeleton width="15%" />
+      </Typography>
+      <Skeleton />
+      <Skeleton />
+      <Skeleton width="80%" />
+      <Divider />
     </>
   );
 }
