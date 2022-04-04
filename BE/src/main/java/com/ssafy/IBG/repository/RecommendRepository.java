@@ -112,4 +112,14 @@ public class RecommendRepository {
                 .getResultList();
     }
 
+    public List<Game> findRecommendByAge(Integer userNo, double gameAgeAvg, int limit) {
+        double positiveRange = gameAgeAvg * 1.1d;
+        double negativeRange = gameAgeAvg * 0.9d;
+        return em.createQuery("select g from Game g where g.gameAge < :positiveRange and g.gameAge < :negativeRange order by g.gameTotalScore desc", Game.class)
+                .setParameter("positiveRange", positiveRange)
+                .setParameter("negativeRange", negativeRange)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
 }
