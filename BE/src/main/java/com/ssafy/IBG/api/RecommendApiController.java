@@ -272,10 +272,28 @@ public class RecommendApiController {
      * @date : 2022-03-25 오전 15:00
      * @desc: 나이대별 추천
      * */
-    @GetMapping("/game/age")
-    public Result getRecommendByAge(@RequestBody(required = false) RecommendRequest request){
+    @GetMapping("/game/age/{userNo}")
+    public Result getRecommendByAge(@PathVariable Integer userNo){
+        List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
+        double gameAgeAvg = 0d;
 
-        return null;
+        for(Score score : scores){
+            Game game = score.getGame();
+            gameAgeAvg += game.getGameAge();
+        }
+        gameAgeAvg /= scores.size();
+
+        List<Game> list = recommendService.getRecommendByAge(userNo, gameAgeAvg, 30);
+
+        for(Game g : list){
+            if(scoreService.getScoreByUserNoGameNo(userNo, g.getGameNo()) != null){
+                list.remove(g);
+            }
+        }
+
+        Collections.shuffle(list);
+
+        return getResultList(list, userNo);
     }
 
     /**

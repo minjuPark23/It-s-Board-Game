@@ -82,4 +82,13 @@ public class RecommendService {
     public List<Game> getRecommendByPlayTime(Integer userNo, double minPlayTime, double maxPlayTime, int limit) {
         return recommendRepository.findRecommendByPlayTime(userNo, minPlayTime, maxPlayTime, limit);
     }
+
+    /**
+     * @author : 권오범
+     * @date : 2022-04-03 오후 15:00
+     * @desc: 추천 연령으로 게임 추천
+     **/
+    public List<Game> getRecommendByAge(Integer userNo, double gameAgeAvg, int limit) {
+        return recommendRepository.findRecommendByAge(userNo, gameAgeAvg, limit);
+    }
 }
