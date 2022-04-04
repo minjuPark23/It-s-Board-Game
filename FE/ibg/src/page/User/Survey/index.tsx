@@ -27,9 +27,9 @@ export default function Survey() {
   const [ratedGame] = useState<number[]>([]);
   const [width] = useState(window.innerWidth);
   const [open, setOpen] = useState(false); //modal
-  const [userNo] = useState(
-    useSelector((state: RootStateOrAny) => state.user.userNo)
-  ); //modal
+  // const [userNo] = useState(
+  //   useSelector((state: RootStateOrAny) => state.user.userNo)
+  // );
   const navigate = useNavigate();
 
   // function to handle modal open
@@ -51,11 +51,11 @@ export default function Survey() {
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
     const init = async () => {
-      const data = await initSurvey(userNo);
+      const data = await initSurvey();
       setGameList(data); //gameImg, gameName, gameNo를 준다
     };
     init();
-  }, [userNo]);
+  }, []);
 
   // count 업데이트하는 method
   const countHandler = (ratedGameNo: number, score: number) => {
