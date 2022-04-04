@@ -247,10 +247,31 @@ public class RecommendApiController {
      * @date : 2022-03-25 오전 15:00
      * @desc: 플레이 시간 별 추천
      * */
-    @GetMapping("/game/time")
-    public Result getRecommendByTime(@RequestBody(required = false) RecommendRequest request){
+    @GetMapping("/game/time/{userNo}")
+    public Result getRecommendByTime(@PathVariable Integer userNo){
+        List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
+        double minPlayTime = 0d;
+        double maxPlayTime = 0d;
 
-        return null;
+        for(Score score : scores){
+            Game game = score.getGame();
+            minPlayTime += game.getGameMinTime();
+            maxPlayTime += game.getGameMaxTime();
+        }
+        minPlayTime /= scores.size();
+        maxPlayTime /= scores.size();
+
+        List<Game> list = recommendService.getRecommendByPlayTime(userNo, minPlayTime*0.5, maxPlayTime*1.5, 30);
+
+        for(Game g : list){
+            if(scoreService.getScoreByUserNoGameNo(userNo, g.getGameNo()) != null){
+                list.remove(g);
+            }
+        }
+
+        Collections.shuffle(list);
+
+        return getResultList(list, userNo);
     }
 
     /**
