@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -57,6 +59,15 @@ public class ScoreService {
             score.setScoreRating(0);
             return score;
         }else return score;
+    }
+
+    /**
+    * @author : 박민주
+    * @date : 2022-04-04 오전 2:40
+    * @desc : 유저가 평점 매긴 게임 찾기
+    **/
+    public List<Score> getScoreByUserNo(Integer userNo){
+        return scoreRepository.findScoreByUserNo(userNo);
     }
 
 }

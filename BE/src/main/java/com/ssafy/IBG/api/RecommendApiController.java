@@ -2,15 +2,14 @@ package com.ssafy.IBG.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.IBG.api.dto.Result;
+import com.ssafy.IBG.api.game.GameListResponse;
 import com.ssafy.IBG.api.recommend.RecommendRequest;
 import com.ssafy.IBG.api.recommend.RecommendResultResponse;
 import com.ssafy.IBG.api.recommend.RecommendSurveyResponse;
 import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Recommend;
-import com.ssafy.IBG.service.InterestService;
-import com.ssafy.IBG.service.RESTAPIService;
-import com.ssafy.IBG.service.RecommendService;
-import com.ssafy.IBG.service.ScoreService;
+import com.ssafy.IBG.domain.Score;
+import com.ssafy.IBG.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +28,8 @@ public class RecommendApiController {
     private final RecommendService recommendService;
     private final InterestService interestService;
     private final RESTAPIService restapiService;
+    private final GameService gameService;
+    private final ScoreService scoreService;
 
     /**
      * @author : 권오범
@@ -76,20 +78,66 @@ public class RecommendApiController {
      * @author : 권오범
      * @date : 2022-03-25 오전 14:00
      * @desc: 보드 게임 랭킹 순서로 추천(평점 기준 순서)
+     * @modify :
+     * - author : 박민주
+     * - date : 2022-04-04 오전 2:15
+     * - desc : 평점 수 대비 평점으로 인기 목록 뽑기
      * */
-    @GetMapping("/game/ranking")
-    public Result getRecommendByRanking(@RequestBody(required = false) RecommendRequest request){
-        List<Game> list = recommendService.getRecommendByRanking(50);
+    @GetMapping("/game/ranking/{userNo}")
+    public Result getRecommendByRanking(@PathVariable(name = "userNo") Integer userNo) throws JsonProcessingException {
+        String[] game_no_list = restapiService.requestGETAPI2("/popular/predict");
+        List<Game> game_popular_list = new ArrayList<>();
+        for (String s : game_no_list) {
+            Game game = gameService.getGameByGameNo(Integer.parseInt(s));
+            game_popular_list.add(game);
+        }
 
-        if(list.size() == 0)
-            return new Result(HttpStatus.NO_CONTENT.value());
+        List<GameListResponse> collect = game_popular_list.stream()
+                .map(gpl -> {
+                    boolean isLike = interestService.getIsLike(userNo, gpl.getGameNo());
+                    return new GameListResponse(gpl, isLike);
+                }).collect(Collectors.toList());
 
-        // request.getUserNo()가 null일 때 좋아요 false로 제공
-        if(request == null)
-            return getResultList(list, null);
-
-        return getResultList(list, request.getUserNo());
+        if (collect.isEmpty()) return new Result(HttpStatus.BAD_REQUEST.value());
+        return new Result(HttpStatus.OK.value(), collect);
     }
+
+    /**
+    * @author : 박민주
+    * @date : 2022-04-04 오전 2:34
+    * @desc : 사용자가 한 게임 중 비슷한 게임(랜덤) 유형별 추천
+    **/
+    @GetMapping("/game/desc/{userNo}")
+    public Result getRecommendByDesc(@PathVariable(name = "userNo") Integer userNo) throws JsonProcessingException {
+        int gameNo = 1;
+        List<Score> scoreList = scoreService.getScoreByUserNo(userNo);
+        if (scoreList.isEmpty()) {
+            double random = Math.random();
+            gameNo = (int)(random*300)+1;
+        }else{
+            double random = Math.random();
+            int n = (int)(random*scoreList.size());
+            gameNo = scoreList.get(n).getGame().getGameNo();
+        }
+        String[] game_no_list = restapiService.requestGETAPI3("/desc/predict", gameNo);
+
+        List<Game> game_desc_list = new ArrayList<>();
+        for (String s : game_no_list) {
+            Game game = gameService.getGameByGameNo(Integer.parseInt(s));
+            game_desc_list.add(game);
+        }
+
+        List<GameListResponse> collect = game_desc_list.stream()
+                .map(gpl -> {
+                    boolean isLike = interestService.getIsLike(userNo, gpl.getGameNo());
+                    return new GameListResponse(gpl, isLike);
+                }).collect(Collectors.toList());
+
+        if (collect.isEmpty()) return new Result(HttpStatus.BAD_REQUEST.value());
+        return new Result(HttpStatus.OK.value(), collect);
+
+    }
+
 
     /**
      * @author : 권오범
