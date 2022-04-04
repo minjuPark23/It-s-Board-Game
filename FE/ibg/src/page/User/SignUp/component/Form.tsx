@@ -22,15 +22,15 @@ function Form({ parentCallback, emailCallback, nicknameCallback }: User) {
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
-  const [agreement] = useState("");
+  const [agreement, setAgreement] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(false);
 
-  let agreed = false;
   /* 닉네임 검사 */
   const onChangeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
   };
   const nicknameValidation = () => {
-    return nickname.length === 1;
+    return nickname.length > 0 && nickname.length < 2;
   };
   /* 이메일 검사 */
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,20 +56,41 @@ function Form({ parentCallback, emailCallback, nicknameCallback }: User) {
   };
   /*약관 확인 */
   const agreementCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    agreed = e.target.checked;
+    if (e.target.checked) setAgreement(true);
+    else if (!e.target.checked) setAgreement(false);
   };
-  const sendData = () => {
-    if (!agreed) alert("개인정보 약관에 동의해주세요");
-    else parentCallback(nickname, email, password); // 전달
+
+  const checkData = () => {
+    if (!email.includes("@")) {
+      alert("이메일을 확인해주세요");
+      setCanSubmit(false);
+    } else if (nickname.length < 2) {
+      alert("닉네임을 확인해주세요");
+      setCanSubmit(false);
+    } else if (agreement === false) {
+      alert("개인정보 약관에 동의해주세요");
+      setCanSubmit(false);
+    } else if (password.length < 6) {
+      alert("비밀번호는 6글자 이상이어야합니다.");
+      setCanSubmit(false);
+    } else setCanSubmit(true);
+  };
+
+  //e: React.FormEvent<HTMLFormElement>
+  const sendData = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (canSubmit) parentCallback(nickname, email, password); // 전달
   };
   /* 이메일 중복 확인 */
   const emailDup = () => {
     // alert("중복");
+
     emailCallback(email);
   };
   /* 이메일 중복 확인 */
   const nicknameDup = () => {
     // alert("중복");
+
     nicknameCallback(nickname);
   };
 
@@ -114,7 +135,7 @@ function Form({ parentCallback, emailCallback, nicknameCallback }: User) {
             </Grid>
             <Grid item xs={3} sm={3}>
               <Button
-                type="submit"
+                type="button"
                 fullWidth
                 variant="contained"
                 color="primary"
@@ -145,7 +166,7 @@ function Form({ parentCallback, emailCallback, nicknameCallback }: User) {
             </Grid>
             <Grid item xs={3} sm={3}>
               <Button
-                type="submit"
+                type="button"
                 fullWidth
                 variant="contained"
                 color="primary"
@@ -214,6 +235,7 @@ function Form({ parentCallback, emailCallback, nicknameCallback }: User) {
             color="primary"
             size="large"
             sx={{ py: 2 }}
+            onClick={checkData}
             //onClick={sendData}
             // className={classes.submit}
           >

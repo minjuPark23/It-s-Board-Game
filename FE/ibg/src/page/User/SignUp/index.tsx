@@ -20,21 +20,29 @@ interface MyToken {
 }
 export default function SignUp() {
   const [width] = useState(window.innerWidth);
-
+  const [checkedNick, setCheckedNick] = useState(false);
+  const [checkedEmail, setCheckedEmail] = useState(false);
   const [loading, setLoading] = useState(false); //https://gist.github.com/velopert/a94290c448162b99ad374631e376963c
   const navigate = useNavigate();
   const dispatch = useDispatch();
   //api 연결
+  const signup = (nickname: string, email: string, password: string) => {
+    // alert("called");
+    if (!checkedEmail) alert("이메일 중복 체크를 확인 부탁드립니다.");
+    else if (!checkedNick) alert("닉네임 중복 체크를 확인 부탁드립니다.");
+    else if (checkedEmail && checkedNick)
+      callJoinApi(nickname, email, password);
+  };
   const callJoinApi = (nickname: string, email: string, password: string) => {
     console.log(loading); // => loading never used 빌드 경고 해결을 위해 추가했음
-    setLoading(true);
 
+    setLoading(true);
     // const joinRes =    => 빌드 경고(never used)
     join(email, nickname, password).then((codeRes) => {
       sessionStorage.removeItem("accessToken");
       login(email, password).then((response) => {
         if (response.data.code === 200) {
-          alert(response.data.code);
+          // alert(response.data.code);
 
           let token = response.headers.authorization;
           let decode_token = jwtDecode<MyToken>(token);
@@ -73,22 +81,28 @@ export default function SignUp() {
   };
   /*이메일 중복체크 */
   const emailCheck = (email: string) => {
-    // const emailRes =   => 빌드 경고(never used)
+    setLoading(true);
     checkEmail(email).then((codeRes) => {
       if (codeRes.code === 200) {
         alert("사용 가능한 이메일 입니다.");
+        setCheckedEmail(true);
       } else {
         alert("사용 불가능한 이메일입니다.");
+        setCheckedEmail(false);
       }
     });
+    setLoading(false);
   };
   /* 닉네임 중복체크*/
   const nicknameCheck = (nickname: string) => {
-    // const nicknameRes =     => 빌드 경고(never used)
     checkNickname(nickname).then((codeRes) => {
       if (codeRes.code === 200) {
         alert("사용 가능한 닉네임 입니다.");
-      } else alert("사용 불가능한 닉네임입니다.");
+        setCheckedNick(true);
+      } else {
+        alert("사용 불가능한 닉네임입니다.");
+        setCheckedNick(false);
+      }
     });
   };
 
@@ -119,7 +133,7 @@ export default function SignUp() {
           sx={{ flexGrow: 1, m: { xs: 2, md: 3 }, mt: { xs: 5 } }}
         >
           <Form
-            parentCallback={callJoinApi}
+            parentCallback={signup}
             emailCallback={emailCheck}
             nicknameCallback={nicknameCheck}
           />
