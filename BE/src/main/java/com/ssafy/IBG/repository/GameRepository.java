@@ -113,4 +113,9 @@ public class GameRepository {
         return gameList;
     }
 
+    public double findAvgWeight() {
+        return (Double)em.createQuery("select avg(g) from Game g")
+                .getSingleResult();
+    }
+
 }

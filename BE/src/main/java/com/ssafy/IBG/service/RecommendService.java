@@ -91,4 +91,13 @@ public class RecommendService {
     public List<Game> getRecommendByAge(Integer userNo, double gameAgeAvg, int limit) {
         return recommendRepository.findRecommendByAge(userNo, gameAgeAvg, limit);
     }
+
+    /**
+     * @author : 권오범
+     * @date : 2022-04-03 오후 15:00
+     * @desc: 초보자 추천 게임
+     **/
+    public List<Game> getRecommendByNewbie(Integer userNo, double gameAgeWeight, int limit) {
+        return recommendRepository.findRecommendByNewbie(userNo, gameAgeWeight, limit);
+    }
 }
