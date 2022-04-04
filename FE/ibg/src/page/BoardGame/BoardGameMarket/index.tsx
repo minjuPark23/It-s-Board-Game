@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useState, useEffect } from "react";
 import { getDealLists, getDealSearch, writeDeal } from "../../../api/deal";
 import {
@@ -8,7 +9,8 @@ import {
   InputBase,
   Button,
   Modal,
-  Typography,
+  Stack,
+  Alert,
 } from "@mui/material";
 import { styled, alpha, createTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
@@ -149,11 +151,10 @@ export default function BoardGameMarket() {
     position: "absolute" as "absolute",
     top: "50%",
     left: "50%",
-    transform: "translate(-50%, -50%)",
     width: 400,
+    transform: "translate(-50%, -50%)",
     bgcolor: "background.paper",
     boxShadow: 24,
-    p: 4,
   };
 
   return (
@@ -167,7 +168,7 @@ export default function BoardGameMarket() {
         <Title />
         <Button
           style={{ height: 20 }}
-          sx={{ top: { md: 28, xs: 10 } }}
+          sx={{ top: { md: 28, xs: 10 }, cursor: "pointer" }}
           color="primary"
           onClick={handleOpen}
         >
@@ -181,19 +182,11 @@ export default function BoardGameMarket() {
             sendDataToParent={handleSubmit}
           />
         ) : (
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-describedby="modal-modal-description"
-          >
+          <Modal open={open} onClose={handleClose}>
             <Box sx={modalStyle}>
-              <Typography
-                id="modal-modal-description"
-                variant="h6"
-                component="h2"
-              >
-                로그인 후 가능한 서비스입니다.
-              </Typography>
+              <Stack sx={{ width: "100%" }} spacing={2}>
+                <Alert severity="error">로그인 후 등록이 가능합니다.</Alert>
+              </Stack>
             </Box>
           </Modal>
         )}
@@ -204,7 +197,7 @@ export default function BoardGameMarket() {
           <SearchIcon />
         </SearchIconWrapper>
         <StyledInputBase
-          placeholder="보드게임 이름으로 검색"
+          placeholder="보드게임 이름(영문)으로 검색"
           inputProps={{ "aria-label": "search" }}
           onKeyUp={handleSearchKeyUp}
         />
@@ -217,18 +210,3 @@ export default function BoardGameMarket() {
     </Container>
   );
 }
-
-// 임시 데이터
-// const tempData = {
-//   dealList: [
-//     {
-//       dealTitle: "보드게임 팝니다.",
-//       dealGame: "UNO",
-//       dealState: false,
-//       dealNo: 1,
-//       dealImage:
-//         "https://ae01.alicdn.com/kf/H886df0f1371840bc8607e8eccd08a84bd/Mattel-Games-UNO-Kartenspiel-UNO.jpg_Q90.jpg_.webp",
-//       dealPrice: 5000,
-//     },
-//   ],
-// };
