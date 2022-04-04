@@ -215,10 +215,31 @@ public class RecommendApiController {
      * @date : 2022-03-25 오전 15:00
      * @desc: 플레이 인원수별 추천
      * */
-    @GetMapping("/game/player")
-    public Result getRecommendByPlayer(@RequestBody(required = false) RecommendRequest request){
+    @GetMapping("/game/player/{userNo}")
+    public Result getRecommendByPlayer(@PathVariable(name="userNo", required = false) Integer userNo){
+        List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
+        double minPlayers = 0d;
+        double maxPlayers = 0d;
 
-        return null;
+        for(Score score : scores){
+            Game game = score.getGame();
+            minPlayers += game.getGameMinPlayer();
+            maxPlayers += game.getGameMaxPlayer();
+        }
+        minPlayers /= scores.size();
+        maxPlayers /= scores.size();
+
+        List<Game> list = recommendService.getRecommendByPlayer(userNo, minPlayers, maxPlayers, 30);
+
+        for(Game g : list){
+            if(scoreService.getScoreByUserNoGameNo(userNo, g.getGameNo()) != null){
+                list.remove(g);
+            }
+        }
+
+        Collections.shuffle(list);
+
+        return getResultList(list, userNo);
     }
 
     /**

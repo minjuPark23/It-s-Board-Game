@@ -64,4 +64,13 @@ public class RecommendService {
     public List<Game> getRecommendByWeight(int userNo, double weight, int limit){
         return recommendRepository.findRecommendByWeight(userNo, weight, limit);
     }
+
+    /**
+     * @author : 권오범
+     * @date : 2022-04-23 오후 15:00
+     * @desc: 플레이어 수로 게임 추천
+     **/
+    public List<Game> getRecommendByPlayer(Integer userNo, double minPlayers, double maxPlayers, int limit) {
+        return recommendRepository.findRecommendByPlayer(userNo, minPlayers, maxPlayers, limit);
+    }
 }

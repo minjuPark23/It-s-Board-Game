@@ -96,4 +96,12 @@ public class RecommendRepository {
                 .getResultList();
     }
 
+    public List<Game> findRecommendByPlayer(Integer userNo, double minPlayers, double maxPlayers, int limit) {
+        return em.createQuery("select g from Game g where g.gameMinPlayer > :minPlayers and g.gameMaxPlayer < :maxPlayers order by g.gameTotalScore desc", Game.class)
+                .setParameter("minPlayers", minPlayers)
+                .setParameter("maxPlayers", maxPlayers)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
 }
