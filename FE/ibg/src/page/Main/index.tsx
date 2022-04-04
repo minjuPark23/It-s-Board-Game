@@ -15,19 +15,7 @@ import {
 import { RootStateOrAny, useSelector } from "react-redux";
 import SkelBoardCard from "../../component/SkelBoardCard";
 import AliceCarousel from "react-alice-carousel";
-
-// Game 객체 => types파일로 빼는 것이 좋음
-export interface Game {
-  gameNo: number;
-  gameImg: string;
-  gameName: string;
-  gameKorName: string;
-  gameMinPlayer: number;
-  gameMaxPlayer: number;
-  gameCategory: string;
-  gameTotalScore: number;
-  like: boolean;
-}
+import { IGame } from "../../types/IGame";
 
 // 테마별 게임리스트: sm(600) 이상(pc)에서는 버튼으로, 이하(모바일)에서는 스크롤로 동작
 export default function Main() {

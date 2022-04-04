@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { addReview } from "../../../../api/review";
-import { Review } from "..";
 import ReviewItem from "./ReviewItem";
+import { IReview } from "../../../types/IReview";
 import { Typography, TextField, Box, Button } from "@mui/material";
 
 export default function Reviews(props: {
-  reviewList: Review[];
-  gameNo: number;
+  title: string;
+  reviewList: IReview[];
   userNo: number;
   addCallback: Function;
 }) {
@@ -19,12 +18,8 @@ export default function Reviews(props: {
   };
 
   const registerReview = () => {
-    addReview(props.gameNo, props.userNo, newReview).then((data) => {
-      if (data.code === 200) {
-        props.addCallback();
-        setNewReview("");
-      }
-    });
+    props.addCallback(newReview);
+    setNewReview("");
   };
 
   const movePage = () => {
@@ -36,7 +31,7 @@ export default function Reviews(props: {
       <Typography
         sx={{ fontSize: { xs: 16, md: 21 }, fontWeight: "bold", mb: 1 }}
       >
-        리뷰
+        {props.title}
         <Typography component="span">({props.reviewList.length})</Typography>
       </Typography>
 
