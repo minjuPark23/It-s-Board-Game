@@ -86,4 +86,14 @@ public class RecommendRepository {
                 .getResultList();
     }
 
+    public List<Game> findRecommendByWeight(int userNo, double weight, int limit) {
+        double positiveRange = weight * 1.1d;
+        double negativeRange = weight * 0.9d;
+        return em.createQuery("select g from Game g where g.gameTotalScore < :positiveRange and g.gameTotalScore < :negativeRange order by g.gameTotalScore desc", Game.class)
+                .setParameter("positiveRange", positiveRange)
+                .setParameter("negativeRange", negativeRange)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
 }
