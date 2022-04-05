@@ -1,6 +1,7 @@
 package com.ssafy.IBG.service;
 
 import com.ssafy.IBG.domain.Deal;
+import com.ssafy.IBG.domain.DealReview;
 import com.ssafy.IBG.repository.DealRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -63,5 +64,25 @@ public class DealService {
         if(deal == null) return null;
         deal.setDealStatus(true);
         return deal;
+    }
+
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-05 오후 4:14
+     * @desc : 거래 리뷰 등록
+    **/
+    @Transactional
+    public boolean setDealReview(DealReview dealReview) {
+        boolean isSaved = dealRepository.saveDealReview(dealReview);
+        return isSaved;
+    }
+
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-05 오후 5:09
+     * @desc : 거래 번호로 거래 댓글 목록 가져오기
+    **/
+    public List<DealReview> getDealReviewByDealNo(int dealNo) {
+        return dealRepository.findDealReviewByDealNo(dealNo);
     }
 }
