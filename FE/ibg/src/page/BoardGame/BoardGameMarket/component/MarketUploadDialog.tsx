@@ -49,7 +49,7 @@ const MarketUploadDialog = ({
   const [contents, setContents] = useState("");
   const [file, setFile] = useState<File>();
   const [preview, setPreview] = useState<any>();
-  const [scroll, setScroll] = useState<DialogProps["scroll"]>("paper");
+  const [scroll] = useState<DialogProps["scroll"]>("paper"); //setScroll 빌드에러 때문에 뺐습니다.
   const [errorText, setErrorText] = useState("");
 
   useEffect(() => {
