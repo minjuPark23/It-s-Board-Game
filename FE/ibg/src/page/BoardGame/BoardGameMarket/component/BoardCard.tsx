@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
 interface Deal {
   deal: {
     dealTitle: string;
@@ -19,6 +20,7 @@ interface Deal {
     dealSavedName: string;
     dealPrice: number;
     gameNo: number;
+    gameName: string;
   };
 }
 
@@ -100,7 +102,6 @@ export default function BoardCard({ deal }: Deal) {
       <StyledCard variant="outlined" onClick={moveToDetail}>
         <CardActionArea>
           <ImgWrapper>
-            {/* BE 오류 수정 후, image={dealDetail?.dealPath + "/" + dealDetail?.dealSavedName} 변경필수!!! */}
             <CardMedia
               sx={{
                 position: "absolute",
@@ -109,14 +110,13 @@ export default function BoardCard({ deal }: Deal) {
                 objectFit: "contain",
               }}
               component="img"
-              image="https://cf.geekdo-images.com/original/img/o07K8ZVh0PkOpOnSZs1TuABb7I4=/0x0/pic4001505.jpg"
+              image={deal.dealPath + "/" + deal.dealSavedName}
               alt={deal.dealTitle}
             />
           </ImgWrapper>
           <CardContent>
             <DealTitle>{deal.dealTitle}</DealTitle>
-            {/* gameNo -> gameName으로 변경해야 함 */}
-            <DealGame>{deal.gameNo}</DealGame>
+            <DealGame>{deal.gameName}</DealGame>
             <StateWrapper>
               <MarketState color={deal.dealStatus ? "#67B6FF" : "#FCB500"}>
                 {deal.dealStatus ? "거래완료" : "거래중"}

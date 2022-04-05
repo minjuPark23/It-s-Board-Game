@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { getDealDetail, closeDeal } from "../../../../api/deal";
+import {
+  getDealDetail,
+  closeDeal,
+  addDealReview,
+  getDealReviewList,
+} from "../../../../api/deal";
 import { useParams } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import {
@@ -16,29 +21,37 @@ import { RootStateOrAny, useSelector } from "react-redux";
 import BGMTitle from "../../component/BGMTitle";
 
 export default function DealDetail() {
+  const dealNo = Number(useParams().dealNo);
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
   const [dealDetail, setDealDetail] = useState<any>();
-  const params = useParams();
+  const [reviewList, setReviewList] = useState([]);
 
   useEffect(() => {
-    console.log(params.dealNo);
-    getDealDetail(Number(params.dealNo)).then((data) => {
-      console.log(data);
+    getDealDetail(dealNo).then((data) => {
       setDealDetail(data.data);
     });
-  }, [params.dealNo]);
+    getReviewList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dealNo]);
 
   const handleChangeStatus = () => {
-    closeDeal(Number(params.dealNo)).then((data) => {
-      console.log(data);
+    closeDeal(dealNo).then((data) => {
       if (data.code === 200) {
         setDealDetail({ ...dealDetail, dealStatus: true });
       }
     });
   };
 
-  const registerReview = () => {
-    console.log("등록!!");
+  const registerReview = (content: string) => {
+    addDealReview(dealNo, userNo, content).then((data) => {
+      if (data.code === 200) getReviewList();
+    });
+  };
+
+  const getReviewList = () => {
+    getDealReviewList(dealNo).then((data) => {
+      setReviewList(data.data);
+    });
   };
 
   /* 제목 style */
@@ -49,7 +62,7 @@ export default function DealDetail() {
   }));
 
   /* 거래상태 style */
-  const DealStatus = styled("span")(({ theme, color }) => ({
+  const DealStatus = styled("span")(() => ({
     textAlign: "center",
   }));
 
@@ -68,10 +81,15 @@ export default function DealDetail() {
   }));
 
   /* 이미지 style */
-  const Img = styled("img")({
-    width: "100%",
+  const ImgWrpper = styled("div")(() => ({
+    textAlign: "center",
     marginTop: -10,
-  });
+    img: {
+      width: "100%",
+      maxHeight: "550px",
+      objectFit: "contain",
+    },
+  }));
 
   /* 거래 상태 */
   const MarketState = styled("span")(({ theme, color }) => ({
@@ -113,7 +131,7 @@ export default function DealDetail() {
                   />
                 </Typography>
                 <Typography style={{ marginLeft: 8, marginTop: 8 }}>
-                  {dealDetail ? String(dealDetail.userNo) : ""}
+                  {dealDetail ? String(dealDetail.userNick) : ""}
                 </Typography>
               </Box>
               <Button
@@ -127,14 +145,18 @@ export default function DealDetail() {
             </Box>
           </Grid>
           {/* 사진 */}
-          <Grid item direction="row">
-            {/* BE 오류 수정 후, src={dealDetail?.dealPath + "/" + dealDetail?.dealSavedName} 변경필수!!! */}
-            <Img src="https://cf.geekdo-images.com/original/img/o07K8ZVh0PkOpOnSZs1TuABb7I4=/0x0/pic4001505.jpg" />
+          <Grid item>
+            <ImgWrpper>
+              <img
+                src={dealDetail?.dealPath + "/" + dealDetail?.dealSavedName}
+                alt="거래사진"
+              />
+            </ImgWrpper>
           </Grid>
-          <Grid item direction="row">
+          <Grid item>
             <DealTitle>{dealDetail?.dealTitle}</DealTitle>
           </Grid>
-          <Grid item direction="row">
+          <Grid item>
             <MarketState
               sx={{ cursor: "pointer" }}
               color={dealDetail?.dealStatus ? "#67B6FF" : "#FCB500"}
@@ -148,13 +170,13 @@ export default function DealDetail() {
               )}
             </MarketState>
           </Grid>
-          <Grid item direction="row">
+          <Grid item>
             <DealPrice>{dealDetail?.dealPrice.toLocaleString()}원</DealPrice>
           </Grid>
-          <Grid item direction="row">
+          <Grid item>
             <DealContent>{dealDetail?.dealContent}</DealContent>
           </Grid>
-          <Grid item direction="row">
+          <Grid item>
             <Typography
               sx={{
                 fontSize: { xs: 12, md: 16 },
@@ -179,7 +201,7 @@ export default function DealDetail() {
         <Divider sx={{ marginTop: 2 }} />
         <ReviewInfo
           title="댓글"
-          reviewList={tempReviewList}
+          reviewList={reviewList}
           userNo={userNo}
           addCallback={registerReview}
         />
@@ -187,13 +209,3 @@ export default function DealDetail() {
     </>
   );
 }
-
-// 임시데이터
-const tempReviewList = [
-  {
-    reviewNo: 1,
-    userNick: "ssafffff",
-    reviewContent: "리뷰리뷰",
-    reviewReg: "Mar 2022",
-  },
-];
