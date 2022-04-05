@@ -61,21 +61,11 @@ export default function BoardGameSearch() {
       setLoading(false);
     });
   };
-  {
-    /*   <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        sx={{ mt: { xs: 1, sm: 1, md: 6 } }}
-      >
-        <TitleBackground title="보드게임" />
-      </Grid>*/
-  }
+
   return (
     <>
       {/* 제목 */}
-      <TitleToolbar title="보드게임"  />
+      <TitleToolbar title="보드게임" />
       <Container style={{ marginTop: 20, padding: 20 }}>
         {/* 필터링 박스 */}
         <GameFilter searchCallback={getSearchResult} />
