@@ -1,6 +1,7 @@
 package com.ssafy.IBG.repository;
 
 import com.ssafy.IBG.domain.Deal;
+import com.ssafy.IBG.domain.DealReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -67,6 +68,20 @@ public class DealRepository {
             return em.find(Deal.class, dealNo);
         }catch (NoResultException e) {
             return null;
+        }
+    }
+
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-05 오후 4:15
+     * @desc : 거래 리뷰 등록
+    **/
+    public boolean saveDealReview(DealReview dealReview) {
+        try{
+            em.persist(dealReview);
+            return true;
+        }catch (NoResultException e) {
+            return false;
         }
     }
 }
