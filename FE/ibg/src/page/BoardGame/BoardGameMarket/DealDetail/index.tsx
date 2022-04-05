@@ -14,7 +14,6 @@ import {
   Divider,
   Button,
   Typography,
-  ImageListItem,
 } from "@mui/material";
 import AvatarGenerator from "../../../../component/AvatarGenerator";
 import ReviewInfo from "../../component/ReviewInfo";
@@ -29,15 +28,14 @@ export default function DealDetail() {
 
   useEffect(() => {
     getDealDetail(dealNo).then((data) => {
-      console.log(data);
       setDealDetail(data.data);
     });
     getReviewList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dealNo]);
 
   const handleChangeStatus = () => {
     closeDeal(dealNo).then((data) => {
-      console.log(data);
       if (data.code === 200) {
         setDealDetail({ ...dealDetail, dealStatus: true });
       }
@@ -147,17 +145,18 @@ export default function DealDetail() {
             </Box>
           </Grid>
           {/* 사진 */}
-          <Grid item direction="row">
+          <Grid item>
             <ImgWrpper>
               <img
                 src={dealDetail?.dealPath + "/" + dealDetail?.dealSavedName}
+                alt="거래사진"
               />
             </ImgWrpper>
           </Grid>
-          <Grid item direction="row">
+          <Grid item>
             <DealTitle>{dealDetail?.dealTitle}</DealTitle>
           </Grid>
-          <Grid item direction="row">
+          <Grid item>
             <MarketState
               sx={{ cursor: "pointer" }}
               color={dealDetail?.dealStatus ? "#67B6FF" : "#FCB500"}
@@ -171,13 +170,13 @@ export default function DealDetail() {
               )}
             </MarketState>
           </Grid>
-          <Grid item direction="row">
+          <Grid item>
             <DealPrice>{dealDetail?.dealPrice.toLocaleString()}원</DealPrice>
           </Grid>
-          <Grid item direction="row">
+          <Grid item>
             <DealContent>{dealDetail?.dealContent}</DealContent>
           </Grid>
-          <Grid item direction="row">
+          <Grid item>
             <Typography
               sx={{
                 fontSize: { xs: 12, md: 16 },
