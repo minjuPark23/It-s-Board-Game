@@ -170,19 +170,15 @@ export default function BoardGameMarket() {
         <TitleBackground />
       </Grid>
 
-      <Container sx={{ mt: { md: 2, xs: 5 } }} style={{ padding: 20 }}>
+      <Container>
         {/* BGM 상단 */}
-        <Box
-          style={{ marginBottom: 10 }}
-          sx={{ display: "flex", justifyContent: "end" }}
-        >
+        <Box sx={{ display: "flex", justifyContent: "end", mb: { xs: 3 } }}>
           {/* 거래 업로드 버튼 */}
-
           <Button
             style={{ height: 20 }}
             sx={{
-              top: { md: 50, xs: 0 },
-
+              top: { md: 0, xs: 0 },
+              mt: { md: 5, xs: 8 },
               cursor: "pointer",
               color: "primary",
             }}
@@ -209,7 +205,7 @@ export default function BoardGameMarket() {
         </Box>
         <Box sx={{ display: "flex", justifyContent: "start" }}>
           <Search sx={{ width: { xs: "100%", sm: 330 }, mb: { md: 1 } }}>
-            <SearchIconWrapper sx={{ mb: { md: 28, xs: 10 } }}>
+            <SearchIconWrapper sx={{ mb: { md: 0, xs: 10 } }}>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
