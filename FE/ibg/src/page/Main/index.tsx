@@ -160,6 +160,7 @@ export default function Main() {
           paddingLeft={15}
           paddingRight={15}
           items={skelCards}
+          disableButtonsControls
           disableDotsControls
           controlsStrategy="responsive"
           responsive={{
