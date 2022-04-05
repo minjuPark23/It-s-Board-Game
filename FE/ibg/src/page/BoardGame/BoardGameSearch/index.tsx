@@ -8,6 +8,7 @@ import GameFilter, { ISearchFilter } from "./component/GameFilter";
 import SkelBoardCard from "../../../component/SkelBoardCard";
 import TitleBackground from "../../../component/TitleBackground";
 import { Box, Container, Grid, Typography } from "@mui/material";
+import TitleToolbar from "../../../component/TitleToolbar";
 
 export default function BoardGameSearch() {
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
@@ -60,10 +61,8 @@ export default function BoardGameSearch() {
       setLoading(false);
     });
   };
-
-  return (
-    <>
-      <Grid
+  {
+    /*   <Grid
         container
         spacing={0}
         direction="column"
@@ -71,7 +70,12 @@ export default function BoardGameSearch() {
         sx={{ mt: { xs: 1, sm: 1, md: 6 } }}
       >
         <TitleBackground title="보드게임" />
-      </Grid>
+      </Grid>*/
+  }
+  return (
+    <>
+      {/* 제목 */}
+      <TitleToolbar title="보드게임"  />
       <Container style={{ marginTop: 20, padding: 20 }}>
         {/* 필터링 박스 */}
         <GameFilter searchCallback={getSearchResult} />
@@ -84,16 +88,6 @@ export default function BoardGameSearch() {
             mb: 1,
           }}
         >
-          {/* <Typography
-          sx={{
-            fontSize: { xs: 20, md: 30 },
-            fontWeight: "bold",
-            mb: 1,
-          }}
-          >
-          보드게임
-        </Typography>
-          */}
           <CustomSelect value={sortingOpt} onChange={setSortingOpt}>
             <StyledOption value="recomm">추천순</StyledOption>
             <StyledOption value="starRate">평점순</StyledOption>
