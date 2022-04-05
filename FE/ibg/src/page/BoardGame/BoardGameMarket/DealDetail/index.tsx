@@ -10,10 +10,10 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import Title from "../component/Title";
 import AvatarGenerator from "../../../../component/AvatarGenerator";
 import ReviewInfo from "../../component/ReviewInfo";
 import { RootStateOrAny, useSelector } from "react-redux";
+import TitleBackground from "../component/TitleBackground";
 
 export default function DealDetail() {
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
@@ -86,15 +86,27 @@ export default function DealDetail() {
 
   return (
     <>
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        sx={{ mt: { xs: 1, sm: 1, md: 6 } }}
+      >
+        <TitleBackground />
+      </Grid>
+
       <Container maxWidth="md" style={{ marginTop: 20, padding: 20 }}>
         {/* BGM */}
         <Box
           style={{ marginBottom: 10 }}
-          sx={{ display: "flex", justifyContent: "space-between" }}
-        >
-          <Title />
-        </Box>
-        <Divider />
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mt: { md: 5, xs: 7 },
+          }}
+        ></Box>
+
         {/* 내용 */}
         <Grid
           container
