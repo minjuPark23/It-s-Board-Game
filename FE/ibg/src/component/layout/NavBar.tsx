@@ -208,7 +208,6 @@ export default function NavBar() {
           >
             이보게
           </Typography>
-
           {/* Nav 반응형 - PC --------------------------------------*/}
           {/* 페이지 이동 Nav */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>

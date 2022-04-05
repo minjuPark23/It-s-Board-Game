@@ -19,7 +19,7 @@ export default function AvatarGenerator({ userName, isNav }: User) {
   return (
     <Avatar
       style={{
-        backgroundColor: avatarColor != null ? avatarColor : "#FCB500",
+        backgroundColor: avatarColor != null ? avatarColor : "#8ab7ff",
         // backgroundColor: randomColor(),
       }}
     >
