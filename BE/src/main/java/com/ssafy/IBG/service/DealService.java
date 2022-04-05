@@ -76,4 +76,13 @@ public class DealService {
         boolean isSaved = dealRepository.saveDealReview(dealReview);
         return isSaved;
     }
+
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-05 오후 5:09
+     * @desc : 거래 번호로 거래 댓글 목록 가져오기
+    **/
+    public List<DealReview> getDealReviewByDealNo(int dealNo) {
+        return dealRepository.findDealReviewByDealNo(dealNo);
+    }
 }

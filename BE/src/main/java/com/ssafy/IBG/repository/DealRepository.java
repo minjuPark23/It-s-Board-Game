@@ -84,4 +84,19 @@ public class DealRepository {
             return false;
         }
     }
+
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-05 오후 5:10
+     * @desc : 거래 번호로 댓글 목록 가져오기
+    **/
+    public List<DealReview> findDealReviewByDealNo(int dealNo) {
+        try{
+            return em.createQuery("select dr from DealReview dr where dr.deal.dealNo = :dealNo", DealReview.class)
+                    .setParameter("dealNo", dealNo)
+                    .getResultList();
+        }catch (NoResultException e) {
+            return null;
+        }
+    }
 }

@@ -218,4 +218,20 @@ public class DealApiController {
 
         return new Result(HttpStatus.OK.value());
     }
+    
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-05 오후 4:56
+     * @desc : 거래번호로 댓글 가져오기
+    **/
+    @GetMapping("/deal/review/{dealNo}")
+    public Result getDealReviewByDealNo(@PathVariable int dealNo) {
+
+        List<DealReview> dealReviewList = dealService.getDealReviewByDealNo(dealNo);
+
+        List<DealReviewResponse> collect = dealReviewList.stream()
+                .map(dealReview -> new DealReviewResponse(dealReview))
+                .collect(Collectors.toList());
+        return new Result(HttpStatus.OK.value(), collect);
+    }
 }
