@@ -1,9 +1,9 @@
-import { Review } from "..";
+import { IReview } from "../../../types/IReview";
 
 import { Box, Typography, Divider } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 
-export default function ReviewItem(props: { review: Review }) {
+export default function ReviewItem(props: { review: IReview }) {
   return (
     <>
       <Box sx={{ px: 0.8, py: 1.5, position: "relative" }}>

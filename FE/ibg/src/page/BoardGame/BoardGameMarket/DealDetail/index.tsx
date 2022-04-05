@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import Title from "../component/Title";
 import AvatarGenerator from "../../../../component/AvatarGenerator";
+import ReviewInfo from "../../component/ReviewInfo";
 import { RootStateOrAny, useSelector } from "react-redux";
 
 export default function DealDetail() {
@@ -34,6 +35,10 @@ export default function DealDetail() {
         setDealDetail({ ...dealDetail, dealStatus: true });
       }
     });
+  };
+
+  const registerReview = () => {
+    console.log("등록!!");
   };
 
   /* 제목 style */
@@ -71,17 +76,17 @@ export default function DealDetail() {
   /* 거래 상태 */
   const MarketState = styled("span")(({ theme, color }) => ({
     lineHeight: 2,
-    fontSize: 18,
+    fontSize: 14,
     color: color,
-    borderRadius: 10,
+    borderRadius: 8,
     border: "1px solid " + color,
     backgroundColor: "transparent",
-    padding: theme.spacing(1, 2, 1, 2),
+    padding: theme.spacing(0.5, 1.4, 0.6, 1.4),
   }));
 
   return (
     <>
-      <Container style={{ marginTop: 20, padding: 20 }}>
+      <Container maxWidth="md" style={{ marginTop: 20, padding: 20 }}>
         {/* BGM */}
         <Box
           style={{ marginBottom: 10 }}
@@ -107,6 +112,7 @@ export default function DealDetail() {
                 <Typography variant="subtitle1">
                   <AvatarGenerator
                     userName={dealDetail ? String(dealDetail.userNo) : ""}
+                    isNav={false}
                   />
                 </Typography>
                 <Typography style={{ marginLeft: 8, marginTop: 8 }}>
@@ -132,7 +138,10 @@ export default function DealDetail() {
             <DealTitle>{dealDetail?.dealTitle}</DealTitle>
           </Grid>
           <Grid item direction="row">
-            <MarketState color={dealDetail?.dealStatus ? "#67B6FF" : "#FCB500"}>
+            <MarketState
+              sx={{ cursor: "pointer" }}
+              color={dealDetail?.dealStatus ? "#67B6FF" : "#FCB500"}
+            >
               {dealDetail?.dealStatus ? (
                 "거래완료"
               ) : dealDetail?.userNo === userNo ? (
@@ -170,21 +179,24 @@ export default function DealDetail() {
             </Typography>
           </Grid>
         </Grid>
+        <Divider sx={{ marginTop: 2 }} />
+        <ReviewInfo
+          title="댓글"
+          reviewList={tempReviewList}
+          userNo={userNo}
+          addCallback={registerReview}
+        />
       </Container>
     </>
   );
 }
 
-// 임시 데이터
-// const tempData = {
-//   dealList: [
-//     {
-//       dealTitle: "보드게임 팝니다.",
-//       dealState: false,
-//       dealNo: 1,
-//       dealImage:
-//         "https://ae01.alicdn.com/kf/H886df0f1371840bc8607e8eccd08a84bd/Mattel-Games-UNO-Kartenspiel-UNO.jpg_Q90.jpg_.webp",
-//       dealPrice: 5000,
-//     },
-//   ],
-// };
+// 임시데이터
+const tempReviewList = [
+  {
+    reviewNo: 1,
+    userNick: "ssafffff",
+    reviewContent: "리뷰리뷰",
+    reviewReg: "Mar 2022",
+  },
+];

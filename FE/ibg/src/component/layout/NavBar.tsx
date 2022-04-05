@@ -184,24 +184,12 @@ export default function NavBar() {
             sx={{
               maxWidth: 50,
               cursor: "pointer",
+              marginRight: 1,
             }}
             onClick={() => movePage("/")}
           >
             <img src="img/logo.png" alt="logo" />
           </ImageListItem>
-
-          <ImageListItem
-            sx={{
-              mr: { xs: 0, md: 3 },
-              minWidth: 65,
-              cursor: "pointer",
-              display: { xs: "none", md: "block" },
-            }}
-            onClick={() => movePage("/")}
-          >
-            <img src="img/logotext.PNG" alt="logoText" />
-          </ImageListItem>
-
           {/* Nav 반응형 - PC --------------------------------------*/}
           {/* 페이지 이동 Nav */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -226,7 +214,7 @@ export default function NavBar() {
             <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
               <Tooltip title="사용자 메뉴">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <AvatarGenerator userName={userName} />
+                  <AvatarGenerator userName={userName} isNav={true} />
                 </IconButton>
               </Tooltip>
               <Menu
