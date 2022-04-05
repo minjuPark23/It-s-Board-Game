@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Container, Skeleton } from "@mui/material";
+import { useNavigate } from "react-router";
 import ThemeList from "./component/ThemeList";
 import {
   getRecommByAge,
@@ -18,6 +18,7 @@ import SkelBoardCard from "../../component/SkelBoardCard";
 import AliceCarousel from "react-alice-carousel";
 import { IGame } from "../../types/IGame";
 import LegoSpinner from "../../component/LegoSpinner";
+import { Box, Container, Skeleton, Typography } from "@mui/material";
 
 // 테마별 게임리스트: sm(600) 이상(pc)에서는 버튼으로, 이하(모바일)에서는 스크롤로 동작
 export default function Main() {
@@ -42,6 +43,9 @@ export default function Main() {
   const [ageLoading, setAgeLoading] = useState<boolean>(userNo);
   const [reviewLoading, setReviewLoading] = useState<boolean>(true);
   const [scoreLoading, setScoreLoading] = useState<boolean>(true);
+
+  const cardImg = require("../../assets/card.png");
+  const navigate = useNavigate();
 
   useEffect(() => {
     // 로그인 한 경우
@@ -150,6 +154,11 @@ export default function Main() {
       .catch(() => {});
   };
 
+  // 페이지 이동
+  const movePage = (page: string) => {
+    navigate(page);
+  };
+
   const skelCards = [1, 1, 1, 1, 1].map(() => <SkelBoardCard marginX={0.5} />);
 
   const SkelTheme = () => {
@@ -185,6 +194,35 @@ export default function Main() {
 
   return (
     <Container style={{ padding: 20 }} sx={{ mt: 5 }}>
+      {!userNo && (
+        <Box
+          onClick={() => movePage("/signin")}
+          sx={{
+            mt: 5,
+            py: 1,
+            px: 2,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "grey.200",
+            borderRadius: 3,
+            cursor: "pointer",
+          }}
+        >
+          <img src={cardImg} alt="card" width={50} />
+          <Typography
+            sx={{ fontSize: { xs: 15, md: 18 }, ml: 0.5 }}
+            align="left"
+          >
+            로그인을 하면,
+            <Box component="span" ml={1} sx={{ fontWeight: 600 }}>
+              나에게 맞는 보드게임을 추천
+            </Box>
+            받을 수 있어요!
+          </Typography>
+        </Box>
+      )}
+
       {userLoading ? (
         <SkelTheme />
       ) : (
