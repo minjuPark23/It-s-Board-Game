@@ -16,32 +16,32 @@ export default function SkelGameInfo() {
             width="40%"
             sx={{ fontSize: { xs: 18, md: 25 }, fontWeight: "bold" }}
           >
-            <Skeleton />
+            <Skeleton animation="wave" />
           </Typography>
           <Typography
             width="30%"
             sx={{ fontSize: { xs: 13, md: 16 }, color: "gray", mb: 1.5 }}
           >
-            <Skeleton />
+            <Skeleton animation="wave" />
           </Typography>
-          <Skeleton width="40%" />
-          <Skeleton width="40%" />
-          <Skeleton width="40%" />
-          <Skeleton />
-          <Skeleton />
-          <Skeleton />
-          <Skeleton />
-          <Skeleton width="80%" />
+          <Skeleton animation="wave" width="40%" />
+          <Skeleton animation="wave" width="40%" />
+          <Skeleton animation="wave" width="40%" />
+          <Skeleton animation="wave" />
+          <Skeleton animation="wave" />
+          <Skeleton animation="wave" />
+          <Skeleton animation="wave" />
+          <Skeleton animation="wave" width="80%" />
         </Grid>
       </Grid>
       <Divider />
 
       <Typography sx={{ fontSize: 20, mt: 5 }}>
-        <Skeleton width="15%" />
+        <Skeleton animation="wave" width="15%" />
       </Typography>
-      <Skeleton />
-      <Skeleton />
-      <Skeleton width="80%" />
+      <Skeleton animation="wave" />
+      <Skeleton animation="wave" />
+      <Skeleton animation="wave" width="80%" />
       <Divider />
     </>
   );

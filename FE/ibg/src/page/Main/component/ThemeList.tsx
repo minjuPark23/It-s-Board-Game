@@ -2,18 +2,27 @@ import BoardCardMain from "../../../component/BoardCardMain";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import { IGame } from "../../../types/IGame";
-import { Box, styled, Typography } from "@mui/material";
+import { alpha, Box, styled, Typography } from "@mui/material";
 // import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 const ArrowBox = styled(Box)(({ theme }) => ({
-  width: 35,
-  height: 35,
-  textAlign: "center",
-  borderRadius: "50%",
-  backgroundColor: theme.palette.grey[600],
+  width: 40,
+  display: "none",
+  position: "absolute",
+  top: "50%",
+  transform: "translateY(-60%)",
+  backgroundColor: alpha(theme.palette.grey[500], 0.7),
   cursor: "pointer",
+  borderRadius: 5,
+  "&:hover": {
+    backgroundColor: theme.palette.primary.main,
+  },
+  [theme.breakpoints.up("sm")]: {
+    display: "flex",
+    justifyContent: "center",
+  },
 }));
 
 export default function ThemeList(props: { title: string; gameList: IGame[] }) {
@@ -50,30 +59,23 @@ export default function ThemeList(props: { title: string; gameList: IGame[] }) {
         renderPrevButton={() => (
           <ArrowBox
             sx={{
-              position: "absolute",
-              top: "50%",
               left: "0",
-              transform: "translateY(-50%)",
-              display: { xs: "none", sm: "block" },
             }}
           >
-            <NavigateBeforeIcon
-              sx={{ verticalAlign: "-0.7rem", color: "white" }}
-            />
+            <NavigateBeforeIcon sx={{ color: "white", fontSize: 45 }} />
           </ArrowBox>
         )}
         renderNextButton={() => (
           <ArrowBox
             sx={{
-              position: "absolute",
-              top: "50%",
               right: "0",
-              transform: "translateY(-50%)",
-              display: { xs: "none", sm: "block" },
             }}
           >
             <NavigateNextIcon
-              sx={{ verticalAlign: "-0.7rem", color: "white" }}
+              sx={{
+                color: "white",
+                fontSize: 45,
+              }}
             />
           </ArrowBox>
         )}

@@ -7,6 +7,7 @@ import CustomSelect, { StyledOption } from "./component/CustomSelect";
 import GameFilter, { ISearchFilter } from "./component/GameFilter";
 import SkelBoardCard from "../../../component/SkelBoardCard";
 import { Box, Container, Grid, Typography } from "@mui/material";
+import LegoSpinner from "../../../component/LegoSpinner";
 import TitleToolbar from "../../../component/TitleToolbar";
 
 export default function BoardGameSearch() {
@@ -95,11 +96,21 @@ export default function BoardGameSearch() {
         </Box>
         {/* 보드게임 카드 */}
         {loading ? (
-          <Grid container spacing={2}>
-            {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(() => (
-              <SkelBoardCard />
-            ))}
-          </Grid>
+          <Box sx={{ position: "relative" }}>
+            <Grid container spacing={2}>
+              {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(() => (
+                <SkelBoardCard />
+              ))}
+            </Grid>
+            <LegoSpinner
+              sx={{
+                position: "absolute",
+                top: "20%",
+                left: "50%",
+                transform: "translateX(-50%)",
+              }}
+            />
+          </Box>
         ) : gameList.length > 0 ? (
           <Grid container spacing={2}>
             {gameList.map((game) => (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Skeleton } from "@mui/material";
+import { Box, Container, Skeleton } from "@mui/material";
 import ThemeList from "./component/ThemeList";
 import {
   getRecommByAge,
@@ -17,6 +17,7 @@ import { RootStateOrAny, useSelector } from "react-redux";
 import SkelBoardCard from "../../component/SkelBoardCard";
 import AliceCarousel from "react-alice-carousel";
 import { IGame } from "../../types/IGame";
+import LegoSpinner from "../../component/LegoSpinner";
 
 // 테마별 게임리스트: sm(600) 이상(pc)에서는 버튼으로, 이하(모바일)에서는 스크롤로 동작
 export default function Main() {
@@ -135,6 +136,7 @@ export default function Main() {
       .catch(() => {
         setScoreLoading(false);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userNo]);
 
   // 초보자를 위한 게임 리스트 가져오기(평점데이터가 10개 미만일 경우(user추천 response = null)에만 실행)
@@ -148,14 +150,12 @@ export default function Main() {
       .catch(() => {});
   };
 
-  const skelCards = [1, 1, 1, 1, 1, 1].map(() => (
-    <SkelBoardCard marginX={0.5} />
-  ));
+  const skelCards = [1, 1, 1, 1, 1].map(() => <SkelBoardCard marginX={0.5} />);
 
   const SkelTheme = () => {
     return (
-      <>
-        <Skeleton width="30%" height={50} sx={{ mt: 4 }} />
+      <Box sx={{ position: "relative" }}>
+        <Skeleton animation="wave" width="30%" height={50} sx={{ mt: 4 }} />
         <AliceCarousel
           paddingLeft={15}
           paddingRight={15}
@@ -170,8 +170,16 @@ export default function Main() {
             700: { items: 4 },
             900: { items: 5 },
           }}
+        ></AliceCarousel>
+        <LegoSpinner
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
         />
-      </>
+      </Box>
     );
   };
 
