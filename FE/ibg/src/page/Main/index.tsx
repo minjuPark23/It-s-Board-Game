@@ -24,24 +24,21 @@ export default function Main() {
   const [similarGame, setSimilarGame] = useState("");
 
   const [userGameList, setUserGameList] = useState<IGame[]>([]);
+  const [newbieGameList, setNewbieGameList] = useState<IGame[]>([]);
   const [descGameList, setDescGameList] = useState<IGame[]>([]);
   const [categoryGameList, setCategoryGameList] = useState<IGame[]>([]);
   const [weightGameList, setWeightGameList] = useState<IGame[]>([]);
   const [playerGameList, setPlayerGameList] = useState<IGame[]>([]);
   const [timeGameList, setTimeGameList] = useState<IGame[]>([]);
   const [ageGameList, setAgeGameList] = useState<IGame[]>([]);
-  const [newbieGameList, setNewbieGameList] = useState<IGame[]>([]);
   const [reviewGameList, setReviewGameList] = useState<IGame[]>([]);
   const [scoreGameList, setScoreGameList] = useState<IGame[]>([]);
 
   const [userLoading, setUserLoading] = useState<boolean>(userNo);
-  const [descLoading, setDescLoading] = useState<boolean>(userNo);
-  const [categoryLoading, setCategoryLoading] = useState<boolean>(userNo);
   const [weightLoading, setWeightLoading] = useState<boolean>(userNo);
   const [playerLoading, setPlayerLoading] = useState<boolean>(userNo);
   const [timeLoading, setTimeLoading] = useState<boolean>(userNo);
   const [ageLoading, setAgeLoading] = useState<boolean>(userNo);
-  const [newbieLoading, setNewbieLoading] = useState<boolean>(userNo);
   const [reviewLoading, setReviewLoading] = useState<boolean>(true);
   const [scoreLoading, setScoreLoading] = useState<boolean>(true);
 
@@ -51,35 +48,32 @@ export default function Main() {
       getRecommByUser(userNo)
         .then((data) => {
           if (data.code === 200) {
-            setUserGameList(data.data);
+            if (data.data === null) getNewbieGameList();
+            else setUserGameList(data.data);
           }
           setUserLoading(false);
         })
         .catch(() => {
           setUserLoading(false);
         });
+      // 조금 느림(3) -> 스켈레톤 제거
       getRecommByDesc(userNo)
         .then((data) => {
           if (data.code === 200) {
-            setSimilarGame(data.gameName);
-            setDescGameList(data.data);
+            setSimilarGame(data.data.title);
+            setDescGameList(data.data.recommendResultResponses);
           }
-          setDescLoading(false);
         })
-        .catch(() => {
-          setDescLoading(false);
-        });
-      getRecommByCategory()
+        .catch(() => {});
+      // 많이 느림(5) -> 스켈레톤 제거
+      getRecommByCategory(userNo)
         .then((data) => {
           if (data.code === 200) {
             setCategoryGameList(data.data);
           }
-          setCategoryLoading(false);
         })
-        .catch(() => {
-          setCategoryLoading(false);
-        });
-      getRecommByWeight()
+        .catch(() => {});
+      getRecommByWeight(userNo)
         .then((data) => {
           if (data.code === 200) {
             setWeightGameList(data.data);
@@ -89,7 +83,7 @@ export default function Main() {
         .catch(() => {
           setWeightLoading(false);
         });
-      getRecommByPlayer()
+      getRecommByPlayer(userNo)
         .then((data) => {
           if (data.code === 200) {
             setPlayerGameList(data.data);
@@ -99,7 +93,7 @@ export default function Main() {
         .catch(() => {
           setPlayerLoading(false);
         });
-      getRecommByTime()
+      getRecommByTime(userNo)
         .then((data) => {
           if (data.code === 200) {
             setTimeGameList(data.data);
@@ -109,7 +103,7 @@ export default function Main() {
         .catch(() => {
           setTimeLoading(false);
         });
-      getRecommByAge()
+      getRecommByAge(userNo)
         .then((data) => {
           if (data.code === 200) {
             setAgeGameList(data.data);
@@ -119,19 +113,9 @@ export default function Main() {
         .catch(() => {
           setAgeLoading(false);
         });
-      getRecommByNewbie()
-        .then((data) => {
-          if (data.code === 200) {
-            setNewbieGameList(data.data);
-          }
-          setNewbieLoading(false);
-        })
-        .catch(() => {
-          setNewbieLoading(false);
-        });
     }
     // 공통
-    getRecommByReviews()
+    getRecommByReviews(userNo)
       .then((data) => {
         if (data.code === 200) {
           setReviewGameList(data.data);
@@ -152,6 +136,17 @@ export default function Main() {
         setScoreLoading(false);
       });
   }, [userNo]);
+
+  // 초보자를 위한 게임 리스트 가져오기(평점데이터가 10개 미만일 경우(user추천 response = null)에만 실행)
+  const getNewbieGameList = () => {
+    getRecommByNewbie(userNo)
+      .then((data) => {
+        if (data.code === 200) {
+          setNewbieGameList(data.data);
+        }
+      })
+      .catch(() => {});
+  };
 
   const skelCards = [1, 1, 1, 1, 1, 1].map(() => (
     <SkelBoardCard marginX={0.5} />
@@ -188,26 +183,13 @@ export default function Main() {
           <ThemeList title="나의 맞춤 추천 게임" gameList={userGameList} />
         )
       )}
-      {descLoading ? (
-        <SkelTheme />
-      ) : (
-        descGameList.length > 0 && (
-          <ThemeList
-            title={`'${similarGame}'와 비슷한 게임 추천`}
-            gameList={descGameList}
-          />
-        )
+      {newbieGameList.length > 0 && (
+        <ThemeList
+          title="초보자라면 이 게임 어때요?"
+          gameList={newbieGameList}
+        />
       )}
-      {categoryLoading ? (
-        <SkelTheme />
-      ) : (
-        categoryGameList.length > 0 && (
-          <ThemeList
-            title="내가 좋아하는 카테고리의 게임"
-            gameList={categoryGameList}
-          />
-        )
-      )}
+
       {weightLoading ? (
         <SkelTheme />
       ) : (
@@ -251,16 +233,21 @@ export default function Main() {
           />
         )
       )}
-      {newbieLoading ? (
-        <SkelTheme />
-      ) : (
-        newbieGameList.length > 0 && (
-          <ThemeList
-            title="초보자라면 이 게임 어때요?"
-            gameList={newbieGameList}
-          />
-        )
+
+      {descGameList.length > 0 && (
+        <ThemeList
+          title={`'${similarGame}'와 비슷한 게임 추천`}
+          gameList={descGameList}
+        />
       )}
+
+      {categoryGameList.length > 0 && (
+        <ThemeList
+          title="내가 좋아하는 카테고리의 게임"
+          gameList={categoryGameList}
+        />
+      )}
+
       {scoreLoading ? (
         <SkelTheme />
       ) : (
