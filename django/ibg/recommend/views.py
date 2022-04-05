@@ -13,11 +13,22 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 # Import linear_kernel
 from sklearn.metrics.pairwise import linear_kernel
 
+from sklearn.decomposition import TruncatedSVD
+from scipy.sparse.linalg import svds
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import logging
+from rest_framework import status
 
 class UserView(viewsets.ModelViewSet):
 
+    """
+         @author : 박민주
+         @date : 2022-04-4 오전 16:00
+         @desc: 유저가 플레이 했던 게임 중 설명이 유사한 정도로 추천
+    """
     @api_view(['GET'])
-    def recommend_desc(self, game_no):
+    def recommend_by_desc_similartiy(self, game_no):
         print("유저가 한 게임 중 비슷한 유형별")
         print(game_no)
         df_games = Game.objects.all()
@@ -70,8 +81,13 @@ class UserView(viewsets.ModelViewSet):
         print(game_no_list)
         return Response(game_no_list)
 
+    """
+         @author : 박민주
+         @date : 2022-04-4 오전 16:00
+         @desc: 평점 수 대비 평점이 높은 순으로 추천 => 인기순
+    """
     @api_view(['GET'])
-    def recommend_popular(request):
+    def recommend_by_score_on_score_count(request):
         print("평점수 대비 평점이 높은 것: 인기순")
         df_games = Game.objects.all()
         df_games = pd.DataFrame(df_games.values("game_no", "game_total_score"))
@@ -105,8 +121,13 @@ class UserView(viewsets.ModelViewSet):
 
         return Response(game_list)
 
+    """
+         @author : 박민주
+         @date : 2022-04-4 오전 16:00
+         @desc: 유저가 플레이하지 않은 게임들의 평점을 예측하여 추천 => SVD 알고리즘
+    """
     @api_view(['GET'])
-    def recommend_user2(request, user_no):
+    def recommend_by_predicted_score_for_svd(request, user_no):
         print("평점 추천2")
         # 이미 Recommend에 저장된 것 다 지우기
         Recommend.objects.filter(user_no=user_no).delete()
@@ -173,8 +194,13 @@ class UserView(viewsets.ModelViewSet):
 
         return Response()
 
+    """
+         @author : 박민주
+         @date : 2022-04-4 오전 16:00
+         @desc: 유저가 플레이하지 않은 게임들의 평점을 예측하여 추천 => KNN 알고리즘
+    """
     @api_view(['GET'])
-    def recommend_user(request, user_no):
+    def recommend_by_predicted_score_for_knn(request, user_no):
         print("평점 추천")
         # 추천 받아서 결과 반환
 
@@ -257,3 +283,62 @@ class UserView(viewsets.ModelViewSet):
         # user_no로 score데이터 가져오기
 
         return Response()
+
+    """
+         @author : 권오범
+         @date : 2022-04-4 오전 16:00
+         @desc: 카테고리의 유사도를 기반으로 추천
+                처음 위치하는 게임이 기준
+    """
+    @api_view(['GET'])
+    def recommend_by_category_similartiy(request, game_no):
+        # print(game_no)
+        scores = Score.objects.all()
+        score_data = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating"))
+
+        games = Game.objects.all()
+        game_data = pd.DataFrame(games.values("game_no", 'game_name', 'game_category', 'game_total_score'))
+
+        game_data['vote_count'] = score_data.groupby('game_no')["user_no"].count()
+
+        c = game_data['game_total_score'].mean()
+        m = game_data['vote_count'].quantile(0.008)
+
+        def weighted_rating(x, m=m, c=c):
+            v = x['vote_count']
+            r = x['game_total_score']
+
+            return (v / (v + m) * r) + (m / (m + v) * c)
+
+        game_data = game_data.loc[game_data['vote_count'] >= m]
+        game_data['game_weighted_score'] = game_data.apply(weighted_rating, axis=1)  # 함수 인자로 m, c 넘겨줌
+
+        game_data = game_data[game_data['game_category'] != 'nan']
+
+        game_data['game_category'] = game_data['game_category'].apply(
+            lambda x: x.replace('|', '/').replace(' ', '').replace('/', ' '))
+
+        # print(game_data)
+
+        count_vector = CountVectorizer(ngram_range=(1, 3))
+        c_vector_category = count_vector.fit_transform(game_data['game_category'])
+        category_c_sim = cosine_similarity(c_vector_category, c_vector_category).argsort()[:, ::-1]
+
+        game = Game.objects.get(game_no=game_no)
+        # print(type(game.game_name))
+        # print(game.game_name)
+        game_name = game.game_name
+
+        target_game_index = game_data[game_data['game_name'] == game_name].index.values
+
+        sim_index = category_c_sim[target_game_index, :30].reshape(-1)
+
+        sim_index = sim_index[sim_index != target_game_index]
+
+        response = game_data.iloc[sim_index].sort_values('game_total_score', ascending=False)[:10]  # 게임 번호로 수정
+        response = response['game_no'].values.tolist()
+        # print(response)
+        response.insert(0, game_no)
+        # print(response)
+        # response.loc[0] = [game_no]
+        return Response(response)

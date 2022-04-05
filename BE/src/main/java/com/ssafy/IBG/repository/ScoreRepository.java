@@ -57,4 +57,10 @@ public class ScoreRepository {
                 .setParameter("userNo", userNo)
                 .getResultList();
     }
+
+    public List<Score> findScoreListByUserNoOrderByRating(Integer userNo){
+        return em.createQuery("select s from Score s where s.user.userNo =: userNo order by s.scoreRating desc", Score.class)
+                .setParameter("userNo", userNo)
+                .getResultList();
+    }
 }
