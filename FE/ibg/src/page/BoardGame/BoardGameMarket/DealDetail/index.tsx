@@ -13,7 +13,7 @@ import {
 import AvatarGenerator from "../../../../component/AvatarGenerator";
 import ReviewInfo from "../../component/ReviewInfo";
 import { RootStateOrAny, useSelector } from "react-redux";
-import TitleBackground from "../component/TitleBackground";
+import BGMTitle from "../../component/BGMTitle";
 
 export default function DealDetail() {
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
@@ -86,34 +86,19 @@ export default function DealDetail() {
 
   return (
     <>
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        sx={{ mt: { xs: 1, sm: 1, md: 6 } }}
-      >
-        <TitleBackground />
-      </Grid>
-
-      <Container maxWidth="md" style={{ marginTop: 20, padding: 20 }}>
+      <BGMTitle />
+      <Container maxWidth="md" style={{ marginTop: 1, padding: 20 }}>
         {/* BGM */}
         <Box
-          style={{ marginBottom: 10 }}
+          style={{ marginBottom: 5 }}
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            mt: { md: 5, xs: 7 },
           }}
         ></Box>
 
         {/* 내용 */}
-        <Grid
-          container
-          spacing={1}
-          style={{ marginTop: 14 }}
-          direction="column"
-        >
+        <Grid container spacing={1} direction="column">
           <Grid item>
             {/* 상단 */}
             <Box

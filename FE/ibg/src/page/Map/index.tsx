@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Map from "./component/Map";
-import { Box, Container, Grid, Typography, Toolbar } from "@mui/material";
-import Title from "./component/Title";
-import { styled } from "@mui/material/styles";
+import { Container } from "@mui/material";
 import TitleToolbar from "../../component/TitleToolbar";
 
 export default function Index() {
@@ -37,20 +35,9 @@ export default function Index() {
     // setLoading(false);
   });
 
-  /*
-
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        sx={{ mt: { xs: 1, sm: 1, md: 6 } }}
-      >
-  */
   return (
     <>
       <TitleToolbar title="주변 보드게임 카페 찾기" />
-
       <Container style={{ marginTop: 10, padding: 20 }}>
         <Map long={long} lat={lat} addr={addr} />
       </Container>
