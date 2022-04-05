@@ -76,6 +76,8 @@ export default function NavBar() {
   // 자동완성을 위한 게임 목록
   const [autoGameList, setAutoGameList] = useState([]);
 
+  const logoImg = require("../../assets/logo.png");
+
   // 페이지 이동
   const navigate = useNavigate();
 
@@ -193,7 +195,7 @@ export default function NavBar() {
             }}
             onClick={() => movePage("/")}
           >
-            <img src="img/logo.png" alt="logo" />
+            <img src={logoImg} alt="logo" />
           </ImageListItem>
           <Typography
             sx={{
