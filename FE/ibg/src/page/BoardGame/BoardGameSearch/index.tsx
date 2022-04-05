@@ -6,7 +6,7 @@ import BoardCardMain from "../../../component/BoardCardMain";
 import CustomSelect, { StyledOption } from "./component/CustomSelect";
 import GameFilter, { ISearchFilter } from "./component/GameFilter";
 import SkelBoardCard from "../../../component/SkelBoardCard";
-
+import TitleBackground from "../../../component/TitleBackground";
 import { Box, Container, Grid, Typography } from "@mui/material";
 
 export default function BoardGameSearch() {
@@ -62,50 +62,67 @@ export default function BoardGameSearch() {
   };
 
   return (
-    <Container style={{ marginTop: 20, padding: 20 }}>
-      {/* 필터링 박스 */}
-      <GameFilter searchCallback={getSearchResult} />
-      {/* 제목, 정렬 선택 박스 */}
-      <Box
-        sx={{ display: "flex", justifyContent: "space-between", mt: 5, mb: 1 }}
+    <>
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        sx={{ mt: { xs: 1, sm: 1, md: 6 } }}
       >
-        <Typography
+        <TitleBackground title="보드게임" />
+      </Grid>
+      <Container style={{ marginTop: 20, padding: 20 }}>
+        {/* 필터링 박스 */}
+        <GameFilter searchCallback={getSearchResult} />
+        {/* 제목, 정렬 선택 박스*/}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "end",
+            mt: 5,
+            mb: 1,
+          }}
+        >
+          {/* <Typography
           sx={{
             fontSize: { xs: 20, md: 30 },
             fontWeight: "bold",
             mb: 1,
           }}
-        >
+          >
           보드게임
         </Typography>
-        <CustomSelect value={sortingOpt} onChange={setSortingOpt}>
-          <StyledOption value="recomm">추천순</StyledOption>
-          <StyledOption value="starRate">평점순</StyledOption>
-          <StyledOption value="name">이름순</StyledOption>
-        </CustomSelect>
-      </Box>
-      {/* 보드게임 카드 */}
-      {loading ? (
-        <Grid container spacing={2}>
-          {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(() => (
-            <SkelBoardCard />
-          ))}
-        </Grid>
-      ) : gameList.length > 0 ? (
-        <Grid container spacing={2}>
-          {gameList.map((game) => (
-            <BoardCardMain key={game.gameNo} game={game}></BoardCardMain>
-          ))}
-        </Grid>
-      ) : (
-        <Box textAlign="center">
-          <Typography
-            sx={{ fontSize: { xs: 15, sm: 23 }, fontWeight: 600, my: 20 }}
-          >
-            앗❕ 조건에 맞는 보드게임이 없어요😧
-          </Typography>
+          */}
+          <CustomSelect value={sortingOpt} onChange={setSortingOpt}>
+            <StyledOption value="recomm">추천순</StyledOption>
+            <StyledOption value="starRate">평점순</StyledOption>
+            <StyledOption value="name">이름순</StyledOption>
+          </CustomSelect>
         </Box>
-      )}
-    </Container>
+        {/* 보드게임 카드 */}
+        {loading ? (
+          <Grid container spacing={2}>
+            {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(() => (
+              <SkelBoardCard />
+            ))}
+          </Grid>
+        ) : gameList.length > 0 ? (
+          <Grid container spacing={2}>
+            {gameList.map((game) => (
+              <BoardCardMain key={game.gameNo} game={game}></BoardCardMain>
+            ))}
+          </Grid>
+        ) : (
+          <Box textAlign="center">
+            <Typography
+              sx={{ fontSize: { xs: 15, sm: 23 }, fontWeight: 600, my: 20 }}
+            >
+              앗❕ 조건에 맞는 보드게임이 없어요😧
+            </Typography>
+          </Box>
+        )}
+      </Container>
+    </>
   );
 }

@@ -46,7 +46,7 @@ export default function BoardGameDetail() {
   };
 
   return (
-    <Container>
+    <Container sx={{ mt: 10 }}>
       {loading ? (
         <SkelGameInfo />
       ) : game ? (

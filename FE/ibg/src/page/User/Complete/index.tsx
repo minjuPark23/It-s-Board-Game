@@ -15,7 +15,7 @@ export default function SignUp() {
         spacing={0}
         direction="column"
         alignItems="center"
-        sx={{ mt: { xs: 1, sm: 5, md: 8 } }}
+        sx={{ mt: { xs: 5, sm: 5, md: 20 } }}
       >
         <Box sx={{ width: width < 600 ? "100%" : "33%" }}>
           <WelcomeStepper value="2" />
