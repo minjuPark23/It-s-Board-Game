@@ -71,7 +71,7 @@ public class RecommendService {
      * @desc: 플레이어 수로 게임 추천
      **/
     public List<Game> getRecommendByPlayer(Integer userNo, double minPlayers, double maxPlayers, int limit) {
-        return recommendRepository.findRecommendByPlayer(userNo, minPlayers, maxPlayers, limit);
+        return recommendRepository.findRecommendByPlayer(userNo, (int)Math.round(minPlayers), (int)Math.round(maxPlayers), limit);
     }
 
     /**
@@ -80,7 +80,7 @@ public class RecommendService {
      * @desc: 플레이 시간으로 게임 추천
      **/
     public List<Game> getRecommendByPlayTime(Integer userNo, double minPlayTime, double maxPlayTime, int limit) {
-        return recommendRepository.findRecommendByPlayTime(userNo, minPlayTime, maxPlayTime, limit);
+        return recommendRepository.findRecommendByPlayTime(userNo, (int)Math.round(minPlayTime), (int)Math.round(maxPlayTime), limit);
     }
 
     /**
