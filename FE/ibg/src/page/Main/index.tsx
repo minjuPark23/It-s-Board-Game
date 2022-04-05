@@ -180,7 +180,7 @@ export default function Main() {
   };
 
   return (
-    <Container style={{ padding: 20 }}>
+    <Container style={{ padding: 20 }} sx={{ mt: 5 }}>
       {userLoading ? (
         <SkelTheme />
       ) : (

@@ -3,6 +3,7 @@ import BoardCardMain from "../../../component/BoardCardMain";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { getLikedList } from "../../../api/user";
 import { RootStateOrAny, useSelector } from "react-redux";
+import TitleBackground from "../../../component/TitleBackground";
 // Game 객체 => types파일로 빼는 것이 좋음
 export interface Game {
   gameNo: number;
@@ -35,16 +36,17 @@ export default function MyGames() {
   });
 
   return (
-    <Container style={{ marginTop: 20, padding: 20 }}>
-      <Typography
-        sx={{
-          fontSize: { xs: 20, md: 24 },
-          fontWeight: "bold",
-          mb: 1,
-        }}
+    <>
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        sx={{ mt: { xs: 1, sm: 1, md: 6 } }}
       >
-        나의 관심 게임 목록
-      </Typography>
+        <TitleBackground title="내 관심 목록" />
+      </Grid>
+
       <Container style={{ marginTop: 20, padding: 10 }}>
         <Grid container spacing={2}>
           {gameList.length != 0 ? (
@@ -57,6 +59,6 @@ export default function MyGames() {
         </Grid>
         <Box sx={{ mb: 15 }} />
       </Container>
-    </Container>
+    </>
   );
 }

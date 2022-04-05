@@ -12,12 +12,18 @@ export default function Title() {
 
   return (
     <Box
-      sx={{ display: "flex", cursor: "pointer" }}
+      sx={{
+        display: "flex",
+        cursor: "pointer",
+        mt: { md: 1, xs: 7 },
+        ml: { md: 44, xs: 4 },
+        mb: 1,
+      }}
       onClick={() => movePage("/market")}
     >
       <Typography
         sx={{
-          fontSize: { xs: 24, md: 30 },
+          fontSize: { xs: 20, md: 36 },
           fontWeight: "bold",
         }}
         color="error"
@@ -26,32 +32,34 @@ export default function Title() {
       </Typography>
       <Typography
         sx={{
-          fontSize: { xs: 24, md: 30 },
+          fontSize: { xs: 20, md: 36 },
           fontWeight: "bold",
+          color: "white",
         }}
       >
         oard&nbsp;
       </Typography>
       <Typography
         sx={{
-          fontSize: { xs: 24, md: 30 },
+          fontSize: { xs: 20, md: 36 },
           fontWeight: "bold",
         }}
-        color="#FCB500"
+        color="#ffd900"
       >
         G
       </Typography>
       <Typography
         sx={{
-          fontSize: { xs: 24, md: 30 },
+          fontSize: { xs: 20, md: 36 },
           fontWeight: "bold",
+          color: "white",
         }}
       >
         ame&nbsp;
       </Typography>
       <Typography
         sx={{
-          fontSize: { xs: 24, md: 30 },
+          fontSize: { xs: 20, md: 36 },
           fontWeight: "bold",
         }}
         color="primary"
@@ -60,8 +68,9 @@ export default function Title() {
       </Typography>
       <Typography
         sx={{
-          fontSize: { xs: 24, md: 30 },
+          fontSize: { xs: 20, md: 36 },
           fontWeight: "bold",
+          color: "white",
         }}
       >
         arket
