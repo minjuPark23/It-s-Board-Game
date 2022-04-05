@@ -42,6 +42,9 @@ public class RESTAPIService {
 
     private List<Integer> responseParsing(HttpEntity<String> response) {
         String data = response.getBody();
+        if(data == null)
+            return null;
+
         data = data.substring(1, data.length()-1);
         String[] game_no_list = data.split(",");
         List<Integer> list = Arrays.stream(game_no_list).map(str -> Integer.parseInt(str)).collect(Collectors.toList());
