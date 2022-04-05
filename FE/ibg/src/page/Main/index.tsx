@@ -136,6 +136,7 @@ export default function Main() {
       .catch(() => {
         setScoreLoading(false);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userNo]);
 
   // 초보자를 위한 게임 리스트 가져오기(평점데이터가 10개 미만일 경우(user추천 response = null)에만 실행)
