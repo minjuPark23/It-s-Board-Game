@@ -5,7 +5,6 @@ import {
   Grid,
   Box,
   Container,
-  Divider,
   InputBase,
   Button,
   Modal,
@@ -16,10 +15,9 @@ import { styled, alpha, createTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import BoardCard from "./component/BoardCard";
 import MarketUploadDialog from "./component/MarketUploadDialog";
-import Title from "./component/Title";
 import { RootStateOrAny, useSelector } from "react-redux";
 import { getAutoAllGame } from "../../../api/game";
-import TitleBackground from "./component/TitleBackground";
+import BGMTitle from "../component/BGMTitle";
 
 export default function BoardGameMarket() {
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
@@ -160,25 +158,16 @@ export default function BoardGameMarket() {
 
   return (
     <>
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        sx={{ mt: { xs: 1, sm: 1, md: 6 } }}
-      >
-        <TitleBackground />
-      </Grid>
-
+      <BGMTitle />
       <Container>
         {/* BGM 상단 */}
-        <Box sx={{ display: "flex", justifyContent: "end", mb: { xs: 3 } }}>
+        <Box sx={{ display: "flex", justifyContent: "end" }}>
           {/* 거래 업로드 버튼 */}
           <Button
             style={{ height: 20 }}
             sx={{
               top: { md: 0, xs: 0 },
-              mt: { md: 5, xs: 8 },
+              mt: { md: 2, xs: 1 },
               cursor: "pointer",
               color: "primary",
             }}

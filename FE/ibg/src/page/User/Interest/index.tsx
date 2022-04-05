@@ -4,7 +4,8 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import { getLikedList } from "../../../api/user";
 import { RootStateOrAny, useSelector } from "react-redux";
 import TitleBackground from "../../../component/TitleBackground";
-// Game 객체 => types파일로 빼는 것이 좋음
+import TitleToolbar from "../../../component/TitleToolbar";
+
 export interface Game {
   gameNo: number;
   gameImg: string;
@@ -23,9 +24,6 @@ export default function MyGames() {
   const [userno] = useState(
     useSelector((state: RootStateOrAny) => state.user.userNo)
   );
-  // const pic = "img/logo_tears.png";
-
-  // 관심 게임이 없는 경우 추가해야함
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
     const init = async () => {
@@ -37,15 +35,7 @@ export default function MyGames() {
 
   return (
     <>
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        sx={{ mt: { xs: 1, sm: 1, md: 6 } }}
-      >
-        <TitleBackground title="내 관심 목록" />
-      </Grid>
+      <TitleToolbar title="관심목록"  />
 
       <Container style={{ marginTop: 20, padding: 10 }}>
         <Grid container spacing={2}>
