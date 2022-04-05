@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Map from "./component/Map";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
-
+import TitleBackground from "./component/TitleBackground";
 export default function Index() {
   const [long, setLong] = useState(0);
   const [lat, setLat] = useState(0);
@@ -36,22 +36,21 @@ export default function Index() {
   });
   return (
     <>
-      <Container style={{ marginTop: 20, padding: 20 }}>
-        <Typography
-          sx={{
-            fontSize: { xs: 20, md: 24 },
-            fontWeight: "bold",
-            mb: 1,
-          }}
-        >
-          주변 보드게임 카페 찾기
-          <FmdGoodIcon sx={{ verticalAlign: "-0.2rem", ml: 1 }} />
-        </Typography>
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        sx={{ mt: { xs: 1, sm: 1, md: 6 } }}
+      >
+        <Grid container>
+          <TitleBackground title="내 주변 보드게임 카페 찾기" />
+        </Grid>
 
-        <Box>
+        <Container style={{ marginTop: 90, padding: 20 }}>
           <Map long={long} lat={lat} addr={addr} />
-        </Box>
-      </Container>
+        </Container>
+      </Grid>
     </>
   );
 }
