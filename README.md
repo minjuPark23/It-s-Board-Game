@@ -57,16 +57,15 @@
 - 전체 보드게임을 한눈에 확인할 수 있다.
 - 필터를 통해 내가 원하는 게임을 한번에 찾을 수 있다.
 
-![findBoardgame](/uploads/7d2297a254a6e457d46a044e02733578/findBoardgame.JPG)
-![findBoardgameFilter](/uploads/ba053095310708bc7bfe036c539ae650/findBoardgameFilter.JPG)
-
+![findBoardgame](https://user-images.githubusercontent.com/37528765/161695259-56b8e8ef-0345-4ea2-a9cf-796257b5cb4b.JPG)
+![findBoardgameFilter](https://user-images.githubusercontent.com/37528765/161695292-0d6b3f30-e8fa-47ca-a8cc-11a0c73bb470.JPG)
 ---
 
 ### 📌 보드게임 상세보기
 - 게임의 구체적인 정보를 확인할 수 있다.
 - 별점을 주거나 리뷰를 작성할 수 있다.
-![detail](/uploads/2355041fffbd9034eac4f52823954ca3/detail.JPG)
-![reviews](/uploads/d1eba5433014f2f482d73eea930ce80f/reviews.JPG)
+![detail](https://user-images.githubusercontent.com/37528765/161695212-075e8d60-3ac3-48c7-b9b3-26f3d8e7f404.JPG)
+![reviews](https://user-images.githubusercontent.com/37528765/161695190-67692e24-16ad-4adf-b787-77063747ff7a.JPG)
 
 ---
 
@@ -82,7 +81,7 @@
 - 주변의 보드게임 카페를 찾아 지도에 표시
 - 보드게임 카페의 주소 확인
 
-![boardCafe](/uploads/d8be8c24145479b9f962a25902378ced/boardCafe.JPG)
+![boardCafe](https://user-images.githubusercontent.com/37528765/161695146-076d5fc7-b8c0-43b1-88e4-aa2655aa0492.JPG)
 
 ---
 
@@ -102,19 +101,19 @@
 |👑곽현준👑|권오범|박민주|
 
 ### Frontend
-|<img src="https://user-images.githubusercontent.com/53832553/154294716-d449a9af-8419-4cef-906e-a802320217fb.png"  width="150" height="150"/>|<img src=""  width="150" height="150"/>|<img src="https://user-images.githubusercontent.com/53832553/154294097-01760928-93ac-479e-b9f9-160ba9d5c1b1.png"  width="150" height="150"/>|
+|<img src="https://user-images.githubusercontent.com/53832553/154294716-d449a9af-8419-4cef-906e-a802320217fb.png"  width="150" height="150"/>|<img src="https://user-images.githubusercontent.com/37528765/161694976-0c06cf4f-28a9-4eab-8293-6c4de05bde3d.jpg"  width="150" height="150"/>|<img src="https://user-images.githubusercontent.com/53832553/154294097-01760928-93ac-479e-b9f9-160ba9d5c1b1.png"  width="150" height="150"/>|
 |:---:|:---:|:---:|
 |박혜준|신미래|정하은|
 
 <br>
 
 ## 👨‍💻 Tech Architecture
-![architecture](/uploads/4461443baec7688a4ff8ee325a5416db/architecture.JPG)
+![architecture](https://user-images.githubusercontent.com/37528765/161695057-a9ddf84b-27e8-45ef-b06f-ff37b468d917.JPG)
 
 <br>
 
 ## 🎈 ERD
-![ERD](/uploads/6aa3a51bbc6e3c5fca12ce8aee323c4b/ERD.JPG)
+![ERD](https://user-images.githubusercontent.com/37528765/161695099-e769cd5f-8341-4e6c-8523-9ed7d9ab3b2b.JPG)
 
 <br>
 

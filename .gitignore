@@ -48,3 +48,4 @@ out/
 *.csv
 *.p
 chromedriver.exe
+BE/src/main/resources/aws.yml
