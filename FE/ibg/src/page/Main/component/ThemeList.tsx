@@ -1,12 +1,11 @@
 import BoardCardMain from "../../../component/BoardCardMain";
-import AliceCarousel, { EventObject } from "react-alice-carousel";
+import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import { IGame } from "../../../types/IGame";
 import { alpha, Box, styled, Typography } from "@mui/material";
 // import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import { useState } from "react";
 
 const ArrowBox = styled(Box)(({ theme }) => ({
   width: 40,
@@ -27,16 +26,9 @@ const ArrowBox = styled(Box)(({ theme }) => ({
 }));
 
 export default function ThemeList(props: { title: string; gameList: IGame[] }) {
-  const [isStart, setIsStart] = useState(false);
-
   const cards = props.gameList.map((game) => (
     <BoardCardMain key={game.gameNo} game={game} marginX={0.5}></BoardCardMain>
   ));
-
-  const checkStartEnd = (e: EventObject) => {
-    if (e.item === 0) setIsStart(false);
-    else setIsStart(true);
-  };
 
   return (
     <>
@@ -57,7 +49,6 @@ export default function ThemeList(props: { title: string; gameList: IGame[] }) {
         items={cards}
         disableDotsControls
         controlsStrategy="responsive"
-        onSlideChanged={checkStartEnd}
         responsive={{
           0: { items: 1.5 },
           400: { items: 2 },

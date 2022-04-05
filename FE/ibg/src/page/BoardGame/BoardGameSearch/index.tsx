@@ -8,6 +8,7 @@ import GameFilter, { ISearchFilter } from "./component/GameFilter";
 import SkelBoardCard from "../../../component/SkelBoardCard";
 import TitleBackground from "../../../component/TitleBackground";
 import { Box, Container, Grid, Typography } from "@mui/material";
+import LegoSpinner from "../../../component/LegoSpinner";
 
 export default function BoardGameSearch() {
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
@@ -102,11 +103,21 @@ export default function BoardGameSearch() {
         </Box>
         {/* 보드게임 카드 */}
         {loading ? (
-          <Grid container spacing={2}>
-            {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(() => (
-              <SkelBoardCard />
-            ))}
-          </Grid>
+          <Box sx={{ position: "relative" }}>
+            <Grid container spacing={2}>
+              {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(() => (
+                <SkelBoardCard />
+              ))}
+            </Grid>
+            <LegoSpinner
+              sx={{
+                position: "absolute",
+                top: "20%",
+                left: "50%",
+                transform: "translateX(-50%)",
+              }}
+            />
+          </Box>
         ) : gameList.length > 0 ? (
           <Grid container spacing={2}>
             {gameList.map((game) => (
