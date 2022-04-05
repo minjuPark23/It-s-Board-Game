@@ -14,8 +14,8 @@ async function getRecommByDesc(userNo: number) {
 }
 
 // 리뷰 많은 순(공통)
-async function getRecommByReviews() {
-  return (await api.get(`/game/review/`)).data;
+async function getRecommByReviews(userNo: number) {
+  return (await api.get(`/game/review/${userNo ? userNo : 0}`)).data;
 }
 
 // 평점 높은 순(공통)
@@ -24,33 +24,33 @@ async function getRecommByScore(userNo: number) {
 }
 
 // 카테고리별 추천
-async function getRecommByCategory() {
-  return (await api.get(`/game/category`)).data;
+async function getRecommByCategory(userNo: number) {
+  return (await api.get(`/game/category/${userNo}`)).data;
 }
 
 // 난이도별 추천
-async function getRecommByWeight() {
-  return (await api.get(`/game/weight`)).data;
+async function getRecommByWeight(userNo: number) {
+  return (await api.get(`/game/weight/${userNo}`)).data;
 }
 
 // 인원수별 추천
-async function getRecommByPlayer() {
-  return (await api.get(`/game/player`)).data;
+async function getRecommByPlayer(userNo: number) {
+  return (await api.get(`/game/player/${userNo}`)).data;
 }
 
 // 플레이 시간별 추천
-async function getRecommByTime() {
-  return (await api.get(`/game/time`)).data;
+async function getRecommByTime(userNo: number) {
+  return (await api.get(`/game/time/${userNo}`)).data;
 }
 
 // 나이대별 추천
-async function getRecommByAge() {
-  return (await api.get(`/game/age`)).data;
+async function getRecommByAge(userNo: number) {
+  return (await api.get(`/game/age/${userNo}`)).data;
 }
 
 // 초보자 추천
-async function getRecommByNewbie() {
-  return (await api.get(`/game/newbie`)).data;
+async function getRecommByNewbie(userNo: number) {
+  return (await api.get(`/game/newbie/${userNo}`)).data;
 }
 
 export {
