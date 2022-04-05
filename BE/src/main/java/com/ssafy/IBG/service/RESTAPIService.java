@@ -1,47 +1,51 @@
 package com.ssafy.IBG.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.IBG.api.recommend.RecommendJsonResponse;
+import com.ssafy.IBG.api.game.GameListResponse;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RESTAPIService {
 
-    private final String BASE_URL = "http://localhost:7776/ibg/api/recommend";
+    private final String BASE_URL = "http://localhost:7776/ibg/api/recommend/predict";
 
-    public void requestGETAPI(String url, Integer userNo) throws JsonProcessingException {
+    public List<Integer> requestGETAPI(String url, Integer pathVariable) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
 
         // Header set
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        // Body set
-//        MultiValueMap<String, Integer> body = new LinkedMultiValueMap<>();
-//        body.add("userNo", userNo);
 
-        // Combine Message
-//        HttpEntity<?> requestMessage = new HttpEntity<>(body, httpHeaders);
+        HttpEntity<String> response = restTemplate.getForEntity(BASE_URL+url+"/"+pathVariable, String.class);
+        return responseParsing(response);
+    }
 
-        String res_url = BASE_URL+url+"/"+userNo;
+    public List<Integer> requestGETAPI(String url) throws JsonProcessingException {
+        RestTemplate restTemplate = new RestTemplate();
 
-        // Request and getResponse
-        HttpEntity<String> response = restTemplate.getForEntity(res_url, String.class);
+        // Header set
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-        // Response Body 파싱
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
-//        System.out.println(response.getBody());
-//        List<RecommendJsonResponse> list = objectMapper.readValue(response.getBody(), new TypeReference<List<RecommendJsonResponse>>() {});
-//        System.out.println(list);
+        HttpEntity<String> response = restTemplate.getForEntity(BASE_URL+url, String.class);
+        return responseParsing(response);
+    }
+
+    private List<Integer> responseParsing(HttpEntity<String> response) {
+        String data = response.getBody();
+        data = data.substring(1, data.length()-1);
+        String[] game_no_list = data.split(",");
+        List<Integer> list = Arrays.stream(game_no_list).map(str -> Integer.parseInt(str)).collect(Collectors.toList());
+
+        return list;
     }
 }
