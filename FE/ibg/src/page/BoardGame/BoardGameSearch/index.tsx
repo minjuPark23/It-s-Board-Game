@@ -61,7 +61,6 @@ export default function BoardGameSearch() {
       setLoading(false);
     });
   };
-
   return (
     <>
       {/* 제목 */}
