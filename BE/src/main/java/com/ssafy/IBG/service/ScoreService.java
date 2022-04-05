@@ -70,4 +70,13 @@ public class ScoreService {
         return scoreRepository.findScoreByUserNo(userNo);
     }
 
+    /**
+     * @author : 권오범
+     * @date : 2022-04-01 오후 03:16
+     * @desc : 유저가 평가한 게임 목록 평점 순 상위 10개 가져오기
+     **/
+    public List<Score> getScoreListByUserNoOrderByRating(Integer userNo){
+        return scoreRepository.findScoreListByUserNoOrderByRating(userNo);
+    }
+
 }
