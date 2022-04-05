@@ -53,4 +53,27 @@ async function closeDeal(dealNo: number) {
   ).data;
 }
 
-export { getDealLists, getDealSearch, getDealDetail, writeDeal, closeDeal };
+// 댓글 등록
+async function addDealReview(
+  dealNo: number,
+  userNo: number,
+  dealReviewContent: string
+) {
+  return (await api.post(`/deal/review`, { dealNo, userNo, dealReviewContent }))
+    .data;
+}
+
+// 댓글 목록 가져오기
+async function getDealReviewList(dealNo: number) {
+  return (await api.get(`/deal/review/${dealNo}`)).data;
+}
+
+export {
+  getDealLists,
+  getDealSearch,
+  getDealDetail,
+  writeDeal,
+  closeDeal,
+  addDealReview,
+  getDealReviewList,
+};
