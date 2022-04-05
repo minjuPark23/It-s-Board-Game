@@ -14,6 +14,7 @@ import {
   Divider,
   Button,
   Typography,
+  ImageListItem,
 } from "@mui/material";
 import AvatarGenerator from "../../../../component/AvatarGenerator";
 import ReviewInfo from "../../component/ReviewInfo";
@@ -82,10 +83,15 @@ export default function DealDetail() {
   }));
 
   /* 이미지 style */
-  const Img = styled("img")({
-    width: "100%",
+  const ImgWrpper = styled("div")(() => ({
+    textAlign: "center",
     marginTop: -10,
-  });
+    img: {
+      width: "100%",
+      maxHeight: "550px",
+      objectFit: "contain",
+    },
+  }));
 
   /* 거래 상태 */
   const MarketState = styled("span")(({ theme, color }) => ({
@@ -142,7 +148,11 @@ export default function DealDetail() {
           </Grid>
           {/* 사진 */}
           <Grid item direction="row">
-            <Img src={dealDetail?.dealPath + "/" + dealDetail?.dealSavedName} />
+            <ImgWrpper>
+              <img
+                src={dealDetail?.dealPath + "/" + dealDetail?.dealSavedName}
+              />
+            </ImgWrpper>
           </Grid>
           <Grid item direction="row">
             <DealTitle>{dealDetail?.dealTitle}</DealTitle>
