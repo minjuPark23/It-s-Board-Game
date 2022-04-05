@@ -204,22 +204,10 @@ export default function NavBar() {
               // mb: 2,
               ml: { md: 2 },
             }}
+            onClick={() => movePage("/")}
           >
             이보게
           </Typography>
-          {/*
-          <ImageListItem
-            sx={{
-              mr: { xs: 0, md: 3 },
-              minWidth: 65,
-              cursor: "pointer",
-              display: { xs: "none", md: "block" },
-            }}
-            onClick={() => movePage("/")}
-          >
-            <img src="img/logotext.PNG" alt="logoText" />
-          </ImageListItem>
-            */}
 
           {/* Nav 반응형 - PC --------------------------------------*/}
           {/* 페이지 이동 Nav */}
@@ -322,7 +310,7 @@ export default function NavBar() {
                 sx={{
                   color: "white",
                   display: { xs: "none", md: "block" },
-                 // mb: { md: 2 },
+                  // mb: { md: 2 },
                   mr: { md: 15 },
                 }}
                 onClick={() => movePage("/signin")}

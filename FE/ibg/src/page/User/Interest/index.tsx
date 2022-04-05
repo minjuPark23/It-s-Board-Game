@@ -3,7 +3,6 @@ import BoardCardMain from "../../../component/BoardCardMain";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { getLikedList } from "../../../api/user";
 import { RootStateOrAny, useSelector } from "react-redux";
-import TitleBackground from "../../../component/TitleBackground";
 import TitleToolbar from "../../../component/TitleToolbar";
 
 export interface Game {
@@ -39,7 +38,7 @@ export default function MyGames() {
 
       <Container style={{ marginTop: 20, padding: 10 }}>
         <Grid container spacing={2}>
-          {gameList.length != 0 ? (
+          {gameList.length !== 0 ? (
             gameList.map((game) => (
               <BoardCardMain key={game.gameNo} game={game}></BoardCardMain>
             ))

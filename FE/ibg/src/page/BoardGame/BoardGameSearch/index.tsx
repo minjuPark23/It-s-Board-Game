@@ -6,7 +6,6 @@ import BoardCardMain from "../../../component/BoardCardMain";
 import CustomSelect, { StyledOption } from "./component/CustomSelect";
 import GameFilter, { ISearchFilter } from "./component/GameFilter";
 import SkelBoardCard from "../../../component/SkelBoardCard";
-import TitleBackground from "../../../component/TitleBackground";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import TitleToolbar from "../../../component/TitleToolbar";
 
