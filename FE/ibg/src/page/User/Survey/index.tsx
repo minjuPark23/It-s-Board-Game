@@ -57,7 +57,7 @@ export default function Survey() {
     const init = async () => {
       //백앤드 완료되면 아래로 대체
       //const data = await initSurvey().then(()=>{setLoading(false)});
-      await initSurvey(userNo).then((data) => {
+      await initSurvey().then((data) => {
         setGameList(data); //gameImg, gameName, gameNo를 준다
         setLoading(false);
       });
