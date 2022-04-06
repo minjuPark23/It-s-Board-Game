@@ -9,7 +9,6 @@ import {
   Button,
   Modal,
   Stack,
-  Paper,
   Alert,
 } from "@mui/material";
 import { styled, alpha, createTheme } from "@mui/material/styles";

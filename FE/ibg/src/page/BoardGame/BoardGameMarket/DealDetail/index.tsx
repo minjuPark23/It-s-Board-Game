@@ -7,14 +7,7 @@ import {
 } from "../../../../api/deal";
 import { useParams } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import {
-  Grid,
-  Box,
-  Container,
-  Divider,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Grid, Box, Container, Divider, Typography } from "@mui/material";
 import AvatarGenerator from "../../../../component/AvatarGenerator";
 import ReviewInfo from "../../component/ReviewInfo";
 import { RootStateOrAny, useSelector } from "react-redux";
