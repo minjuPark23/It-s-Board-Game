@@ -137,11 +137,7 @@ public class RecommendApiController {
             System.out.println("아직 평점 데이터 10개가 안된다.");
             return new Result(HttpStatus.OK.value(), null);
         }
-//        List<RecommendResultResponse> collect = recommendList.stream()
-//                .map(rl -> {
-//                    boolean isLike = interestService.getIsLike(rl.getUser().getUserNo(), rl.getGame().getGameNo());
-//                    return new RecommendResultResponse(rl, isLike);
-//                }).collect(Collectors.toList());
+
         System.out.println("평점 데이터 충분해 추천 데이터 반환. "+ recommendList.size());
 
         List<Game> collect = recommendList.stream().map(r -> r.getGame()).collect(Collectors.toList());
@@ -163,16 +159,24 @@ public class RecommendApiController {
         for(Score score : scores){
             weight += score.getGame().getGameWeight();
         }
+
         weight /= scores.size();
 
-        List<Game> list = recommendService.getRecommendByWeight(userNo, weight, 30);
+        double percent = 0.3;
+
+        List<Game> list = recommendService.getRecommendByWeight(userNo, weight, 30, percent);
+        while(list.size() < 10){
+            percent += 0.1;
+            list = recommendService.getRecommendByWeight(userNo, weight, 30, percent);
+        }
+
         return getRecommendGameList(userNo, list);
     }
 
     /**
      * @author : 권오범
      * @date : 2022-03-25 오전 15:00
-     * @desc: 평가했던 게임들과 유사한 게임 추천, 반환 값 중 가장 처음 오는 게임이 유사 게임
+     * @desc: 평가했던 게임들과 유사한 게임 추천
      * */
     @GetMapping("/game/category/{userNo}")
     public Result getRecommendByCategory(@PathVariable Integer userNo) throws JsonProcessingException {
@@ -185,17 +189,17 @@ public class RecommendApiController {
         int game_no = scores.get(num).getGame().getGameNo();
 
         List<Integer> list = restapiService.requestGETAPI("/category", game_no);
+        String target = gameService.getGameByGameNo(game_no).getGameKorName();
 
         List<Game> gameList = list.stream()
                 .map(no-> {
-
                     return gameService.getGameByGameNo(no);
                 })
                 .collect(Collectors.toList());
 
         Collections.shuffle(gameList);
 
-        return getResultList(gameList, userNo);
+        return getResultList(gameList, userNo, target);
     }
 
     /**
@@ -217,10 +221,14 @@ public class RecommendApiController {
         minPlayers /= scores.size();
         maxPlayers /= scores.size();
 
-        System.out.println(minPlayers);
-        System.out.println(maxPlayers);
+        double percent = 0.3;
 
-        List<Game> list = recommendService.getRecommendByPlayer(userNo, minPlayers, maxPlayers, 30);
+        List<Game> list = recommendService.getRecommendByPlayer(userNo, maxPlayers, minPlayers, 30, percent);
+        while(list.size() < 10){
+            percent += 0.1;
+            list = recommendService.getRecommendByPlayer(userNo, maxPlayers, minPlayers, 30, percent);
+        }
+
         return getRecommendGameList(userNo, list);
     }
 
@@ -243,7 +251,12 @@ public class RecommendApiController {
         minPlayTime /= scores.size();
         maxPlayTime /= scores.size();
 
-        List<Game> list = recommendService.getRecommendByPlayTime(userNo, minPlayTime*0.5, maxPlayTime*1.5, 30);
+        double percent = 0.3;
+        List<Game> list = recommendService.getRecommendByPlayTime(userNo, maxPlayTime, minPlayTime, 30, percent);
+        while(list.size() < 10){
+            percent += 0.1;
+            list = recommendService.getRecommendByPlayTime(userNo, maxPlayTime, minPlayTime, 30, percent);
+        }
 
         return getRecommendGameList(userNo, list);
     }
@@ -264,7 +277,12 @@ public class RecommendApiController {
         }
         gameAgeAvg /= scores.size();
 
-        List<Game> list = recommendService.getRecommendByAge(userNo, gameAgeAvg, 30);
+        double percent = 0.3;
+        List<Game> list = recommendService.getRecommendByAge(userNo, gameAgeAvg, 30, percent);
+        while(list.size() < 10){
+            percent += 0.1;
+            list = recommendService.getRecommendByAge(userNo, gameAgeAvg, 30, percent);
+        }
 
         return getRecommendGameList(userNo, list);
     }
@@ -278,8 +296,12 @@ public class RecommendApiController {
     public Result getRecommendByNewbie(@PathVariable Integer userNo){
         double gameAgeWeight = gameService.getAvgWeight();
 
-        List<Game> list = recommendService.getRecommendByNewbie(userNo, gameAgeWeight, 30);
-
+        double percent = 0.3;
+        List<Game> list = recommendService.getRecommendByNewbie(userNo, gameAgeWeight, 30, percent);
+        while(list.size() < 10){
+            percent += 0.1;
+            list = recommendService.getRecommendByNewbie(userNo, gameAgeWeight, 30, percent);
+        }
         return getRecommendGameList(userNo, list);
     }
 
