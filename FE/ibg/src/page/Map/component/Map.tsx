@@ -8,32 +8,26 @@ interface Location {
 
 export default function Map({ long, lat, addr }: Location) {
   const { kakao } = window;
-  // 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
-  var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
- // const [myAddress, setMyAddress] = useState("");
- // const [loading, setLoading] = useState(false);
+  var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 }); //인포윈도우
 
   useEffect(() => {
-   // setMyAddress(addr);
+    // setMyAddress(addr);
     const container = document.getElementById("myMap");
     const options = {
       center: new kakao.maps.LatLng(lat, long),
-      level: 25,
+      level: 5,
+      scrollwheel: false,
     };
 
-  //  var locPosition = new kakao.maps.LatLng(lat, long); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
     const map = new kakao.maps.Map(container, options); //맵 뿌리기
-    // 이동할 위도 경도 위치를 생성합니다
     map.setCenter(new kakao.maps.LatLng(lat, long));
-
     const ps = new kakao.maps.services.Places(); //키워드 서치용
+    ps.keywordSearch(addr + "보드게임", placesSearchCB);
 
-    // console.log(locPosition);
-    ps.keywordSearch(addr + "보드게임", placesSearchCB); //이쪽이 본체였음
+    var zoomControl = new kakao.maps.ZoomControl(); // 줌 컨트롤을 생성
+    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
     async function placesSearchCB(data: any, status: number) {
-      //setMyAddress(addr);
-      //  console.log("child: " + addr);
       if (status === kakao.maps.services.Status.OK) {
         let bounds = new kakao.maps.LatLngBounds();
         for (let i = 0; i < data.length; i++) {
@@ -63,7 +57,10 @@ export default function Map({ long, lat, addr }: Location) {
         position: new kakao.maps.LatLng(place.y, place.x),
         image: markerImage, // 마커 이미지
       });
-
+      //인포윈도우 닫는 이벤트 추가
+      kakao.maps.event.addListener(map, "click", function () {
+        infowindow.close();
+      });
       // 마커에 클릭이벤트를 등록
       kakao.maps.event.addListener(marker, "click", function () {
         // 마커를 클릭하면 장소명이 인포윈도우에 표출
@@ -77,6 +74,15 @@ export default function Map({ long, lat, addr }: Location) {
             "</p>" +
             '<p style="font-size:8px;">' +
             place.address_name +
+            "</p>" +
+            '<p style="font-size:8px;">' +
+            '   <a class="title" href="' +
+            place.place_url +
+            '" target="_blank" title="' +
+            place.place_name +
+            '">' +
+            place.place_name +
+            "</a>" +
             "</p>" +
             "</div>"
         );
