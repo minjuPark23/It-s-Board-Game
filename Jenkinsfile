@@ -35,6 +35,7 @@ pipeline {
 		}
 		stage('Springboot Build') {
 			steps {
+				sh 'docker cp aws.yml ./BE/src/main/resources'
 				dir('./BE'){
 					sh './gradlew build'
 				}
