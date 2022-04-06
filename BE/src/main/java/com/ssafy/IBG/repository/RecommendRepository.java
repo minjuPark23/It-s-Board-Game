@@ -86,9 +86,7 @@ public class RecommendRepository {
                 .getResultList();
     }
 
-    public List<Game> findRecommendByWeight(int userNo, double weight, int limit) {
-        double positiveRange = weight * 1.5d;
-        double negativeRange = weight * 0.5d;
+    public List<Game> findRecommendByWeight(int userNo, double positiveRange, double negativeRange, int limit) {
         return em.createQuery("select g from Game g where g.gameTotalScore < :positiveRange and g.gameTotalScore > :negativeRange order by g.gameTotalScore desc", Game.class)
                 .setParameter("positiveRange", positiveRange)
                 .setParameter("negativeRange", negativeRange)
@@ -96,7 +94,7 @@ public class RecommendRepository {
                 .getResultList();
     }
 
-    public List<Game> findRecommendByPlayer(Integer userNo, int minPlayers, int maxPlayers, int limit) {
+    public List<Game> findRecommendByPlayer(Integer userNo, int maxPlayers, int minPlayers, int limit) {
         return em.createQuery("select g from Game g where g.gameMinPlayer >= :minPlayers and g.gameMaxPlayer <= :maxPlayers order by g.gameTotalScore desc", Game.class)
                 .setParameter("minPlayers", minPlayers)
                 .setParameter("maxPlayers", maxPlayers)
@@ -104,7 +102,7 @@ public class RecommendRepository {
                 .getResultList();
     }
 
-    public List<Game> findRecommendByPlayTime(Integer userNo, int minPlayTime, int maxPlayTime, int limit) {
+    public List<Game> findRecommendByPlayTime(Integer userNo, int maxPlayTime, int minPlayTime, int limit) {
         return em.createQuery("select g from Game g where g.gameMinTime >= :minPlayTime and g.gameMaxTime <= :maxPlayTime order by g.gameTotalScore desc", Game.class)
                 .setParameter("minPlayTime", minPlayTime)
                 .setParameter("maxPlayTime", maxPlayTime)
@@ -112,18 +110,15 @@ public class RecommendRepository {
                 .getResultList();
     }
 
-    public List<Game> findRecommendByAge(Integer userNo, double gameAgeAvg, int limit) {
-        double positiveRange = gameAgeAvg * 1.2d;
-        double negativeRange = gameAgeAvg * 0.8d;
+    public List<Game> findRecommendByAge(Integer userNo, int positiveRange, int negativeRange, int limit) {
         return em.createQuery("select g from Game g where g.gameAge <= :positiveRange and g.gameAge >= :negativeRange order by g.gameTotalScore desc", Game.class)
-                .setParameter("positiveRange", (int)Math.round(positiveRange))
-                .setParameter("negativeRange", (int)Math.round(negativeRange))
+                .setParameter("positiveRange", positiveRange)
+                .setParameter("negativeRange", negativeRange)
                 .setMaxResults(limit)
                 .getResultList();
     }
 
     public List<Game> findRecommendByNewbie(Integer userNo, double gameAgeWeight, int limit) {
-        gameAgeWeight = gameAgeWeight * 0.2d;
         return em.createQuery("select g from Game g where g.gameWeight <= :gameAgeWeight order by g.gameTotalScore desc", Game.class)
                 .setParameter("gameAgeWeight", gameAgeWeight)
                 .setMaxResults(limit)
