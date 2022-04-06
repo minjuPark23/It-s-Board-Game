@@ -179,6 +179,7 @@ export default function NavBar() {
 
   // 페이지 이동
   const movePage = (page: string) => {
+    handleCloseUserMenu();
     navigate(page);
   };
 
