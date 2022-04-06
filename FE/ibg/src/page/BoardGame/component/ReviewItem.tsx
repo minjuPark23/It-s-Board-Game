@@ -30,7 +30,7 @@ export default function ReviewItem(props: {
           >
             {props.review.userNick}
           </Typography>
-          {props.review.scoreRating && (
+          {typeof props.review.scoreRating === "number" && (
             <Typography
               sx={{
                 display: "flex",
@@ -42,7 +42,8 @@ export default function ReviewItem(props: {
               <StarIcon color="warning" /> {props.review.scoreRating}
             </Typography>
           )}
-          {props.review.userNick === props.userNick && <Seller>판매자</Seller>}
+          {typeof props.review.scoreRating !== "number" &&
+            props.review.userNick === props.userNick && <Seller>판매자</Seller>}
         </Box>
         <Typography
           sx={{ fontSize: { xs: 12, md: 15 }, mt: 0.7, whiteSpace: "pre-line" }}
