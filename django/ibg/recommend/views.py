@@ -24,6 +24,7 @@ from rest_framework import status
 
 
 class UserView(viewsets.ModelViewSet):
+
     """
          @author : 박민주
          @date : 2022-04-4 오전 16:00
@@ -31,7 +32,7 @@ class UserView(viewsets.ModelViewSet):
     """
 
     @api_view(['GET'])
-    def recommend_by_desc_similartiy(self, game_no):
+    def recommend_by_desc_similarity(self, game_no):
         print("유저가 한 게임 중 비슷한 유형별")
         print(game_no)
         df_games = Game.objects.all()
@@ -92,22 +93,17 @@ class UserView(viewsets.ModelViewSet):
 
     @api_view(['GET'])
     def recommend_by_score_on_score_count(request):
-        print("평점수 대비 평점이 높은 것: 인기순")
         df_games = Game.objects.all()
         df_games = pd.DataFrame(df_games.values("game_no", "game_total_score"))
-        # print(df_games)
-        df_scores = Score.objects.all()
-        df_scores = pd.DataFrame(df_scores.values("user_no", "game_no", "score_rating"))
-        # print(df_scores)
+        df_scores = Score.objects.all().values("game_no", "score_rating")
+        df_scores = pd.DataFrame(df_scores)
 
-        df_games['score_count'] = df_scores.groupby('game_no')['user_no'].sum()
+        df_games['score_count'] = df_scores.groupby('game_no')['score_rating'].count()
 
         C = df_games['game_total_score'].mean()
-        # print("C ", C)
 
         # 게임이 차트에 오르려면 목록에 있는 게임의 투표수가 90%이 되어야 한다.
         m = df_games['score_count'].quantile(0.9)
-        # print("m ", m)
 
         q_games = df_games.copy().loc[df_games['score_count'] >= m]
 
@@ -133,36 +129,28 @@ class UserView(viewsets.ModelViewSet):
 
     @api_view(['GET'])
     def recommend_by_predicted_score_for_lasso(self, user_no):
-        print("평점 추천3")
         Recommend.objects.filter(user_no=user_no).delete()
 
         games = Game.objects.all()
         game_list = pd.DataFrame(games.values("game_no", "game_category")).set_index('game_no')
-        # print(game_list)
         categorys = game_list['game_category'].str.get_dummies("|")
-        # print(categorys)
 
         scores = Score.objects.filter(user_no=user_no)
         user_score_list = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating")).set_index(
             'score_no')
-        # print("user_score_list",user_score_list)
         user_score_list = user_score_list.merge(categorys, left_on='game_no', right_index=True)
 
-        model = Lasso(alpha=0.003)
+        model = Lasso(alpha=0.5)
         X = user_score_list[categorys.columns]
         y = user_score_list['score_rating']
         model.fit(X, y)
         user_profile = [model.intercept_, *model.coef_]
-        # print(user_profile)
 
         recommendations = game_list[~game_list.index.isin(user_score_list['game_no'])]
         recommend_category = recommendations['game_category'].str.get_dummies("|")
-        # print(recommend_category)
         predict = model.predict(recommend_category)
-        # print(predict)
 
         recommendations['predict'] = predict
-        # print(recommendations)
 
         findUser = get_object_or_404(User, pk=user_no)
         for idx, row in recommendations.iterrows():
@@ -191,18 +179,15 @@ class UserView(viewsets.ModelViewSet):
         score_list = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating"))
 
         user_game_score = pd.merge(score_list, game_list, on="game_no")
-        # print(user_game_score)
 
         # 사용자의 각 영화 평점
         user_game_score = user_game_score.pivot_table('score_rating', index='user_no', columns="game_no")
-        # print(user_game_score)
 
         df_user_game_score = user_game_score.fillna(0)
 
         matrix = df_user_game_score.to_numpy()
         # 총 유저 평점의 평균
         user_score_mean = np.mean(matrix, axis=1)
-        # print(user_score_mean)
 
         matrix_user_mean = matrix - user_score_mean.reshape(-1, 1)
 
@@ -262,12 +247,10 @@ class UserView(viewsets.ModelViewSet):
 
         games = Game.objects.all()
         game_list = pd.DataFrame(games.values("game_no", "game_category")).set_index("game_no")
-        # print(game_list.loc[52])
         game_list['game_category'] = game_list['game_category'].fillna("")
         category_list = list(game_list['game_category'].apply(lambda x: x.split("|")))
 
         category_dummies = game_list['game_category'].str.get_dummies(sep="|")
-        # print(category_dummies)
         category_dummies = category_dummies.replace(0, np.nan)
 
         scores = Score.objects.filter(user_no=user_no)
@@ -276,37 +259,23 @@ class UserView(viewsets.ModelViewSet):
         user_predict_list = score_list.merge(category_dummies, left_on="game_no", right_on="game_no")
         user_predict_list = user_predict_list.replace(0, np.nan)
         # category_dummies에서 해당 game_no 삭제하기
-        # print("유저의 게임 목록을 이용한 예측값 적용 1: ")
-        # print(user_predict_list)
 
         for cols in category_dummies.columns:
             user_predict_list[cols] = user_predict_list[cols] * user_predict_list['score_rating']
-        # print(user_predict_list)
 
         user_profile = user_predict_list[category_dummies.columns].mean()
-        # print("해당 카테고리에 대한 유저의 평균값 프로필: ")
-        # print(user_profile)
 
         # 모든 게임에 대해서 predict 구하기
-        # print(category_dummies)
 
         # 이미 한 게임은 지우자
         user_del_game_list = score_list['game_no']
-        # print("지울 게임 목록: ")
-        # print(user_del_game_list)
-
-        # print(category_dummies)
 
         category_dummies.drop(user_del_game_list, axis=0, inplace=True)
-        # print(category_dummies)
         game_list.drop(user_del_game_list, axis=0, inplace=True)
-        # print(game_list)
 
         # category_dummies에서 유저가 사용한 게임 제거하기
         predict = []
         for idx, row in category_dummies.iterrows():
-            # print(idx, row)
-            # print(row[category_dummies.columns])
             predict.append((user_profile * row[category_dummies.columns]).mean())
 
         game_list['recommend_rating'] = predict
@@ -316,10 +285,8 @@ class UserView(viewsets.ModelViewSet):
 
         findUser = get_object_or_404(User, pk=user_no)
         for idx, row in predict.iterrows():
-            # print(idx, row['recommend_rating'])
             findGame = get_object_or_404(Game, pk=idx)
             r = Recommend(game_no=findGame, user_no=findUser, recommend_rating=row['recommend_rating']);
-            # print(r)
             r.save()
 
         # 유저별 추천 결과를 DB에 넣고 스프링이 DB에 접근
@@ -345,7 +312,6 @@ class UserView(viewsets.ModelViewSet):
 
     @api_view(['GET'])
     def recommend_by_category_similartiy(request, game_no):
-        # print(game_no)
         scores = Score.objects.all()
         score_data = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating"))
 
@@ -371,15 +337,11 @@ class UserView(viewsets.ModelViewSet):
         game_data['game_category'] = game_data['game_category'].apply(
             lambda x: x.replace('|', '/').replace(' ', '').replace('/', ' '))
 
-        # print(game_data)
-
         count_vector = CountVectorizer(ngram_range=(1, 3))
         c_vector_category = count_vector.fit_transform(game_data['game_category'])
         category_c_sim = cosine_similarity(c_vector_category, c_vector_category).argsort()[:, ::-1]
 
         game = Game.objects.get(game_no=game_no)
-        # print(type(game.game_name))
-        # print(game.game_name)
         game_name = game.game_name
 
         target_game_index = game_data[game_data['game_name'] == game_name].index.values
