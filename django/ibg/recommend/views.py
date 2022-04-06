@@ -17,6 +17,7 @@ from sklearn.decomposition import TruncatedSVD
 from scipy.sparse.linalg import svds
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.linear_model import Lasso
 import logging
 from rest_framework import status
 
@@ -123,6 +124,51 @@ class UserView(viewsets.ModelViewSet):
 
     """
          @author : 박민주
+         @date : 2022-04-06 오전 01:00
+         @desc: 유저가 플레이하지 않은 게임들의 평점을 예측하여 추천 => LinearRegression Lasso 알고리즘
+    """
+    @api_view(['GET'])
+    def recommend_by_predicted_score_for_lasso(self, user_no):
+        print("평점 추천3")
+        Recommend.objects.filter(user_no=user_no).delete()
+
+        games = Game.objects.all()
+        game_list = pd.DataFrame(games.values("game_no", "game_category")).set_index('game_no')
+        # print(game_list)
+        categorys = game_list['game_category'].str.get_dummies("|")
+        # print(categorys)
+
+        scores = Score.objects.filter(user_no=user_no)
+        user_score_list = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating")).set_index('score_no')
+        # print("user_score_list",user_score_list)
+        user_score_list = user_score_list.merge(categorys, left_on='game_no', right_index=True)
+
+        model = Lasso(alpha=0.003)
+        X = user_score_list[categorys.columns]
+        y = user_score_list['score_rating']
+        model.fit(X, y)
+        user_profile = [model.intercept_, *model.coef_]
+        # print(user_profile)
+
+        recommendations = game_list[~game_list.index.isin(user_score_list['game_no'])]
+        recommend_category = recommendations['game_category'].str.get_dummies("|")
+        # print(recommend_category)
+        predict = model.predict(recommend_category)
+        # print(predict)
+
+        recommendations['predict'] = predict
+        # print(recommendations)
+
+        findUser = get_object_or_404(User, pk=user_no)
+        for idx, row in recommendations.iterrows():
+            findGame = get_object_or_404(Game, pk=idx)
+            r = Recommend(game_no=findGame, user_no=findUser, recommend_rating=row['predict']);
+            r.save()
+
+        return Response()
+
+    """
+         @author : 박민주
          @date : 2022-04-4 오전 16:00
          @desc: 유저가 플레이하지 않은 게임들의 평점을 예측하여 추천 => SVD 알고리즘
     """
@@ -197,7 +243,7 @@ class UserView(viewsets.ModelViewSet):
     """
          @author : 박민주
          @date : 2022-04-4 오전 16:00
-         @desc: 유저가 플레이하지 않은 게임들의 평점을 예측하여 추천 => KNN 알고리즘
+         @desc: 유저가 플레이하지 않은 게임들의 평점을 예측하여 추천 => 카테고리별 점수 평균
     """
     @api_view(['GET'])
     def recommend_by_predicted_score_for_knn(request, user_no):
