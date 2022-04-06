@@ -3,11 +3,13 @@ package com.ssafy.IBG.api;
 import com.ssafy.IBG.api.deal.*;
 import com.ssafy.IBG.api.dto.Result;
 import com.ssafy.IBG.domain.Deal;
+import com.ssafy.IBG.domain.DealReview;
 import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.User;
 import com.ssafy.IBG.service.DealService;
 import com.ssafy.IBG.service.GameService;
 import com.ssafy.IBG.service.UserService;
+import com.ssafy.IBG.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,7 @@ public class DealApiController {
     private final GameService gameService;
 
     private final DealUtil dealUtil;
+    private final S3Uploader s3Uploader;
 
     /**
      * @author : 곽현준
@@ -77,24 +80,7 @@ public class DealApiController {
                 return new Result(HttpStatus.FORBIDDEN.value());
             }
 
-            // 저장경로 : BE\image\yyyyMMdd\HHmmss\storedFileName
-            Date date = new Date();
-            String dateStr = new SimpleDateFormat("yyyyMMdd").format(date);
-            String timeStr = new SimpleDateFormat("HHmmss").format(date);
-
-            // 날짜 경로 지정, 경로 없는 경우 폴더 만듦
-            String filePath = System.getProperty("user.dir") + File.separator + "image" + File.separator + dateStr;
-            dealUtil.makeDir(filePath);
-
-            // 시간 경로 지정, 경로 없는 경우 폴더 만듦
-            filePath += File.separator + timeStr;
-            dealUtil.makeDir(filePath);
-
-            // 해당 파일 객체 생성
-            File savedFile = new File(filePath + File.separator + storedFileName);
-
-            // 파일 저장
-            file.transferTo(savedFile);
+            String filePath = s3Uploader.upload(file, storedFileName);
 
             // 각 항목 Dto 저장
             deal.setDealFileName(originFile);
@@ -102,6 +88,7 @@ public class DealApiController {
             deal.setDealPath(filePath);
 
         }catch (Exception e) { // 저장 위치 찾지 못하는 경우 92line에서 오류 발생, 417에러 return함.
+            e.printStackTrace();
             return new Result(HttpStatus.EXPECTATION_FAILED.value(), e);
         }
 
@@ -125,7 +112,9 @@ public class DealApiController {
                 .map(deal -> new DealResponse(
                         deal.getDealNo(),
                         deal.getUser().getUserNo(),
+                        deal.getUser().getUserNick(),
                         deal.getGame().getGameNo(),
+                        deal.getGame().getGameName(),
                         deal.getDealTitle(),
                         deal.getDealContent(),
                         deal.getDealFileName(),
@@ -152,7 +141,9 @@ public class DealApiController {
                 .map(deal -> new DealResponse(
                         deal.getDealNo(),
                         deal.getUser().getUserNo(),
+                        deal.getUser().getUserNick(),
                         deal.getGame().getGameNo(),
+                        deal.getGame().getGameName(),
                         deal.getDealTitle(),
                         deal.getDealContent(),
                         deal.getDealFileName(),
@@ -178,7 +169,9 @@ public class DealApiController {
         DealResponse dealResponse = new DealResponse(
                 deal.getDealNo(),
                 deal.getUser().getUserNo(),
+                deal.getUser().getUserNick(),
                 deal.getGame().getGameNo(),
+                deal.getGame().getGameName(),
                 deal.getDealTitle(),
                 deal.getDealContent(),
                 deal.getDealFileName(),
@@ -201,5 +194,44 @@ public class DealApiController {
         Deal deal = dealService.updateDealStatus(dealUpdateRequest.getDealNo());
         if(deal == null) return new Result(HttpStatus.NO_CONTENT.value());
         return new Result(HttpStatus.OK.value());
+    }
+
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-05 오후 4:04
+     * @desc : 댓글 생성
+    **/
+    @PostMapping("/deal/review")
+    public Result setDealReview(@RequestBody DealReviewRequest request) {
+
+        DealReview dealReview = new DealReview();
+
+        Deal deal = dealService.getDealDetailByDealNo(request.getDealNo());
+        User user = userService.getUserByUserNo(request.getUserNo());
+
+        dealReview.setDeal(deal);
+        dealReview.setUser(user);
+        dealReview.setDealReviewContent(request.getDealReviewContent());
+
+        boolean isSaved = dealService.setDealReview(dealReview);
+        if(!isSaved) return new Result(HttpStatus.NO_CONTENT.value());
+
+        return new Result(HttpStatus.OK.value());
+    }
+    
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-05 오후 4:56
+     * @desc : 거래번호로 댓글 가져오기
+    **/
+    @GetMapping("/deal/review/{dealNo}")
+    public Result getDealReviewByDealNo(@PathVariable int dealNo) {
+
+        List<DealReview> dealReviewList = dealService.getDealReviewByDealNo(dealNo);
+
+        List<DealReviewResponse> collect = dealReviewList.stream()
+                .map(dealReview -> new DealReviewResponse(dealReview))
+                .collect(Collectors.toList());
+        return new Result(HttpStatus.OK.value(), collect);
     }
 }

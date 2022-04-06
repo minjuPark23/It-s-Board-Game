@@ -1,14 +1,12 @@
 package com.ssafy.IBG.repository;
 
-import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Score;
-import com.ssafy.IBG.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -44,4 +42,25 @@ public class ScoreRepository {
         }
     }
 
+    /**
+    * @author : 박민주
+    * @date : 2022-04-01 오후 3:59
+    **/
+    public int findScoreCntByUserNo(Integer userNo){
+        return em.createQuery("select s from Score s where s.user.userNo = :userNo", Score.class)
+                .setParameter("userNo", userNo)
+                .getResultList().size();
+    }
+
+    public List<Score> findScoreByUserNo(Integer userNo) {
+        return em.createQuery("select s from Score s where s.user.userNo = :userNo", Score.class)
+                .setParameter("userNo", userNo)
+                .getResultList();
+    }
+
+    public List<Score> findScoreListByUserNoOrderByRating(Integer userNo){
+        return em.createQuery("select s from Score s where s.user.userNo =: userNo order by s.scoreRating desc", Score.class)
+                .setParameter("userNo", userNo)
+                .getResultList();
+    }
 }
