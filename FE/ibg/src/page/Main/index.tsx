@@ -40,6 +40,7 @@ export default function Main() {
   const [scoreGameList, setScoreGameList] = useState<IGame[]>([]);
 
   const [userLoading, setUserLoading] = useState<boolean>(userNo);
+  const [newbieLoading, setNewbieLoading] = useState<boolean>(true);
   const [reviewLoading, setReviewLoading] = useState<boolean>(true);
   const [scoreLoading, setScoreLoading] = useState<boolean>(true);
 
@@ -51,17 +52,27 @@ export default function Main() {
     if (userNo) {
       getRecommByUser(userNo)
         .then((data) => {
-          if (data.code === 200) {
-            if (data.data === null) getNewbieGameList();
-            else {
-              setUserGameList(data.data);
-              setUserLoading(false);
-            }
+          if (data.code === 200 && data.data) {
+            setUserGameList(data.data);
           }
+          setUserLoading(false);
         })
         .catch(() => {
           setUserLoading(false);
         });
+    }
+    // 초보자 추천, 공통이지만 맞춤 추천이 없을 경우 맨 위에 있어야 함
+    getRecommByNewbie(userNo)
+      .then((data) => {
+        if (data.code === 200) {
+          setNewbieGameList(data.data);
+          setNewbieLoading(false);
+        }
+      })
+      .catch(() => {
+        setNewbieLoading(false);
+      });
+    if (userNo) {
       // 조금 느림(3)
       getRecommByDesc(userNo)
         .then((data) => {
@@ -109,7 +120,6 @@ export default function Main() {
         .catch(() => {});
     } else {
       setUserGameList([]);
-      setNewbieGameList([]);
       setDescGameList([]);
       setCategoryGameList([]);
       setWeightGameList([]);
@@ -118,6 +128,7 @@ export default function Main() {
       setAgeGameList([]);
     }
     // 공통
+
     getRecommByReviews(userNo)
       .then((data) => {
         if (data.code === 200) {
@@ -140,20 +151,6 @@ export default function Main() {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userNo]);
-
-  // 초보자를 위한 게임 리스트 가져오기(평점데이터가 10개 미만일 경우(user추천 response = null)에만 실행)
-  const getNewbieGameList = () => {
-    getRecommByNewbie(userNo)
-      .then((data) => {
-        if (data.code === 200) {
-          setNewbieGameList(data.data);
-          setUserLoading(false);
-        }
-      })
-      .catch(() => {
-        setUserLoading(false);
-      });
-  };
 
   // 페이지 이동
   const movePage = (page: string) => {
@@ -227,19 +224,14 @@ export default function Main() {
       {userLoading ? (
         <>
           <SkelTheme />
-          {/* <SkelTheme /> */}
+          <SkelTheme />
         </>
       ) : (
         <>
           {userGameList.length > 0 && (
             <ThemeList title="나의 맞춤 추천 게임" gameList={userGameList} />
           )}
-          {newbieGameList.length > 0 && (
-            <ThemeList
-              title="초보자라면 이 게임 어때요?"
-              gameList={newbieGameList}
-            />
-          )}
+
           {weightGameList.length > 0 && (
             <ThemeList
               title="내가 좋아하는 난이도의 게임"
@@ -266,7 +258,7 @@ export default function Main() {
           )}
           {descGameList.length > 0 && (
             <ThemeList
-              title={`'${similarGame}'와/과 비슷한 게임 추천`}
+              title={`'${similarGame}'와/과 비슷한 유형의 게임 추천`}
               gameList={descGameList}
             />
           )}
@@ -278,7 +270,17 @@ export default function Main() {
           )}
         </>
       )}
-
+      {newbieLoading ? (
+        <SkelTheme />
+      ) : (
+        userGameList.length === 0 &&
+        newbieGameList.length > 0 && (
+          <ThemeList
+            title="초보자라면 이 게임 어때요?"
+            gameList={newbieGameList}
+          />
+        )
+      )}
       {scoreLoading ? (
         <SkelTheme />
       ) : (
