@@ -35,7 +35,7 @@ pipeline {
 		}
 		stage('Springboot Build') {
 			steps {
-				sh 'docker cp aws.yml springboot:/var/jenkins_home/workspace/temp/BE/src/main/resources'
+				sh 'docker cp aws.yml jenkins:/var/jenkins_home/workspace/temp/BE/src/main/resources'
 				dir('./BE'){
 					sh './gradlew build'
 				}
