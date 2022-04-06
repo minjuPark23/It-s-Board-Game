@@ -9,11 +9,16 @@ async function getGameDetail(gameNo: number, userNo: number) {
 }
 
 // 게임 이름으로 검색
-async function SearchByName(searchName: string, userNo: number) {
+async function SearchByName(
+  searchName: string,
+  userNo: number,
+  signal: AbortSignal
+) {
   return (
     await api.post(`/search/auto`, {
-      searchName: searchName,
-      userNo: userNo,
+      searchName,
+      userNo,
+      signal,
     })
   ).data.data;
 }

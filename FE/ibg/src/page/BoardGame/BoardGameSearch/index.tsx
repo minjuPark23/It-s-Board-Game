@@ -19,11 +19,17 @@ export default function BoardGameSearch() {
 
   // 페이지 접속 시 1회 실행
   useEffect(() => {
-    SearchByName("", userNo).then((data) => {
+    const controller = new AbortController();
+
+    SearchByName("", userNo, controller.signal).then((data) => {
       setInitGameList(data);
       setGameList(data);
       setLoading(false);
     });
+
+    return () => {
+      controller.abort();
+    };
   }, [userNo]);
 
   // sortingOpt이 변경되면 실행
