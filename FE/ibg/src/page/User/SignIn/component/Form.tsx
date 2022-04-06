@@ -110,7 +110,6 @@ function Form({ sendDataToParent }: User) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                autoFocus
               />
             </Grid>
           </Grid>
