@@ -1,6 +1,6 @@
 import Form from "./component/Form";
 import { Grid } from "@mui/material/";
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { login, userInfo } from "../../../api/user";
 import jwtDecode from "jwt-decode";
 import { useDispatch } from "react-redux";
@@ -30,26 +30,29 @@ export default function SignIn() {
     });
   };
 
+  function randomColor() {
+    let hex = Math.floor(Math.random() * 0xffffff);
+    let color = "#" + hex.toString(16);
+    return color;
+  }
   //api 연결
   const callLoginApi = async (email: string, password: string) => {
     sessionStorage.removeItem("accessToken");
     await login(email, password).then((response) => {
       if (response.data.code === 200) {
-        // alert(response.data.code);
+        //토큰 및 네비바 배경 색 세션스토리지에 저장
         let token = response.headers.authorization;
         let decode_token = jwtDecode<MyToken>(token);
         sessionStorage.setItem("accessToken", token);
+        sessionStorage.setItem("avatarColor", randomColor());
 
-        //userNO : alert(decode_token.userNo);
         setLoading(true);
         userInfo(decode_token.userNo)
           .then((response) => {
-            console.log(response);
+            //console.log(response);
             let userNick = response.userNick;
             let userNo = response.userNo;
-            //alert("dispatch");
             init(email, password, userNick, userNo);
-            // alert("navigate");
             navigate("/");
             setLoading(false);
           })
@@ -72,10 +75,12 @@ export default function SignIn() {
         justifyContent="center"
         style={{ minHeight: "90vh" }}
       >
-        {loading ? ("loading"):(
-        <Grid item xs={2} sx={{ flexGrow: 1, m: { xs: 4, md: 0 } }}>
-          <Form sendDataToParent={callLoginApi} />
-        </Grid>
+        {loading ? (
+          "loading"
+        ) : (
+          <Grid item xs={2} sx={{ flexGrow: 1, m: { xs: 4, md: 0 } }}>
+            <Form sendDataToParent={callLoginApi} />
+          </Grid>
         )}
       </Grid>
     </>

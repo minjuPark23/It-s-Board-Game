@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 //컴포넌트
 import BoardCardMain from "./component/BoardCardSurvey";
 import { Button, Box, Grid, Container, Typography } from "@mui/material";
@@ -8,7 +8,8 @@ import ConfirmDialog from "./component/ConfirmDialog";
 import { initSurvey } from "../../../api/user";
 //네비게이션
 import { useNavigate } from "react-router-dom";
-import { RootStateOrAny, useSelector } from "react-redux";
+//스캘래톤로더
+import SkeletonLoader from "./component/SkeletonCardSurvey";
 // Game 객체
 export interface Game {
   gameNo: number;
@@ -25,11 +26,9 @@ export default function Survey() {
   const [gameList, setGameList] = useState<Game[]>([]);
   const [count, setCount] = useState(0);
   const [ratedGame] = useState<number[]>([]);
-  const [width] = useState(window.innerWidth);
+  const [width] = useState(window.innerWidth); //width
   const [open, setOpen] = useState(false); //modal
-  const [userNo] = useState(
-    useSelector((state: RootStateOrAny) => state.user.userNo)
-  ); //modal
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   // function to handle modal open
@@ -51,11 +50,13 @@ export default function Survey() {
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
     const init = async () => {
-      const data = await initSurvey(userNo);
-      setGameList(data); //gameImg, gameName, gameNo를 준다
+      await initSurvey().then((data) => {
+        setGameList(data); //gameImg, gameName, gameNo를 준다
+        setLoading(false);
+      });
     };
     init();
-  }, [userNo]);
+  }, []);
 
   // count 업데이트하는 method
   const countHandler = (ratedGameNo: number, score: number) => {
@@ -88,7 +89,7 @@ export default function Survey() {
         spacing={0}
         direction="column"
         alignItems="center"
-        sx={{ mt: { xs: 1, sm: 5, md: 8 } }}
+        sx={{ mt: { xs: 5, sm: 5, md: 20 } }}
       >
         <Box sx={{ width: width < 600 ? "90%" : "33%" }}>
           <WelcomeStepper value="1" />
@@ -104,13 +105,15 @@ export default function Survey() {
       >
         <Container style={{ marginTop: 20, padding: 10 }}>
           <Grid container spacing={2}>
-            {gameList.map((game) => (
-              <BoardCardMain
-                key={game.gameNo}
-                game={game}
-                parentCallback={countHandler}
-              ></BoardCardMain>
-            ))}
+            {loading
+              ? gameList.map(() => <SkeletonLoader />)
+              : gameList.map((game) => (
+                  <BoardCardMain
+                    key={game.gameNo}
+                    game={game}
+                    parentCallback={countHandler}
+                  ></BoardCardMain>
+                ))}
           </Grid>
           <Box sx={{ mb: 15 }} />
         </Container>

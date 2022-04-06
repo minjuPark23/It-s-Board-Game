@@ -1,40 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getGameDetail } from "../../../api/game";
-import { getReviewList } from "../../../api/review";
-import GameInfo from "./component/GameInfo";
-import ReviewInfo from "./component/ReviewInfo";
-import PageNotFound from "../../../component/PageNotFound";
-import { Game } from "../../Main";
-import { Container, Divider } from "@mui/material";
 import { RootStateOrAny, useSelector } from "react-redux";
+import { getGameDetail } from "../../../api/game";
+import { addReview, getReviewList } from "../../../api/review";
+import GameInfo from "./component/GameInfo";
+import ReviewInfo from "../component/ReviewInfo";
+import PageNotFound from "../../../component/PageNotFound";
 import SkelGameInfo from "./component/SkelGameInfo";
-
-export interface GameDetail extends Game {
-  gameNameKr: string;
-  gameMinTime: number;
-  gameMaxTime: number;
-  gameYear: number;
-  gameWeight: number;
-  gameAge: number;
-  gameDesc: string;
-  gameKorDesc: string;
-  myScore: number;
-}
-
-export interface Review {
-  reviewNo: number;
-  scoreRating: number;
-  userNick: string;
-  reviewContent: string;
-  reviewReg: string;
-}
+import { IReview } from "../../../types/IReview";
+import { Container, Divider } from "@mui/material";
+import { IGameDetail } from "../../../types/IGame";
 
 export default function BoardGameDetail() {
   const gameNo = Number(useParams().no);
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
-  const [game, setGame] = useState<GameDetail | null>(null);
-  const [reviewList, setReviewList] = useState<Review[]>([]);
+  const [game, setGame] = useState<IGameDetail | null>(null);
+  const [reviewList, setReviewList] = useState<IReview[]>([]);
   const [loading, setLoading] = useState(true);
 
   // gameNo, userNo를 이용해서 게임 상세 정보 불러오기
@@ -50,6 +31,14 @@ export default function BoardGameDetail() {
       });
   }, [gameNo, userNo]);
 
+  const registerReview = (content: string) => {
+    addReview(gameNo, userNo, content).then((data) => {
+      if (data.code === 200) {
+        refreshReview();
+      }
+    });
+  };
+
   const refreshReview = () => {
     getReviewList(gameNo).then((data) => {
       setReviewList(data);
@@ -57,7 +46,7 @@ export default function BoardGameDetail() {
   };
 
   return (
-    <Container>
+    <Container sx={{ mt: 10 }}>
       {loading ? (
         <SkelGameInfo />
       ) : game ? (
@@ -66,10 +55,10 @@ export default function BoardGameDetail() {
           <Divider />
 
           <ReviewInfo
+            title="리뷰"
             reviewList={reviewList}
-            gameNo={gameNo}
             userNo={userNo}
-            addCallback={refreshReview}
+            addCallback={registerReview}
           />
         </>
       ) : (

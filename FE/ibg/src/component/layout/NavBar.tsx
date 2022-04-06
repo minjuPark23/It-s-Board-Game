@@ -31,8 +31,9 @@ import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import LoginIcon from "@mui/icons-material/Login";
 import Logout from "@mui/icons-material/Logout";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+// import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import MapIcon from "@mui/icons-material/Map";
+import { Typography } from "@mui/material";
 
 // Nav 항목 - link가 존재하면 페이지 이동, method가 존재하면 해당 함수 실행(handleNavMethod 추가 필요)
 const pages = [
@@ -46,18 +47,21 @@ const userNav = [
     icon: <FavoriteBorderIcon />,
     link: "/mygames",
   },
-  {
-    label: "채팅",
-    icon: <ChatBubbleOutlineOutlinedIcon />,
-    method: "",
-  },
+  // {
+  //   label: "채팅",
+  //   icon: <ChatBubbleOutlineOutlinedIcon />,
+  //   method: "",
+  // },
   { label: "로그아웃", icon: <Logout />, method: "logout" },
 ];
 
-const StyledAppBar = styled(AppBar)(() => ({
-  position: "static",
-  backgroundColor: "transparent",
-  boxShadow: "rgba(33, 35, 38, 0.1) 0px 10px 10px -10px",
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  position: "fixed",
+  //backgroundColor: "error",
+  backgroundColor: theme.palette.warning.main,
+  //boxShadow: "rgba(33, 35, 38, 0.1) 0px 10px 10px -10px",
+  boxShadow: "rgba(33, 35, 38, 0.1) 0px 0px 0px 0px",
+  //  maxHeight: 50,
 }));
 
 export default function NavBar() {
@@ -72,6 +76,8 @@ export default function NavBar() {
   // 자동완성을 위한 게임 목록
   const [autoGameList, setAutoGameList] = useState([]);
 
+  const logoImg = require("../../assets/logo.png");
+
   // 페이지 이동
   const navigate = useNavigate();
 
@@ -85,7 +91,6 @@ export default function NavBar() {
 
   //로그아웃 메서드
   const logoutMethod = () => {
-    alert("called");
     sessionStorage.clear();
     dispatch({ type: "logout" });
     navigate("/");
@@ -173,6 +178,7 @@ export default function NavBar() {
 
   // 페이지 이동
   const movePage = (page: string) => {
+    handleCloseUserMenu();
     navigate(page);
   };
 
@@ -182,33 +188,39 @@ export default function NavBar() {
         <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
           <ImageListItem
             sx={{
-              maxWidth: 50,
+              maxWidth: 40,
               cursor: "pointer",
+              //  mb: { md: 2, xs: 1 },
+              ml: { md: 15 },
             }}
             onClick={() => movePage("/")}
           >
-            <img src="img/logo.PNG" alt="logo" />
+            <img src={logoImg} alt="logo" />
           </ImageListItem>
-
-          <ImageListItem
+          <Typography
             sx={{
               mr: { xs: 0, md: 3 },
               minWidth: 65,
               cursor: "pointer",
               display: { xs: "none", md: "block" },
+              // mb: 2,
+              ml: { md: 2 },
             }}
             onClick={() => movePage("/")}
           >
-            <img src="img/logotext.PNG" alt="logoText" />
-          </ImageListItem>
-
+            이보게
+          </Typography>
           {/* Nav 반응형 - PC --------------------------------------*/}
           {/* 페이지 이동 Nav */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page.label}
-                sx={{ my: 2, color: "black", display: "block" }}
+                sx={{
+                  color: "white",
+                  display: "block",
+                  // mb: 2
+                }}
                 onClick={() => movePage(page.link)}
               >
                 {page.label}
@@ -223,10 +235,15 @@ export default function NavBar() {
           />
           {/* 오른쪽 메뉴(사용자) auth: 로그인 여부 */}
           {auth ? (
-            <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+            <Box
+              sx={{
+                flexGrow: 0,
+                display: { xs: "none", md: "flex" },
+              }}
+            >
               <Tooltip title="사용자 메뉴">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <AvatarGenerator userName={userName} />
+                  <AvatarGenerator userName={userName} isNav={true} />
                 </IconButton>
               </Tooltip>
               <Menu
@@ -291,7 +308,12 @@ export default function NavBar() {
             <Box sx={{ flexGrow: 0 }}>
               <Button
                 color="warning"
-                sx={{ color: "black", display: { xs: "none", md: "block" } }}
+                sx={{
+                  color: "white",
+                  display: { xs: "none", md: "block" },
+                  // mb: { md: 2 },
+                  mr: { md: 15 },
+                }}
                 onClick={() => movePage("/signin")}
               >
                 로그인

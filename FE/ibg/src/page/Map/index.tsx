@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Map from "./component/Map";
-import { Box, Container, Typography } from "@mui/material";
-import FmdGoodIcon from "@mui/icons-material/FmdGood";
+import { Container } from "@mui/material";
+import TitleToolbar from "../../component/TitleToolbar";
 
 export default function Index() {
   const [long, setLong] = useState(0);
@@ -34,23 +34,12 @@ export default function Index() {
     }
     // setLoading(false);
   });
+
   return (
     <>
-      <Container style={{ marginTop: 20, padding: 20 }}>
-        <Typography
-          sx={{
-            fontSize: { xs: 20, md: 24 },
-            fontWeight: "bold",
-            mb: 1,
-          }}
-        >
-          주변 보드게임 카페 찾기
-          <FmdGoodIcon sx={{ verticalAlign: "-0.2rem", ml: 1 }} />
-        </Typography>
-
-        <Box>
-          <Map long={long} lat={lat} addr={addr} />
-        </Box>
+      <TitleToolbar title="주변 보드게임 카페 찾기" />
+      <Container style={{ marginTop: 10, padding: 20 }}>
+        <Map long={long} lat={lat} addr={addr} />
       </Container>
     </>
   );

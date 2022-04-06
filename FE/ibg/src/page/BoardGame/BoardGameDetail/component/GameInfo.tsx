@@ -1,7 +1,8 @@
 import { RootStateOrAny, useSelector } from "react-redux";
 import StarRating from "../../../../component/StarRating";
 import LikeButton from "../../../../component/LikeButton";
-import { GameDetail } from "../index";
+
+import { IGameDetail } from "../../../../types/IGame";
 
 import { styled } from "@mui/material/styles";
 import {
@@ -82,7 +83,7 @@ const AlignDiv = styled("div")(() => ({
   textAlign: "center",
 }));
 
-export default function GameInfo(props: { game: GameDetail }) {
+export default function GameInfo(props: { game: IGameDetail }) {
   const user = useSelector((state: RootStateOrAny) => state.user);
 
   return (
