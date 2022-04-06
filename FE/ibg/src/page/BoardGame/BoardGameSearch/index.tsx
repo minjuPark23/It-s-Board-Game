@@ -20,6 +20,7 @@ export default function BoardGameSearch() {
   // 페이지 접속 시 1회 실행
   useEffect(() => {
     SearchByName("", userNo).then((data) => {
+      console.log(data);
       setInitGameList(data);
       setGameList(data);
       setLoading(false);
@@ -87,8 +88,8 @@ export default function BoardGameSearch() {
         {loading ? (
           <Box sx={{ position: "relative" }}>
             <Grid container spacing={2}>
-              {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(() => (
-                <SkelBoardCard />
+              {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((v, i) => (
+                <SkelBoardCard key={i} />
               ))}
             </Grid>
             <LegoSpinner
