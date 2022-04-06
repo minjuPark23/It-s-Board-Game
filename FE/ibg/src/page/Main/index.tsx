@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Container, Skeleton } from "@mui/material";
+import { useNavigate } from "react-router";
 import ThemeList from "./component/ThemeList";
 import {
   getRecommByAge,
@@ -13,15 +13,19 @@ import {
   getRecommByUser,
   getRecommByWeight,
 } from "../../api/recommend";
-import { RootStateOrAny, useSelector } from "react-redux";
+import { RootStateOrAny, shallowEqual, useSelector } from "react-redux";
 import SkelBoardCard from "../../component/SkelBoardCard";
 import AliceCarousel from "react-alice-carousel";
 import { IGame } from "../../types/IGame";
 import LegoSpinner from "../../component/LegoSpinner";
+import { Box, Container, Skeleton, Typography } from "@mui/material";
 
 // 테마별 게임리스트: sm(600) 이상(pc)에서는 버튼으로, 이하(모바일)에서는 스크롤로 동작
 export default function Main() {
-  const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
+  const userNo = useSelector(
+    (state: RootStateOrAny) => state.user.userNo,
+    shallowEqual
+  );
   const [similarGame, setSimilarGame] = useState("");
 
   const [userGameList, setUserGameList] = useState<IGame[]>([]);
@@ -36,28 +40,40 @@ export default function Main() {
   const [scoreGameList, setScoreGameList] = useState<IGame[]>([]);
 
   const [userLoading, setUserLoading] = useState<boolean>(userNo);
-  const [weightLoading, setWeightLoading] = useState<boolean>(userNo);
-  const [playerLoading, setPlayerLoading] = useState<boolean>(userNo);
-  const [timeLoading, setTimeLoading] = useState<boolean>(userNo);
-  const [ageLoading, setAgeLoading] = useState<boolean>(userNo);
+  const [newbieLoading, setNewbieLoading] = useState<boolean>(true);
   const [reviewLoading, setReviewLoading] = useState<boolean>(true);
   const [scoreLoading, setScoreLoading] = useState<boolean>(true);
+
+  const cardImg = require("../../assets/card.png");
+  const navigate = useNavigate();
 
   useEffect(() => {
     // 로그인 한 경우
     if (userNo) {
       getRecommByUser(userNo)
         .then((data) => {
-          if (data.code === 200) {
-            if (data.data === null) getNewbieGameList();
-            else setUserGameList(data.data);
+          if (data.code === 200 && data.data) {
+            setUserGameList(data.data);
           }
           setUserLoading(false);
         })
         .catch(() => {
           setUserLoading(false);
         });
-      // 조금 느림(3) -> 스켈레톤 제거
+    }
+    // 초보자 추천, 공통이지만 맞춤 추천이 없을 경우 맨 위에 있어야 함
+    getRecommByNewbie(userNo)
+      .then((data) => {
+        if (data.code === 200) {
+          setNewbieGameList(data.data);
+          setNewbieLoading(false);
+        }
+      })
+      .catch(() => {
+        setNewbieLoading(false);
+      });
+    if (userNo) {
+      // 조금 느림(3)
       getRecommByDesc(userNo)
         .then((data) => {
           if (data.code === 200) {
@@ -66,7 +82,7 @@ export default function Main() {
           }
         })
         .catch(() => {});
-      // 많이 느림(5) -> 스켈레톤 제거
+      // 많이 느림(5)
       getRecommByCategory(userNo)
         .then((data) => {
           if (data.code === 200) {
@@ -79,43 +95,40 @@ export default function Main() {
           if (data.code === 200) {
             setWeightGameList(data.data);
           }
-          setWeightLoading(false);
         })
-        .catch(() => {
-          setWeightLoading(false);
-        });
+        .catch(() => {});
       getRecommByPlayer(userNo)
         .then((data) => {
           if (data.code === 200) {
             setPlayerGameList(data.data);
           }
-          setPlayerLoading(false);
         })
-        .catch(() => {
-          setPlayerLoading(false);
-        });
+        .catch(() => {});
       getRecommByTime(userNo)
         .then((data) => {
           if (data.code === 200) {
             setTimeGameList(data.data);
           }
-          setTimeLoading(false);
         })
-        .catch(() => {
-          setTimeLoading(false);
-        });
+        .catch(() => {});
       getRecommByAge(userNo)
         .then((data) => {
           if (data.code === 200) {
             setAgeGameList(data.data);
           }
-          setAgeLoading(false);
         })
-        .catch(() => {
-          setAgeLoading(false);
-        });
+        .catch(() => {});
+    } else {
+      setUserGameList([]);
+      setDescGameList([]);
+      setCategoryGameList([]);
+      setWeightGameList([]);
+      setPlayerGameList([]);
+      setTimeGameList([]);
+      setAgeGameList([]);
     }
     // 공통
+
     getRecommByReviews(userNo)
       .then((data) => {
         if (data.code === 200) {
@@ -139,15 +152,9 @@ export default function Main() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userNo]);
 
-  // 초보자를 위한 게임 리스트 가져오기(평점데이터가 10개 미만일 경우(user추천 response = null)에만 실행)
-  const getNewbieGameList = () => {
-    getRecommByNewbie(userNo)
-      .then((data) => {
-        if (data.code === 200) {
-          setNewbieGameList(data.data);
-        }
-      })
-      .catch(() => {});
+  // 페이지 이동
+  const movePage = (page: string) => {
+    navigate(page);
   };
 
   const skelCards = [1, 1, 1, 1, 1].map(() => <SkelBoardCard marginX={0.5} />);
@@ -185,78 +192,95 @@ export default function Main() {
 
   return (
     <Container style={{ padding: 20 }} sx={{ mt: 5 }}>
+      {!userNo && (
+        <Box
+          onClick={() => movePage("/signin")}
+          sx={{
+            mt: 5,
+            py: 1,
+            px: 2,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "grey.200",
+            borderRadius: 3,
+            cursor: "pointer",
+          }}
+        >
+          <img src={cardImg} alt="card" width={50} />
+          <Typography
+            sx={{ fontSize: { xs: 15, md: 18 }, ml: 0.5 }}
+            align="left"
+          >
+            로그인을 하면,
+            <Box component="span" ml={1} sx={{ fontWeight: 600 }}>
+              나에게 맞는 보드게임을 추천
+            </Box>
+            받을 수 있어요!
+          </Typography>
+        </Box>
+      )}
+
       {userLoading ? (
-        <SkelTheme />
+        <>
+          <SkelTheme />
+          <SkelTheme />
+        </>
       ) : (
-        userGameList.length > 0 && (
-          <ThemeList title="나의 맞춤 추천 게임" gameList={userGameList} />
-        )
-      )}
-      {newbieGameList.length > 0 && (
-        <ThemeList
-          title="초보자라면 이 게임 어때요?"
-          gameList={newbieGameList}
-        />
-      )}
+        <>
+          {userGameList.length > 0 && (
+            <ThemeList title="나의 맞춤 추천 게임" gameList={userGameList} />
+          )}
 
-      {weightLoading ? (
+          {weightGameList.length > 0 && (
+            <ThemeList
+              title="내가 좋아하는 난이도의 게임"
+              gameList={weightGameList}
+            />
+          )}
+          {playerGameList.length > 0 && (
+            <ThemeList
+              title="내가 즐겨하는 인원 수의 게임"
+              gameList={playerGameList}
+            />
+          )}
+          {timeGameList.length > 0 && (
+            <ThemeList
+              title="내가 즐겨하는 플레이 시간의 게임"
+              gameList={timeGameList}
+            />
+          )}
+          {ageGameList.length > 0 && (
+            <ThemeList
+              title="내가 즐겨하는 나이대의 게임"
+              gameList={ageGameList}
+            />
+          )}
+          {descGameList.length > 0 && (
+            <ThemeList
+              title={`'${similarGame}'와/과 비슷한 유형의 게임 추천`}
+              gameList={descGameList}
+            />
+          )}
+          {categoryGameList.length > 0 && (
+            <ThemeList
+              title="내가 좋아하는 카테고리의 게임"
+              gameList={categoryGameList}
+            />
+          )}
+        </>
+      )}
+      {newbieLoading ? (
         <SkelTheme />
       ) : (
-        weightGameList.length > 0 && (
+        userGameList.length === 0 &&
+        newbieGameList.length > 0 && (
           <ThemeList
-            title="내가 좋아하는 난이도의 게임"
-            gameList={weightGameList}
+            title="초보자라면 이 게임 어때요?"
+            gameList={newbieGameList}
           />
         )
       )}
-
-      {playerLoading ? (
-        <SkelTheme />
-      ) : (
-        playerGameList.length > 0 && (
-          <ThemeList
-            title="내가 즐겨하는 인원 수의 게임"
-            gameList={playerGameList}
-          />
-        )
-      )}
-
-      {timeLoading ? (
-        <SkelTheme />
-      ) : (
-        timeGameList.length > 0 && (
-          <ThemeList
-            title="내가 즐겨하는 플레이 시간의 게임"
-            gameList={timeGameList}
-          />
-        )
-      )}
-
-      {ageLoading ? (
-        <SkelTheme />
-      ) : (
-        ageGameList.length > 0 && (
-          <ThemeList
-            title="내가 즐겨하는 나이대의 게임"
-            gameList={ageGameList}
-          />
-        )
-      )}
-
-      {descGameList.length > 0 && (
-        <ThemeList
-          title={`'${similarGame}'와 비슷한 게임 추천`}
-          gameList={descGameList}
-        />
-      )}
-
-      {categoryGameList.length > 0 && (
-        <ThemeList
-          title="내가 좋아하는 카테고리의 게임"
-          gameList={categoryGameList}
-        />
-      )}
-
       {scoreLoading ? (
         <SkelTheme />
       ) : (
