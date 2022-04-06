@@ -121,11 +121,13 @@ export default function DealDetail() {
               <Box style={{ marginBottom: 10 }} sx={{ display: "flex" }}>
                 <Typography variant="subtitle1">
                   <AvatarGenerator
-                    userName={dealDetail ? String(dealDetail.userNo) : ""}
+                    userName={dealDetail ? String(dealDetail.userNick) : ""}
                     isNav={false}
                   />
                 </Typography>
-                <Typography style={{ marginLeft: 8, marginTop: 8 }}>
+                <Typography
+                  style={{ marginLeft: 8, marginTop: 8, fontWeight: "bold" }}
+                >
                   {dealDetail ? String(dealDetail.userNick) : ""}
                 </Typography>
               </Box>
