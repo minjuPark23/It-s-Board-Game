@@ -31,7 +31,7 @@ import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import LoginIcon from "@mui/icons-material/Login";
 import Logout from "@mui/icons-material/Logout";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+// import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import MapIcon from "@mui/icons-material/Map";
 import { Typography } from "@mui/material";
 
@@ -47,11 +47,11 @@ const userNav = [
     icon: <FavoriteBorderIcon />,
     link: "/mygames",
   },
-  {
-    label: "채팅",
-    icon: <ChatBubbleOutlineOutlinedIcon />,
-    method: "",
-  },
+  // {
+  //   label: "채팅",
+  //   icon: <ChatBubbleOutlineOutlinedIcon />,
+  //   method: "",
+  // },
   { label: "로그아웃", icon: <Logout />, method: "logout" },
 ];
 
