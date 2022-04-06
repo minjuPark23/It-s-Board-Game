@@ -35,7 +35,7 @@ pipeline {
 		}
 		stage('Springboot Build') {
 			steps {
-				sh 'docker cp aws.yml ./BE/src/main/resources'
+				sh 'docker cp aws.yml springboot:/var/jenkins_home/workspace/temp/BE/src/main/resources'
 				dir('./BE'){
 					sh './gradlew build'
 				}
@@ -48,7 +48,7 @@ pipeline {
 		}
 		stage('Springboot Deploy') {
 			steps {
-				sh 'docker stop springboot && docker rm springboot'
+				// sh 'docker stop springboot && docker rm springboot'
 				sh 'docker run --network backend -d --name springboot -p 7777:7777 -v /etc/letsencrypt:/etc/letsencrypt -u root basepage/springboot'
 			}
 		}
