@@ -41,7 +41,6 @@ public class InterestRepository {
                     .setParameter("gameNo", gameNo)
                     .getSingleResult();
         } catch(NoResultException e){
-            System.err.println("관심 목록을 업데이트합니다.");
             return null;
         }
     }
