@@ -9,6 +9,7 @@ import {
   Button,
   Modal,
   Stack,
+  Paper,
   Alert,
 } from "@mui/material";
 import { styled, alpha, createTheme } from "@mui/material/styles";
@@ -160,50 +161,67 @@ export default function BoardGameMarket() {
     <>
       <BGMTitle />
       <Container>
-        {/* BGM 상단 */}
-        <Box sx={{ display: "flex", justifyContent: "end" }}>
-          {/* 거래 업로드 버튼 */}
-          <Button
-            style={{ height: 20 }}
-            sx={{
-              top: { md: 0, xs: 0 },
-              mt: { md: 2, xs: 1 },
-              cursor: "pointer",
-              color: "primary",
-            }}
-            onClick={handleOpen}
-          >
-            거래 등록
-          </Button>
-          {userNo ? (
-            <MarketUploadDialog
-              open={open}
-              gameList={gameList}
-              handleClose={handleClose}
-              sendDataToParent={handleSubmit}
-            />
-          ) : (
-            <Modal open={open} onClose={handleClose}>
-              <Box sx={modalStyle}>
-                <Stack sx={{ width: "100%" }} spacing={2}>
-                  <Alert severity="error">로그인 후 등록이 가능합니다.</Alert>
-                </Stack>
+        {/* 상단 : 검색 및 거래 등록 */}
+        <Grid container spacing={2} direction="row">
+          <Grid container item xs={12}>
+            <Box />
+          </Grid>
+          <Grid container item xs={12} spacing={2}>
+            <Grid item xs={7}>
+              <Search sx={{ width: { xs: "100%", sm: 330 } }}>
+                <SearchIconWrapper sx={{ mb: { md: 0, xs: 10 } }}>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="보드게임 이름(영문)으로 검색"
+                  inputProps={{ "aria-label": "search" }}
+                  onKeyUp={handleSearchKeyUp}
+                />
+              </Search>
+            </Grid>
+            {/* 영역용 */}
+            <Grid item xs={1} />
+            {/* 거래 업로드 버튼 */}
+            <Grid item xs={4}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "end",
+                  my: 2,
+                }}
+              >
+                <Button
+                  sx={{
+                    cursor: "pointer",
+                    color: "primary",
+                  }}
+                  onClick={handleOpen}
+                >
+                  거래 등록
+                </Button>
+                {userNo ? (
+                  <MarketUploadDialog
+                    open={open}
+                    gameList={gameList}
+                    handleClose={handleClose}
+                    sendDataToParent={handleSubmit}
+                  />
+                ) : (
+                  <Modal open={open} onClose={handleClose}>
+                    <Box sx={modalStyle}>
+                      <Stack sx={{ width: "100%" }} spacing={2}>
+                        <Alert severity="error">
+                          로그인 후 등록이 가능합니다.
+                        </Alert>
+                      </Stack>
+                    </Box>
+                  </Modal>
+                )}
               </Box>
-            </Modal>
-          )}
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "start" }}>
-          <Search sx={{ width: { xs: "100%", sm: 330 }, mb: { md: 1 } }}>
-            <SearchIconWrapper sx={{ mb: { md: 0, xs: 10 } }}>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="보드게임 이름(영문)으로 검색"
-              inputProps={{ "aria-label": "search" }}
-              onKeyUp={handleSearchKeyUp}
-            />
-          </Search>
-        </Box>
+            </Grid>
+          </Grid>
+        </Grid>
+        {/* 리스트 */}
         <Grid container spacing={1} style={{ marginTop: 14 }}>
           {dealList.map((deal, index) => (
             <BoardCard key={index} deal={deal}></BoardCard>
