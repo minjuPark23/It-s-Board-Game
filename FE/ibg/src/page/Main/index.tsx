@@ -60,19 +60,6 @@ export default function Main() {
         .catch(() => {
           setUserLoading(false);
         });
-    }
-    // 초보자 추천, 공통이지만 맞춤 추천이 없을 경우 맨 위에 있어야 함
-    getRecommByNewbie(userNo)
-      .then((data) => {
-        if (data.code === 200) {
-          setNewbieGameList(data.data);
-          setNewbieLoading(false);
-        }
-      })
-      .catch(() => {
-        setNewbieLoading(false);
-      });
-    if (userNo) {
       // 조금 느림(3)
       getRecommByDesc(userNo)
         .then((data) => {
@@ -128,7 +115,16 @@ export default function Main() {
       setAgeGameList([]);
     }
     // 공통
-
+    getRecommByNewbie(userNo)
+      .then((data) => {
+        if (data.code === 200) {
+          setNewbieGameList(data.data);
+        }
+        setNewbieLoading(false);
+      })
+      .catch(() => {
+        setNewbieLoading(false);
+      });
     getRecommByReviews(userNo)
       .then((data) => {
         if (data.code === 200) {
@@ -227,11 +223,23 @@ export default function Main() {
           <SkelTheme />
         </>
       ) : (
+        userGameList.length > 0 && (
+          <ThemeList title="나의 맞춤 추천 게임" gameList={userGameList} />
+        )
+      )}
+      {newbieLoading ? (
+        <SkelTheme />
+      ) : (
+        userGameList.length <= 0 &&
+        newbieGameList.length > 0 && (
+          <ThemeList
+            title="초보자라면 이 게임 어때요?"
+            gameList={newbieGameList}
+          />
+        )
+      )}
+      {!userLoading && (
         <>
-          {userGameList.length > 0 && (
-            <ThemeList title="나의 맞춤 추천 게임" gameList={userGameList} />
-          )}
-
           {weightGameList.length > 0 && (
             <ThemeList
               title="내가 좋아하는 난이도의 게임"
@@ -269,17 +277,6 @@ export default function Main() {
             />
           )}
         </>
-      )}
-      {newbieLoading ? (
-        <SkelTheme />
-      ) : (
-        userGameList.length === 0 &&
-        newbieGameList.length > 0 && (
-          <ThemeList
-            title="초보자라면 이 게임 어때요?"
-            gameList={newbieGameList}
-          />
-        )
       )}
       {scoreLoading ? (
         <SkelTheme />
