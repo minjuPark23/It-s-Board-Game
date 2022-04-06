@@ -48,7 +48,7 @@ export default function SignUp() {
           let decode_token = jwtDecode<MyToken>(token);
           sessionStorage.setItem("accessToken", token);
 
-          alert(decode_token.userNo);
+          //alert(decode_token.userNo);
           setLoading(true);
           userInfo(decode_token.userNo)
             .then((response) => {

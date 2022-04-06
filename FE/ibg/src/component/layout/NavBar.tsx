@@ -91,7 +91,6 @@ export default function NavBar() {
 
   //로그아웃 메서드
   const logoutMethod = () => {
-    alert("called");
     sessionStorage.clear();
     dispatch({ type: "logout" });
     navigate("/");
