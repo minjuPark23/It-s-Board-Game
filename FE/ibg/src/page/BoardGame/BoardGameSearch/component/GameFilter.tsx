@@ -177,6 +177,16 @@ export default function GameFilter(props: { searchCallback: Function }) {
     setCategory(val);
   };
 
+  const resetFilter = () => {
+    setName("");
+    setPlayer(1);
+    setTime(0);
+    setWeight(0);
+    setAge(0);
+    setScore(0);
+    setCategory([]);
+  };
+
   const callSearchFilter = () => {
     const checkKor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
     let filter = {} as ISearchFilter;
@@ -349,6 +359,7 @@ export default function GameFilter(props: { searchCallback: Function }) {
             <FilterTitle>카테고리</FilterTitle>
             <ListItem component="div" sx={{ px: { xs: 0, sm: 2 } }}>
               <Autocomplete
+                value={category}
                 multiple
                 filterSelectedOptions
                 options={CategoryData}
@@ -368,7 +379,17 @@ export default function GameFilter(props: { searchCallback: Function }) {
           </FilterItem>
           <Divider />
         </List>
-        <Box textAlign="right">
+        <Box textAlign="right" sx={{ padding: { xs: 1, md: 0 } }}>
+          <Button
+            variant="outlined"
+            onClick={resetFilter}
+            sx={{
+              mr: 1,
+              boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
+            }}
+          >
+            초기화
+          </Button>
           <Button variant="contained" onClick={callSearchFilter}>
             검색
           </Button>
