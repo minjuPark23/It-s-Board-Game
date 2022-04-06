@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 //컴포넌트
 import BoardCardMain from "./component/BoardCardSurvey";
 import { Button, Box, Grid, Container, Typography } from "@mui/material";

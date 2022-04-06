@@ -27,14 +27,14 @@ export default function MyGames() {
     // API 연결(게임리스트 불러오기)
     const init = async () => {
       let data = await getLikedList(userno);
-      if (data != null) setGameList(data); //gameImg, gameName, gameNo를 준다
+      if (data !== null) setGameList(data); //gameImg, gameName, gameNo를 준다
     };
     init();
   });
 
   return (
     <>
-      <TitleToolbar title="관심목록"  />
+      <TitleToolbar title="관심목록" />
 
       <Container style={{ marginTop: 20, padding: 10 }}>
         <Grid container spacing={2}>
