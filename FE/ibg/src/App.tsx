@@ -6,6 +6,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import NavBar from "./component/layout/NavBar";
 import ScrollToTop from "./component/ScrollToTop";
 import Footer from "./component/layout/Footer";
+import ScrollToTopPage from "./component/ScrollToTopPage";
 
 declare global {
   interface Window {
@@ -20,6 +21,7 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <div id="ibgContent">
+          <ScrollToTopPage />
           <Router />
         </div>
         <ScrollToTop />
