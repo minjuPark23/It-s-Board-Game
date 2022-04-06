@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class RESTAPIService {
 
-    private final String BASE_URL = "http://django:7776/ibg/api/recommend";
+    private final String BASE_URL = "http://django:7776/ibg/api/recommend/predict";
     public List<Integer> requestGETAPI(String url, Integer pathVariable) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
 
