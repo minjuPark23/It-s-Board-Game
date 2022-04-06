@@ -48,9 +48,9 @@ async function getRecommByAge(userNo: number) {
   return (await api.get(`/game/age/${userNo}`)).data;
 }
 
-// 초보자 추천
+// 초보자 추천(공통)
 async function getRecommByNewbie(userNo: number) {
-  return (await api.get(`/game/newbie/${userNo}`)).data;
+  return (await api.get(`/game/newbie/${userNo ? userNo : 0}`)).data;
 }
 
 export {
