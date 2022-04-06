@@ -164,7 +164,6 @@ function Form({ parentCallback, emailCallback, nicknameCallback }: User) {
                     : ""
                 }
                 label="닉네임 입력"
-                autoFocus
               />
             </Grid>
             <Grid item xs={3} sm={3}>
@@ -196,7 +195,6 @@ function Form({ parentCallback, emailCallback, nicknameCallback }: User) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                autoFocus
               />
             </Grid>
             <Grid item xs={12}>
