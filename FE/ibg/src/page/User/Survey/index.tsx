@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 //컴포넌트
 import BoardCardMain from "./component/BoardCardSurvey";
 import { Button, Box, Grid, Container, Typography } from "@mui/material";
@@ -15,6 +15,7 @@ export interface Game {
   gameNo: number;
   gameImg: string;
   gameName: string;
+  gameKorName: string;
 }
 // Rated  객체
 export interface IProps {

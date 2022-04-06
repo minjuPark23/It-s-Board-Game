@@ -38,32 +38,32 @@ export default function SignIn() {
   //api 연결
   const callLoginApi = async (email: string, password: string) => {
     sessionStorage.removeItem("accessToken");
-    await login(email, password).then((response) => {
-      if (response.data.code === 200) {
-        //토큰 및 네비바 배경 색 세션스토리지에 저장
-        let token = response.headers.authorization;
-        let decode_token = jwtDecode<MyToken>(token);
-        sessionStorage.setItem("accessToken", token);
-        sessionStorage.setItem("avatarColor", randomColor());
+    await login(email, password)
+      .then((response) => {
+        if (response.data.code === 200) {
+          //토큰 및 네비바 배경 색 세션스토리지에 저장
 
-        setLoading(true);
-        userInfo(decode_token.userNo)
-          .then((response) => {
-            //console.log(response);
+          let token = response.headers.authorization;
+          let decode_token = jwtDecode<MyToken>(token);
+          sessionStorage.setItem("accessToken", token);
+          sessionStorage.setItem("avatarColor", randomColor());
+
+          setLoading(true);
+          userInfo(decode_token.userNo).then((response) => {
             let userNick = response.userNick;
             let userNo = response.userNo;
             init(email, password, userNick, userNo);
             navigate("/");
             setLoading(false);
-          })
-          .catch((error) => {
-            console.log(error);
           });
-        setLoading(false);
-      } else {
-        alert("이메일 또는 비밀번호를 확인해주세요");
-      }
-    });
+        } else {
+          alert("비밀번호를 확인해주세요");
+        }
+      })
+      .catch(() => {
+        alert("가입되지 않은 이메일입니다");
+      });
+    setLoading(false);
   };
   return (
     <>
@@ -78,7 +78,11 @@ export default function SignIn() {
         {loading ? (
           "loading"
         ) : (
-          <Grid item xs={2} sx={{ flexGrow: 1, m: { xs: 4, md: 0 } }}>
+          <Grid
+            item
+            xs={2}
+            sx={{ flexGrow: 1, m: { xs: 5, md: 0 }, pt: { xs: 6 } }}
+          >
             <Form sendDataToParent={callLoginApi} />
           </Grid>
         )}
