@@ -6,28 +6,30 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import pandas as pd
 import numpy as np
-from sklearn.decomposition import TruncatedSVD
+
+# 사용자 평점 기반 추천 svd
 from scipy.sparse.linalg import svds
-# Import TfIdfVectorizer from scikit-learn
+from sklearn.linear_model import Lasso
+
+# 유형별 추천 TfidfVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-# Import linear_kernel
 from sklearn.metrics.pairwise import linear_kernel
 
-from sklearn.decomposition import TruncatedSVD
-from scipy.sparse.linalg import svds
+# 카테고리 기반
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.linear_model import Lasso
+
 import logging
 from rest_framework import status
 
-class UserView(viewsets.ModelViewSet):
 
+class UserView(viewsets.ModelViewSet):
     """
          @author : 박민주
          @date : 2022-04-4 오전 16:00
          @desc: 유저가 플레이 했던 게임 중 설명이 유사한 정도로 추천
     """
+
     @api_view(['GET'])
     def recommend_by_desc_similartiy(self, game_no):
         print("유저가 한 게임 중 비슷한 유형별")
@@ -87,6 +89,7 @@ class UserView(viewsets.ModelViewSet):
          @date : 2022-04-4 오전 16:00
          @desc: 평점 수 대비 평점이 높은 순으로 추천 => 인기순
     """
+
     @api_view(['GET'])
     def recommend_by_score_on_score_count(request):
         print("평점수 대비 평점이 높은 것: 인기순")
@@ -127,6 +130,7 @@ class UserView(viewsets.ModelViewSet):
          @date : 2022-04-06 오전 01:00
          @desc: 유저가 플레이하지 않은 게임들의 평점을 예측하여 추천 => LinearRegression Lasso 알고리즘
     """
+
     @api_view(['GET'])
     def recommend_by_predicted_score_for_lasso(self, user_no):
         print("평점 추천3")
@@ -139,7 +143,8 @@ class UserView(viewsets.ModelViewSet):
         # print(categorys)
 
         scores = Score.objects.filter(user_no=user_no)
-        user_score_list = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating")).set_index('score_no')
+        user_score_list = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating")).set_index(
+            'score_no')
         # print("user_score_list",user_score_list)
         user_score_list = user_score_list.merge(categorys, left_on='game_no', right_index=True)
 
@@ -172,6 +177,7 @@ class UserView(viewsets.ModelViewSet):
          @date : 2022-04-4 오전 16:00
          @desc: 유저가 플레이하지 않은 게임들의 평점을 예측하여 추천 => SVD 알고리즘
     """
+
     @api_view(['GET'])
     def recommend_by_predicted_score_for_svd(request, user_no):
         print("평점 추천2")
@@ -245,8 +251,9 @@ class UserView(viewsets.ModelViewSet):
          @date : 2022-04-4 오전 16:00
          @desc: 유저가 플레이하지 않은 게임들의 평점을 예측하여 추천 => 카테고리별 점수 평균
     """
+
     @api_view(['GET'])
-    def recommend_by_predicted_score_for_knn(request, user_no):
+    def recommend_by_predicted_score(request, user_no):
         print("평점 추천")
         # 추천 받아서 결과 반환
 
@@ -336,6 +343,7 @@ class UserView(viewsets.ModelViewSet):
          @desc: 카테고리의 유사도를 기반으로 추천
                 처음 위치하는 게임이 기준
     """
+
     @api_view(['GET'])
     def recommend_by_category_similartiy(request, game_no):
         # print(game_no)
