@@ -185,17 +185,17 @@ public class RecommendApiController {
         int game_no = scores.get(num).getGame().getGameNo();
 
         List<Integer> list = restapiService.requestGETAPI("/category", game_no);
+        String target = gameService.getGameByGameNo(game_no).getGameKorName();
 
         List<Game> gameList = list.stream()
                 .map(no-> {
-
                     return gameService.getGameByGameNo(no);
                 })
                 .collect(Collectors.toList());
 
         Collections.shuffle(gameList);
 
-        return getResultList(gameList, userNo);
+        return getResultList(gameList, userNo, target);
     }
 
     /**

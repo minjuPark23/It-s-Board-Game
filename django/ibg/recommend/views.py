@@ -341,7 +341,6 @@ class UserView(viewsets.ModelViewSet):
          @author : 권오범
          @date : 2022-04-4 오전 16:00
          @desc: 카테고리의 유사도를 기반으로 추천
-                처음 위치하는 게임이 기준
     """
 
     @api_view(['GET'])
@@ -391,8 +390,4 @@ class UserView(viewsets.ModelViewSet):
 
         response = game_data.iloc[sim_index].sort_values('game_total_score', ascending=False)[:10]  # 게임 번호로 수정
         response = response['game_no'].values.tolist()
-        # print(response)
-        response.insert(0, game_no)
-        # print(response)
-        # response.loc[0] = [game_no]
         return Response(response)
