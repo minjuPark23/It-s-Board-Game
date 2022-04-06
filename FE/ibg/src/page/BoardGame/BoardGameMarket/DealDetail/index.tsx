@@ -114,97 +114,97 @@ export default function DealDetail() {
             justifyContent: "space-between",
           }}
         ></Box>
-
-        {/* 내용 */}
-        <Grid container spacing={1} direction="column">
-          <Grid item>
-            {/* 상단 */}
-            <Box
-              style={{ marginBottom: 10 }}
-              sx={{ display: "flex", justifyContent: "space-between" }}
-            >
+        <Grid container spacing={2} direction="row">
+          <Grid container item xs={12} spacing={2}>
+            <Grid item xs={12}>
+              {/* 프로필 */}
               <Box style={{ marginBottom: 10 }} sx={{ display: "flex" }}>
                 <Typography variant="subtitle1">
                   <AvatarGenerator
-                    userName={dealDetail ? String(dealDetail.userNo) : ""}
+                    userName={dealDetail ? String(dealDetail.userNick) : ""}
                     isNav={false}
                   />
                 </Typography>
-                <Typography style={{ marginLeft: 8, marginTop: 8 }}>
+                <Typography
+                  style={{ marginLeft: 8, marginTop: 8, fontWeight: "bold" }}
+                >
                   {dealDetail ? String(dealDetail.userNick) : ""}
                 </Typography>
               </Box>
-              <Button
-                style={{ height: 30 }}
-                sx={{ top: { md: 7, xs: 6 } }}
-                color="primary"
-                variant="outlined"
-              >
-                거래하기
-              </Button>
-            </Box>
-          </Grid>
-          {/* 사진 */}
-          <Grid item>
-            <ImgWrpper>
-              <img
-                src={dealDetail?.dealPath + "/" + dealDetail?.dealSavedName}
-                alt="거래사진"
+            </Grid>
+            {/* 사진 */}
+            <Grid item xs={12}>
+              <ImgWrpper>
+                <img
+                  src={dealDetail?.dealPath + "/" + dealDetail?.dealSavedName}
+                  alt="거래사진"
+                />
+              </ImgWrpper>
+            </Grid>
+            <Grid item xs={12}>
+              {/* 사진 */}
+              <Grid item>
+                <DealTitle>{dealDetail?.dealTitle}</DealTitle>
+
+                <Grid item>
+                  <MarketState
+                    sx={{ cursor: "pointer" }}
+                    color={dealDetail?.dealStatus ? "#67B6FF" : "#FCB500"}
+                  >
+                    {dealDetail?.dealStatus ? (
+                      "거래완료"
+                    ) : dealDetail?.userNo === userNo ? (
+                      <DealStatus onClick={handleChangeStatus}>
+                        거래중
+                      </DealStatus>
+                    ) : (
+                      "거래중"
+                    )}
+                  </MarketState>
+                </Grid>
+                <Grid item>
+                  <DealPrice>
+                    {dealDetail?.dealPrice.toLocaleString()}원
+                  </DealPrice>
+                </Grid>
+                <Grid item>
+                  <DealContent>{dealDetail?.dealContent}</DealContent>
+                </Grid>
+                <Grid item>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: 12, md: 16 },
+                      top: 10,
+                      right: 5,
+                      color: "gray",
+                    }}
+                  >
+                    {(() => {
+                      const date = new Date(dealDetail?.dealReg);
+                      const year = date.getFullYear();
+                      const month = String(date.getMonth() + 1);
+                      const day = String(date.getDate());
+                      return `${year}. ${month.padStart(
+                        2,
+                        "0"
+                      )}. ${day.padStart(2, "0")}`;
+                    })()}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Divider sx={{ marginTop: 2 }} />
+            </Grid>
+            {/* 댓글 영역 */}
+            <Grid item xs={12}>
+              <ReviewInfo
+                title="댓글"
+                reviewList={reviewList}
+                userNo={userNo}
+                addCallback={registerReview}
               />
-            </ImgWrpper>
-          </Grid>
-          <Grid item>
-            <DealTitle>{dealDetail?.dealTitle}</DealTitle>
-          </Grid>
-          <Grid item>
-            <MarketState
-              sx={{ cursor: "pointer" }}
-              color={dealDetail?.dealStatus ? "#67B6FF" : "#FCB500"}
-            >
-              {dealDetail?.dealStatus ? (
-                "거래완료"
-              ) : dealDetail?.userNo === userNo ? (
-                <DealStatus onClick={handleChangeStatus}>거래중</DealStatus>
-              ) : (
-                "거래중"
-              )}
-            </MarketState>
-          </Grid>
-          <Grid item>
-            <DealPrice>{dealDetail?.dealPrice.toLocaleString()}원</DealPrice>
-          </Grid>
-          <Grid item>
-            <DealContent>{dealDetail?.dealContent}</DealContent>
-          </Grid>
-          <Grid item>
-            <Typography
-              sx={{
-                fontSize: { xs: 12, md: 16 },
-                top: 10,
-                right: 5,
-                color: "gray",
-              }}
-            >
-              {(() => {
-                const date = new Date(dealDetail?.dealReg);
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1);
-                const day = String(date.getDate());
-                return `${year}. ${month.padStart(2, "0")}. ${day.padStart(
-                  2,
-                  "0"
-                )}`;
-              })()}
-            </Typography>
+            </Grid>
           </Grid>
         </Grid>
-        <Divider sx={{ marginTop: 2 }} />
-        <ReviewInfo
-          title="댓글"
-          reviewList={reviewList}
-          userNo={userNo}
-          addCallback={registerReview}
-        />
       </Container>
     </>
   );
