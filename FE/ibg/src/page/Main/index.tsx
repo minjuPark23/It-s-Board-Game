@@ -42,6 +42,12 @@ export default function Main() {
 
   const [userLoading, setUserLoading] = useState<boolean>(userNo);
   const [newbieLoading, setNewbieLoading] = useState<boolean>(true);
+  const [descLoading, setDescLoading] = useState<boolean>(userNo);
+  const [categoryLoading, setCategoryLoading] = useState<boolean>(userNo);
+  const [weightLoading, setWeightLoading] = useState<boolean>(userNo);
+  const [playerLoading, setPlayerLoading] = useState<boolean>(userNo);
+  const [timeLoading, setTimeLoading] = useState<boolean>(userNo);
+  const [ageLoading, setAgeLoading] = useState<boolean>(userNo);
   const [reviewLoading, setReviewLoading] = useState<boolean>(true);
   const [scoreLoading, setScoreLoading] = useState<boolean>(true);
 
@@ -72,8 +78,11 @@ export default function Main() {
             setDescGame(data.data.title);
             setDescGameList(data.data.recommendResultResponses);
           }
+          isMounted && setDescLoading(false);
         })
-        .catch(() => {});
+        .catch(() => {
+          isMounted && setDescLoading(false);
+        });
       // 많이 느림(5)
       getRecommByCategory(userNo, signal)
         .then((data) => {
@@ -81,36 +90,51 @@ export default function Main() {
             setCategoryGame(data.data.title);
             setCategoryGameList(data.data.recommendResultResponses);
           }
+          isMounted && setCategoryLoading(false);
         })
-        .catch(() => {});
+        .catch(() => {
+          isMounted && setCategoryLoading(false);
+        });
       getRecommByWeight(userNo, signal)
         .then((data) => {
           if (data.code === 200 && isMounted) {
             setWeightGameList(data.data);
           }
+          isMounted && setWeightLoading(false);
         })
-        .catch(() => {});
+        .catch(() => {
+          isMounted && setWeightLoading(false);
+        });
       getRecommByPlayer(userNo, signal)
         .then((data) => {
           if (data.code === 200 && isMounted) {
             setPlayerGameList(data.data);
           }
+          isMounted && setPlayerLoading(false);
         })
-        .catch(() => {});
+        .catch(() => {
+          isMounted && setPlayerLoading(false);
+        });
       getRecommByTime(userNo, signal)
         .then((data) => {
           if (data.code === 200 && isMounted) {
             setTimeGameList(data.data);
           }
+          isMounted && setTimeLoading(false);
         })
-        .catch(() => {});
+        .catch(() => {
+          isMounted && setTimeLoading(false);
+        });
       getRecommByAge(userNo, signal)
         .then((data) => {
           if (data.code === 200 && isMounted) {
             setAgeGameList(data.data);
           }
+          isMounted && setAgeLoading(false);
         })
-        .catch(() => {});
+        .catch(() => {
+          isMounted && setAgeLoading(false);
+        });
     }
     // 공통
     getRecommByNewbie(userNo, signal)
@@ -230,10 +254,7 @@ export default function Main() {
       )}
 
       {userLoading ? (
-        <>
-          <SkelTheme />
-          <SkelTheme />
-        </>
+        <SkelTheme />
       ) : (
         userGameList.length > 0 && (
           <ThemeList title="나의 맞춤 추천 게임" gameList={userGameList} />
@@ -250,45 +271,65 @@ export default function Main() {
           />
         )
       )}
-      {!userLoading && (
-        <>
-          {weightGameList.length > 0 && (
-            <ThemeList
-              title="내가 좋아하는 난이도의 게임"
-              gameList={weightGameList}
-            />
-          )}
-          {playerGameList.length > 0 && (
-            <ThemeList
-              title="내가 즐겨하는 인원 수의 게임"
-              gameList={playerGameList}
-            />
-          )}
-          {timeGameList.length > 0 && (
-            <ThemeList
-              title="내가 즐겨하는 플레이 시간의 게임"
-              gameList={timeGameList}
-            />
-          )}
-          {ageGameList.length > 0 && (
-            <ThemeList
-              title="내가 즐겨하는 나이대의 게임"
-              gameList={ageGameList}
-            />
-          )}
-          {descGameList.length > 0 && (
-            <ThemeList
-              title={`'${descGame}'와/과 비슷한 유형의 게임 추천`}
-              gameList={descGameList}
-            />
-          )}
-          {categoryGameList.length > 0 && (
-            <ThemeList
-              title={`'${categoryGame}'와/과 비슷한 장르의 게임 추천`}
-              gameList={categoryGameList}
-            />
-          )}
-        </>
+      {weightLoading ? (
+        <SkelTheme />
+      ) : (
+        weightGameList.length > 0 && (
+          <ThemeList
+            title="내가 좋아하는 난이도의 게임"
+            gameList={weightGameList}
+          />
+        )
+      )}
+      {playerLoading ? (
+        <SkelTheme />
+      ) : (
+        playerGameList.length > 0 && (
+          <ThemeList
+            title="내가 즐겨하는 인원 수의 게임"
+            gameList={playerGameList}
+          />
+        )
+      )}
+      {timeLoading ? (
+        <SkelTheme />
+      ) : (
+        timeGameList.length > 0 && (
+          <ThemeList
+            title="내가 즐겨하는 플레이 시간의 게임"
+            gameList={timeGameList}
+          />
+        )
+      )}
+      {ageLoading ? (
+        <SkelTheme />
+      ) : (
+        ageGameList.length > 0 && (
+          <ThemeList
+            title="내가 즐겨하는 나이대의 게임"
+            gameList={ageGameList}
+          />
+        )
+      )}
+      {descLoading ? (
+        <SkelTheme />
+      ) : (
+        descGameList.length > 0 && (
+          <ThemeList
+            title={`'${descGame}'와/과 비슷한 유형의 게임 추천`}
+            gameList={descGameList}
+          />
+        )
+      )}
+      {categoryLoading ? (
+        <SkelTheme />
+      ) : (
+        categoryGameList.length > 0 && (
+          <ThemeList
+            title={`'${categoryGame}'와/과 비슷한 장르의 게임 추천`}
+            gameList={categoryGameList}
+          />
+        )
       )}
       {reviewLoading ? (
         <SkelTheme />
