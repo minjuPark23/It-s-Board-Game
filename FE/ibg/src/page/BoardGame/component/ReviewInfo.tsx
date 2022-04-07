@@ -3,17 +3,16 @@ import { useNavigate } from "react-router";
 import ReviewItem from "./ReviewItem";
 import { IReview } from "../../../types/IReview";
 import { Typography, TextField, Box, Button } from "@mui/material";
-import { RootStateOrAny, useSelector } from "react-redux";
 
 export default function ReviewInfo(props: {
   title: string;
   reviewList: IReview[];
   userNo: number;
+  dealUserNick?: string;
   addCallback: Function;
 }) {
   const [newReview, setNewReview] = useState("");
   const navigate = useNavigate();
-  const userNick = useSelector((state: RootStateOrAny) => state.user.userNick);
 
   const onChangeNewReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewReview(e.target.value);
@@ -83,7 +82,7 @@ export default function ReviewInfo(props: {
           <ReviewItem
             key={review.reviewNo ? review.reviewNo : review.dealReviewContent}
             review={review}
-            userNick={userNick}
+            dealUserNick={props.dealUserNick}
           />
         );
       })}
