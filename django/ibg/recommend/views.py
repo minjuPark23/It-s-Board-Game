@@ -132,17 +132,21 @@ class UserView(viewsets.ModelViewSet):
         user_score_list = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating")).set_index('score_no')
         user_score_list = user_score_list.merge(categorys, left_on='game_no', right_index=True)
 
-        model = Lasso(alpha=0.6)
+        model = Lasso(alpha=0.003)
         X = user_score_list[categorys.columns]
         y = user_score_list['score_rating']
         model.fit(X, y)
-        user_profile = [model.intercept_, *model.coef_]
+        # user_profile = [model.intercept_, *model.coef_]
 
-        recommendations = game_list[~game_list.index.isin(user_score_list['game_no'])].copy()
+        recommendations = game_list.copy()
         recommend_category = recommendations['game_category'].str.get_dummies("|")
         predict = model.predict(recommend_category)
 
         recommendations['predict'] = predict
+        print(recommendations)
+
+        recommendations = recommendations[~game_list.index.isin(user_score_list['game_no'])]
+        print(recommendations)
 
         findUser = get_object_or_404(User, pk=user_no)
         for idx, row in recommendations.iterrows():
