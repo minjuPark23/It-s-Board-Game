@@ -111,7 +111,7 @@ export default function BoardCard(props: { game: IGame; marginX?: number }) {
           <CardContent>
             <GameTitle>{props.game.gameKorName}</GameTitle>
             {props.game.gameCategory === "NaN" ? (
-              <Category sx={{ color: "transparent" }}>No Category</Category>
+              <Category sx={{ color: "white" }}>No Category</Category>
             ) : (
               <Category>{props.game.gameCategory}</Category>
             )}
