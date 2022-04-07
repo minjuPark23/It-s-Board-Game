@@ -107,7 +107,7 @@ public class RecommendApiController {
             gameNo = (int)(random*300)+1;
         }else{
             double random = Math.random();
-            int n = (int)(random*scoreList.size())+1;
+            int n = (int)(random*scoreList.size());
             gameNo = scoreList.get(n).getGame().getGameNo();
         }
 
