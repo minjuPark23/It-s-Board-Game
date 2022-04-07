@@ -12,7 +12,7 @@ import static javax.persistence.FetchType.LAZY;
 public class Deal {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int daelNo;
+    private int dealNo;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "userNo")

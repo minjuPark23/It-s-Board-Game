@@ -8,6 +8,7 @@ public class UserInterestResponse {
     private int gameNo;
     private String gameImg;
     private String gameName;
+    private String gameKorName;
     private double gameTotalScore;
     private int gameMinPlayer;
     private int gameMaxPlayer;
@@ -18,6 +19,7 @@ public class UserInterestResponse {
         this.gameNo = game.getGameNo();
         this.gameImg = game.getGameImg();
         this.gameName = game.getGameName();
+        this.gameKorName = game.getGameKorName();
         this.gameTotalScore = game.getGameTotalScore();
         this.gameMinPlayer = game.getGameMinPlayer();
         this.gameMaxPlayer = game.getGameMaxPlayer();

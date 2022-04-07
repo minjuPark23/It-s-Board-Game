@@ -1,74 +1,309 @@
-import { Container, Grid } from "@mui/material";
-import { useState } from "react";
-import BoardCard from "./component/BoardCard";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import ThemeList from "./component/ThemeList";
+import {
+  getRecommByAge,
+  getRecommByCategory,
+  getRecommByDesc,
+  getRecommByNewbie,
+  getRecommByPlayer,
+  getRecommByReviews,
+  getRecommByScore,
+  getRecommByTime,
+  getRecommByUser,
+  getRecommByWeight,
+} from "../../api/recommend";
+import { RootStateOrAny, shallowEqual, useSelector } from "react-redux";
+import SkelBoardCard from "../../component/SkelBoardCard";
+import AliceCarousel from "react-alice-carousel";
+import { IGame } from "../../types/IGame";
+import LegoSpinner from "../../component/LegoSpinner";
+import { Box, Container, Skeleton, Typography } from "@mui/material";
 
+// 테마별 게임리스트: sm(600) 이상(pc)에서는 버튼으로, 이하(모바일)에서는 스크롤로 동작
 export default function Main() {
-  const [gameList, setGameList] = useState(tempData.gameList);
+  const userNo = useSelector(
+    (state: RootStateOrAny) => state.user.userNo,
+    shallowEqual
+  );
+  const [descGame, setDescGame] = useState("");
+  const [categoryGame, setCategoryGame] = useState("");
+
+  const [userGameList, setUserGameList] = useState<IGame[]>([]);
+  const [newbieGameList, setNewbieGameList] = useState<IGame[]>([]);
+  const [descGameList, setDescGameList] = useState<IGame[]>([]);
+  const [categoryGameList, setCategoryGameList] = useState<IGame[]>([]);
+  const [weightGameList, setWeightGameList] = useState<IGame[]>([]);
+  const [playerGameList, setPlayerGameList] = useState<IGame[]>([]);
+  const [timeGameList, setTimeGameList] = useState<IGame[]>([]);
+  const [ageGameList, setAgeGameList] = useState<IGame[]>([]);
+  const [reviewGameList, setReviewGameList] = useState<IGame[]>([]);
+  const [scoreGameList, setScoreGameList] = useState<IGame[]>([]);
+
+  const [userLoading, setUserLoading] = useState<boolean>(userNo);
+  const [newbieLoading, setNewbieLoading] = useState<boolean>(true);
+  const [reviewLoading, setReviewLoading] = useState<boolean>(true);
+  const [scoreLoading, setScoreLoading] = useState<boolean>(true);
+
+  const cardImg = require("../../assets/card.png");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    // 로그인 한 경우
+    if (userNo) {
+      getRecommByUser(userNo, signal)
+        .then((data) => {
+          if (data.code === 200 && data.data && isMounted) {
+            setUserGameList(data.data);
+          }
+          isMounted && setUserLoading(false);
+        })
+        .catch(() => {
+          isMounted && setUserLoading(false);
+        });
+      // 조금 느림(3)
+      getRecommByDesc(userNo, signal)
+        .then((data) => {
+          if (data.code === 200 && isMounted) {
+            setDescGame(data.data.title);
+            setDescGameList(data.data.recommendResultResponses);
+          }
+        })
+        .catch(() => {});
+      // 많이 느림(5)
+      getRecommByCategory(userNo, signal)
+        .then((data) => {
+          if (data.code === 200 && isMounted) {
+            setCategoryGame(data.data.title);
+            setCategoryGameList(data.data.recommendResultResponses);
+          }
+        })
+        .catch(() => {});
+      getRecommByWeight(userNo, signal)
+        .then((data) => {
+          if (data.code === 200 && isMounted) {
+            setWeightGameList(data.data);
+          }
+        })
+        .catch(() => {});
+      getRecommByPlayer(userNo, signal)
+        .then((data) => {
+          if (data.code === 200 && isMounted) {
+            setPlayerGameList(data.data);
+          }
+        })
+        .catch(() => {});
+      getRecommByTime(userNo, signal)
+        .then((data) => {
+          if (data.code === 200 && isMounted) {
+            setTimeGameList(data.data);
+          }
+        })
+        .catch(() => {});
+      getRecommByAge(userNo, signal)
+        .then((data) => {
+          if (data.code === 200 && isMounted) {
+            setAgeGameList(data.data);
+          }
+        })
+        .catch(() => {});
+    }
+    // 공통
+    getRecommByNewbie(userNo, signal)
+      .then((data) => {
+        if (data.code === 200 && isMounted) {
+          setNewbieGameList(data.data);
+        }
+        isMounted && setNewbieLoading(false);
+      })
+      .catch(() => {
+        isMounted && setNewbieLoading(false);
+      });
+    getRecommByReviews(userNo, signal)
+      .then((data) => {
+        if (data.code === 200 && isMounted) {
+          setReviewGameList(data.data);
+        }
+        isMounted && setReviewLoading(false);
+      })
+      .catch(() => {
+        isMounted && setReviewLoading(false);
+      });
+    getRecommByScore(userNo, signal)
+      .then((data) => {
+        if (data.code === 200 && isMounted) {
+          setScoreGameList(data.data);
+        }
+        isMounted && setScoreLoading(false);
+      })
+      .catch(() => {
+        isMounted && setScoreLoading(false);
+      });
+
+    // 컴포넌트가 willunmount될 떄 실행되는 함수
+    return () => {
+      setUserGameList([]);
+      setDescGameList([]);
+      setCategoryGameList([]);
+      setWeightGameList([]);
+      setPlayerGameList([]);
+      setTimeGameList([]);
+      setAgeGameList([]);
+      // 실행중인 DOM 요청이 완료되기 전에 취소
+      controller.abort();
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userNo]);
+
+  // 페이지 이동
+  const movePage = (page: string) => {
+    navigate(page);
+  };
+
+  const skelCards = [1, 1, 1, 1, 1].map(() => <SkelBoardCard marginX={0.5} />);
+
+  const SkelTheme = () => {
+    return (
+      <Box sx={{ position: "relative" }}>
+        <Skeleton animation="wave" width="30%" height={50} sx={{ mt: 4 }} />
+        <AliceCarousel
+          paddingLeft={15}
+          paddingRight={15}
+          items={skelCards}
+          disableButtonsControls
+          disableDotsControls
+          controlsStrategy="responsive"
+          responsive={{
+            0: { items: 1.5 },
+            400: { items: 2 },
+            550: { items: 3 },
+            700: { items: 4 },
+            900: { items: 5 },
+          }}
+        ></AliceCarousel>
+        <LegoSpinner
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+      </Box>
+    );
+  };
 
   return (
-    <Container style={{ marginTop: 20, padding: 20 }}>
-      <Grid container spacing={2}>
-        {gameList.map((game) => (
-          <BoardCard key={game.gameNo} game={game}></BoardCard>
-        ))}
-      </Grid>
+    <Container style={{ padding: 20 }} sx={{ mt: 5 }}>
+      {!userNo && (
+        <Box
+          onClick={() => movePage("/signin")}
+          sx={{
+            mt: 5,
+            py: 1,
+            px: 2,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "grey.200",
+            borderRadius: 3,
+            cursor: "pointer",
+          }}
+        >
+          <img src={cardImg} alt="card" width={50} />
+          <Typography
+            sx={{ fontSize: { xs: 15, md: 18 }, ml: 0.5 }}
+            align="left"
+          >
+            로그인을 하면,
+            <Box component="span" ml={1} sx={{ fontWeight: 600 }}>
+              나에게 맞는 보드게임을 추천
+            </Box>
+            받을 수 있어요!
+          </Typography>
+        </Box>
+      )}
+
+      {userLoading ? (
+        <>
+          <SkelTheme />
+          <SkelTheme />
+        </>
+      ) : (
+        userGameList.length > 0 && (
+          <ThemeList title="나의 맞춤 추천 게임" gameList={userGameList} />
+        )
+      )}
+      {newbieLoading ? (
+        <SkelTheme />
+      ) : (
+        userGameList.length <= 0 &&
+        newbieGameList.length > 0 && (
+          <ThemeList
+            title="초보자라면 이 게임 어때요?"
+            gameList={newbieGameList}
+          />
+        )
+      )}
+      {!userLoading && (
+        <>
+          {weightGameList.length > 0 && (
+            <ThemeList
+              title="내가 좋아하는 난이도의 게임"
+              gameList={weightGameList}
+            />
+          )}
+          {playerGameList.length > 0 && (
+            <ThemeList
+              title="내가 즐겨하는 인원 수의 게임"
+              gameList={playerGameList}
+            />
+          )}
+          {timeGameList.length > 0 && (
+            <ThemeList
+              title="내가 즐겨하는 플레이 시간의 게임"
+              gameList={timeGameList}
+            />
+          )}
+          {ageGameList.length > 0 && (
+            <ThemeList
+              title="내가 즐겨하는 나이대의 게임"
+              gameList={ageGameList}
+            />
+          )}
+          {descGameList.length > 0 && (
+            <ThemeList
+              title={`'${descGame}'와/과 비슷한 유형의 게임 추천`}
+              gameList={descGameList}
+            />
+          )}
+          {categoryGameList.length > 0 && (
+            <ThemeList
+              title={`'${categoryGame}'와/과 비슷한 장르의 게임 추천`}
+              gameList={categoryGameList}
+            />
+          )}
+        </>
+      )}
+      {reviewLoading ? (
+        <SkelTheme />
+      ) : (
+        reviewGameList.length > 0 && (
+          <ThemeList title="리뷰가 많은 게임" gameList={reviewGameList} />
+        )
+      )}
+      {scoreLoading ? (
+        <SkelTheme />
+      ) : (
+        scoreGameList.length > 0 && (
+          <ThemeList title="이보게 평점이 높은 게임" gameList={scoreGameList} />
+        )
+      )}
     </Container>
   );
 }
-
-// 임시 데이터
-const tempData = {
-  gameList: [
-    {
-      gameNo: 1,
-      gameImg:
-        "https://cf.geekdo-images.com/original/img/uqlrq_bQJqHpcaN7_7qocV5XfbU=/0x0/pic4718279.jpg",
-      gameName: "Die Macher long title very long",
-      gameMinPlayer: 3,
-      gameMaxPlayer: 5,
-      // gameMinTime: 240,
-      // gameMaxTime: 240,
-      // gameYear: 1986,
-      // gameWeight: 4.3,
-      // gameAge: 14,
-      gameCategory: "Economic|Negotiation|Political",
-      // gameDesc: "Die Macher is a game about seven sequential political races in different regions of Germany. Players...",
-      gameTotalScore: 7.6,
-      isLike: true,
-    },
-    {
-      gameNo: 2,
-      gameImg:
-        "https://cf.geekdo-images.com/original/img/o07K8ZVh0PkOpOnSZs1TuABb7I4=/0x0/pic4001505.jpg",
-      gameName: "Dragonmaster",
-      gameMinPlayer: 3,
-      gameMaxPlayer: 4,
-      // gameMinTime: 30,
-      // gameMaxTime: 30,
-      // gameYear: 1981,
-      // gameWeight: 1.9,
-      // gameAge: 12,
-      gameCategory: "Card Game|Fantasy",
-      // gameDesc: "Dragonmaster is a trick-taking card game based on an older game called Coup d'État. Each player is g...",
-      gameTotalScore: 6.6,
-      isLike: false,
-    },
-    {
-      gameNo: 3,
-      gameImg:
-        "https://cf.geekdo-images.com/original/img/mPS50ts53753q5-kb5vWbTDN8Z0=/0x0/pic3211873.jpg",
-      gameName: "Samurai",
-      gameMinPlayer: 2,
-      gameMaxPlayer: 4,
-      // gameMinTime: 30,
-      // gameMaxTime: 60,
-      // gameYear: 1998,
-      // gameWeight: 2.4,
-      // gameAge: 10,
-      gameCategory: "Abstract Strategy|Medieval",
-      // gameDesc: "Samurai is set in medieval Japan. Players compete to gain the favor of three factions: samurai, peas...",
-      gameTotalScore: 7.4,
-      isLike: false,
-    },
-  ],
-};
