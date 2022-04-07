@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import StarIcon from "@mui/icons-material/Star";
+import { Box } from "@mui/system";
 
 // 카드 효과 스타일
 const StyledCard = styled(Card)(() => ({
@@ -51,7 +52,7 @@ const GameTitle = styled("div")(({ theme }) => ({
 }));
 
 // 카테고리 스타일
-const Category = styled("div")(({ theme }) => ({
+const Category = styled(Box)(({ theme }) => ({
   fontSize: "0.85rem",
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
@@ -109,13 +110,12 @@ export default function BoardCard(props: { game: IGame; marginX?: number }) {
           </ImgWrapper>
           <CardContent>
             <GameTitle>{props.game.gameKorName}</GameTitle>
-            <Category>
-              {props.game.gameCategory === "NaN" ? (
-                <br />
-              ) : (
-                props.game.gameCategory
-              )}
-            </Category>
+            {props.game.gameCategory === "NaN" ? (
+              <Category sx={{ color: "transparent" }}>No Category</Category>
+            ) : (
+              <Category>{props.game.gameCategory}</Category>
+            )}
+
             <AddInfo>
               <PersonIcon color="warning" fontSize="small" sx={{ mr: 0.5 }} />
               {props.game.gameMinPlayer}~{props.game.gameMaxPlayer}명
