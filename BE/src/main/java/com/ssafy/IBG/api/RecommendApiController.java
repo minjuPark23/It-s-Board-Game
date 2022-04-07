@@ -369,9 +369,6 @@ public class RecommendApiController {
     private Result getResultList(List<Game> list, Integer userNo, String target){
         List<RecommendResultResponse> collect = list.stream()
                 .map(g-> {
-                    if(userNo == null)
-                        return new RecommendResultResponse(g, false);
-
                     return new RecommendResultResponse(g, interestService.getIsLike(userNo, g.getGameNo()));
                 })
                 .collect(Collectors.toList());
