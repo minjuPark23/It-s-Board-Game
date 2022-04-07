@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 export default function SignUp() {
   const [width] = useState(window.innerWidth);
-  const pic = require("./component/선비레고.png");
+  const pic = require("./component/빙글빙글 이보게.gif");
   return (
     <>
       <Grid
