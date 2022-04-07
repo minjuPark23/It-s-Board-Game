@@ -46,7 +46,7 @@ public class RecommendApiController {
 
         List<RecommendSurveyResponse> collect = list.stream()
                 .map(g -> {
-                    return new RecommendSurveyResponse(g.getGameNo(), g.getGameName(), g.getGameImg());
+                    return new RecommendSurveyResponse(g.getGameNo(), g.getGameName(), g.getGameKorName(), g.getGameImg());
                 })
                 .collect(Collectors.toList());
 
