@@ -95,7 +95,7 @@ public class RecommendApiController {
     /**
     * @author : 박민주
     * @date : 2022-04-04 오전 2:34
-    * @desc : 사용자가 한 게임 중 비슷한 게임(랜덤) 유형별 추천 - Desc 기준
+    * @desc : 사용자가 한 게임 중 비슷한 게임(랜덤) 유형별 추천 - `Desc` 기준
     **/
     @GetMapping("/game/desc/{userNo}")
     public Result getRecommendByDesc(@PathVariable(name = "userNo") Integer userNo) throws JsonProcessingException {
