@@ -53,7 +53,7 @@
 - 사용자가 해본 보드게임에 별점을 줄 수 있다.
 - 해당 별점을 기반으로 보드게임을 추천받을 수 있다.
 
-![survey](https://user-images.githubusercontent.com/37528765/161986535-62e5f7df-a2b5-450c-bd7a-852a596d1a8b.JPG)
+![survey](https://user-images.githubusercontent.com/37528765/162167980-39390038-9ef9-4069-b2ad-3a91213794a0.JPG)
 
 
 ---
@@ -79,7 +79,7 @@
 - 사용자간 보드게임 거래
 - 댓글을 통해 사용자가 거래 진행
 
-![bgm](https://user-images.githubusercontent.com/37528765/161987229-af396b4f-5e1c-42aa-86ea-7b0d082414cd.JPG)
+![bgm](https://user-images.githubusercontent.com/37528765/162168189-69603d8a-e63d-4726-9baa-8e4b8d117862.JPG)
 
 ---
 
@@ -96,7 +96,7 @@
 - 하트를 눌러 환심목록에 추가
 - 추가한 관심있는 보드게임을 한눈에 확인
 
-![image](https://user-images.githubusercontent.com/37528765/161994088-3d5a0be5-83d5-4324-bfcf-0567e223aa91.png)
+![like](https://user-images.githubusercontent.com/37528765/162169011-14ce750a-ff5b-49dd-8db4-aa3f3a90231f.JPG)
 
 <br>
 
