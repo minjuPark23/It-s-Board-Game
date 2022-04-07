@@ -8,5 +8,6 @@ import lombok.Data;
 public class RecommendSurveyResponse {
     private int gameNo;
     private String gameName;
+    private String gameKorName;
     private String gameImg;
 }
