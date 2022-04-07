@@ -145,6 +145,13 @@ public class RecommendApiController {
 //        Collections.shuffle(collect);
 //
 //        return getResultList(collect, userNo);
+
+        List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
+
+        if(scores.size() < 10)
+            return new Result(HttpStatus.NO_CONTENT.value());
+
+
         List<Integer> gameNoList = restapiService.requestGETAPI("/user3", userNo);
 
         List<Game> game_popular_list = gameNoList.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
