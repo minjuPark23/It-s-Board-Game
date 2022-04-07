@@ -89,8 +89,8 @@ class UserView(viewsets.ModelViewSet):
         df_games = Game.objects.all()
         df_games = pd.DataFrame(df_games.values("game_no", "game_total_score"))
 
-        # df_scores1 = Score.objects.all().values("game_no", "score_rating")
-        df_scores = pd.DataFrame(Score.objects.all().values("game_no", "score_rating")).astype('float32')
+        df_scores1 = Score.objects.all().values("game_no", "score_rating")
+        df_scores = pd.DataFrame(df_scores1)
 
         df_games['score_count'] = df_scores.groupby('game_no')['score_rating'].count()
 
