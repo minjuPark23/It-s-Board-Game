@@ -5,6 +5,7 @@ import { login, userInfo } from "../../../api/user";
 import jwtDecode from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 
 interface MyToken {
   userNo: number;
@@ -57,11 +58,11 @@ export default function SignIn() {
             setLoading(false);
           });
         } else {
-          alert("비밀번호를 확인해주세요");
+          swal("비밀번호를 확인해주세요");
         }
       })
       .catch(() => {
-        alert("가입되지 않은 이메일입니다");
+        swal("가입되지 않은 이메일입니다");
       });
     setLoading(false);
   };

@@ -40,7 +40,6 @@ function Form({ sendDataToParent }: User) {
   const saveEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsRemember(e.target.checked);
     if (e.target.checked) {
-      //alert("remember" + email + " " + e.target.checked);
       setCookie("rememberEmail", email, { maxAge: 31536000 });
     } else {
       removeCookie("rememberEmail");
