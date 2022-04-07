@@ -28,7 +28,7 @@ export default function BoardGameMarket() {
 
   const fetchDealLists = () => {
     getDealLists().then((data) => {
-      console.log(data);
+      // console.log(data);
       setDealList(data.data);
     });
   };
@@ -124,9 +124,9 @@ export default function BoardGameMarket() {
     contents: string,
     file: File | Blob
   ) => {
-    console.log(file);
+    // console.log(file);
     writeDeal(gameNo, userNo, title, contents, file, price).then((data) => {
-      console.log(data);
+      // console.log(data);
       setOpen(false);
       fetchDealLists();
     });
@@ -138,7 +138,7 @@ export default function BoardGameMarket() {
         fetchDealLists();
       } else {
         getDealSearch(e.target.value).then((data) => {
-          console.log(data);
+          // console.log(data);
           setDealList(data.data);
         });
       }
