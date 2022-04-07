@@ -9,6 +9,7 @@ import {
   Typography,
   Container,
 } from "@mui/material/";
+import swal from "sweetalert";
 
 interface User {
   parentCallback: (nickname: string, email: string, password: string) => void;
@@ -62,19 +63,19 @@ function Form({ parentCallback, emailCallback, nicknameCallback }: User) {
 
   const checkData = () => {
     if (!email.includes("@")) {
-      alert("이메일을 확인해주세요");
+      swal("이메일을 확인해주세요");
       setCanSubmit(false);
     } else if (nickname.length < 2) {
-      alert("닉네임을 확인해주세요");
+      swal("닉네임을 확인해주세요");
       setCanSubmit(false);
     } else if (agreement === false) {
-      alert("개인정보 약관에 동의해주세요");
+      swal("개인정보 약관에 동의해주세요");
       setCanSubmit(false);
     } else if (password.length < 6) {
-      alert("비밀번호는 6글자 이상이어야합니다.");
+      swal("비밀번호는 6글자 이상이어야합니다.");
       setCanSubmit(false);
     } else if (password !== passwordCheck) {
-      alert("비밀번호 확인이 일치하지 않습니다");
+      swal("비밀번호 확인이 일치하지 않습니다");
       setCanSubmit(false);
     } else setCanSubmit(true);
   };
@@ -86,14 +87,10 @@ function Form({ parentCallback, emailCallback, nicknameCallback }: User) {
   };
   /* 이메일 중복 확인 */
   const emailDup = () => {
-    // alert("중복");
-
     emailCallback(email);
   };
   /* 이메일 중복 확인 */
   const nicknameDup = () => {
-    // alert("중복");
-
     nicknameCallback(nickname);
   };
 
