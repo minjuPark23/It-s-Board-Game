@@ -143,18 +143,24 @@ class UserView(viewsets.ModelViewSet):
         predict = model.predict(recommend_category)
 
         recommendations['predict'] = predict
-        print(recommendations)
+        # print(recommendations)
 
         recommendations = recommendations[~game_list.index.isin(user_score_list['game_no'])]
-        print(recommendations)
+        # print(recommendations)
 
-        findUser = get_object_or_404(User, pk=user_no)
-        for idx, row in recommendations.iterrows():
-            findGame = get_object_or_404(Game, pk=idx)
-            r = Recommend(game_no=findGame, user_no=findUser, recommend_rating=row['predict']);
-            r.save()
+        # findUser = get_object_or_404(User, pk=user_no)
+        # for idx, row in recommendations.iterrows():
+        #     findGame = get_object_or_404(Game, pk=idx)
+        #     r = Recommend(game_no=findGame, user_no=findUser, recommend_rating=row['predict']);
+        #     print("save")
+        #     r.save()
 
-        return Response()
+        recommendations = recommendations.sort_values('predict', ascending=False)
+        # print(recommendations)
+
+        recommendations = recommendations.index[:10]
+        print(recommendations.values.tolist())
+        return Response(recommendations.values.tolist())
 
     """
          @author : 박민주
