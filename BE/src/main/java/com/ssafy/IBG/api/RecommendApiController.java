@@ -206,7 +206,7 @@ public class RecommendApiController {
         if(scores.size() == 0)
             return new Result(HttpStatus.NO_CONTENT.value());
 
-        int num = (int)(Math.random()*(scores.size()));
+        int num = 1+(int)(Math.random()*(scores.size()));
         int game_no = scores.get(num).getGame().getGameNo();
 
         List<Integer> list = restapiService.requestGETAPI("/category", game_no);
