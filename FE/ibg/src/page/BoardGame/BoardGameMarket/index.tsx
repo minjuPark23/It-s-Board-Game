@@ -172,7 +172,7 @@ export default function BoardGameMarket() {
                   <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
-                  placeholder="보드게임 이름(영문)으로 검색"
+                  placeholder="보드게임 이름(영문)"
                   inputProps={{ "aria-label": "search" }}
                   onKeyUp={handleSearchKeyUp}
                 />
