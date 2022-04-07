@@ -48,7 +48,13 @@ export default function ReviewItem(props: {
             )}
         </Box>
         <Typography
-          sx={{ fontSize: { xs: 12, md: 15 }, mt: 0.7, whiteSpace: "pre-line" }}
+          component="div"
+          sx={{
+            fontSize: { xs: 12, md: 15 },
+            mt: 0.7,
+            whiteSpace: "pre-line",
+            wordBreak: "break-all",
+          }}
         >
           {props.review.reviewContent
             ? props.review.reviewContent
