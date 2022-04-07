@@ -107,7 +107,7 @@ public class RecommendApiController {
             gameNo = (int)(random*300)+1;
         }else{
             double random = Math.random();
-            int n = (int)(random*scoreList.size())+1;
+            int n = (int)(random*scoreList.size());
             gameNo = scoreList.get(n).getGame().getGameNo();
         }
 
@@ -132,31 +132,32 @@ public class RecommendApiController {
      * */
     @GetMapping("/game/score/{userNo}")
     public Result getRecommendByScore(@PathVariable(name = "userNo") Integer userNo) throws JsonProcessingException {
-//        List<Recommend> recommendList = recommendService.getRecommendByUserNo(userNo);
-//        if (recommendList.size() < 10) {
-//            System.out.println("아직 평점 데이터 10개가 안된다.");
-//            return new Result(HttpStatus.OK.value(), null);
-//        }
+        int scoreCnt = scoreService.getScoreCnt(userNo);
+        if (scoreCnt < 10) {
+            System.out.println("아직 평점 데이터 10개가 안된다.");
+            return new Result(HttpStatus.OK.value(), null);
+        }
+        List<Recommend> recommendList = recommendService.getRecommendByUserNo(userNo);
+
+        System.out.println("평점 데이터 충분해 추천 데이터 반환. "+ recommendList.size());
+
+        List<Game> collect = recommendList.stream().map(r -> r.getGame()).collect(Collectors.toList());
+
+        Collections.shuffle(collect);
+
+        return getResultList(collect, userNo);
+
+//        List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
 //
-//        System.out.println("평점 데이터 충분해 추천 데이터 반환. "+ recommendList.size());
+//        if(scores.size() < 10)
+//            return new Result(HttpStatus.NO_CONTENT.value());
 //
-//        List<Game> collect = recommendList.stream().map(r -> r.getGame()).collect(Collectors.toList());
 //
-//        Collections.shuffle(collect);
+//        List<Integer> gameNoList = restapiService.requestGETAPI("/user3", userNo);
 //
-//        return getResultList(collect, userNo);
-
-        List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
-
-        if(scores.size() < 10)
-            return new Result(HttpStatus.NO_CONTENT.value());
-
-
-        List<Integer> gameNoList = restapiService.requestGETAPI("/user3", userNo);
-
-        List<Game> game_popular_list = gameNoList.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
-
-        return getResultList(game_popular_list, userNo);
+//        List<Game> game_popular_list = gameNoList.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
+//
+//        return getResultList(game_popular_list, userNo);
     }
 
     /**
@@ -206,7 +207,7 @@ public class RecommendApiController {
         if(scores.size() == 0)
             return new Result(HttpStatus.NO_CONTENT.value());
 
-        int num = 1+(int)(Math.random()*(scores.size()));
+        int num = (int)(Math.random()*(scores.size()));
         int game_no = scores.get(num).getGame().getGameNo();
 
         List<Integer> list = restapiService.requestGETAPI("/category", game_no);
