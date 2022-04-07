@@ -44,11 +44,16 @@
     4. 별점 랭킹을 통한 보드게임 추천 - 정적 추천
     5. 리뷰가 많은 보드게임 추천 - 정적 추천
 
+![main](https://user-images.githubusercontent.com/37528765/161986188-94ece7c6-5e9d-4f13-8bae-080d37c70b80.JPG)
+
+
 ---
 
 ### 📌 설문조사
 - 사용자가 해본 보드게임에 별점을 줄 수 있다.
 - 해당 별점을 기반으로 보드게임을 추천받을 수 있다.
+
+![survey](https://user-images.githubusercontent.com/37528765/161986535-62e5f7df-a2b5-450c-bd7a-852a596d1a8b.JPG)
 
 
 ---
@@ -57,7 +62,8 @@
 - 전체 보드게임을 한눈에 확인할 수 있다.
 - 필터를 통해 내가 원하는 게임을 한번에 찾을 수 있다.
 
-![findBoardgame](https://user-images.githubusercontent.com/37528765/161695259-56b8e8ef-0345-4ea2-a9cf-796257b5cb4b.JPG)
+![findBoardgame](https://user-images.githubusercontent.com/37528765/161986852-e542d721-b9aa-4d91-a293-4ee03a6ea005.JPG)
+
 ![findBoardgameFilter](https://user-images.githubusercontent.com/37528765/161695292-0d6b3f30-e8fa-47ca-a8cc-11a0c73bb470.JPG)
 ---
 
@@ -73,6 +79,7 @@
 - 사용자간 보드게임 거래
 - 댓글을 통해 사용자가 거래 진행
 
+![bgm](https://user-images.githubusercontent.com/37528765/161987229-af396b4f-5e1c-42aa-86ea-7b0d082414cd.JPG)
 
 ---
 
@@ -81,7 +88,7 @@
 - 주변의 보드게임 카페를 찾아 지도에 표시
 - 보드게임 카페의 주소 확인
 
-![boardCafe](https://user-images.githubusercontent.com/37528765/161695146-076d5fc7-b8c0-43b1-88e4-aa2655aa0492.JPG)
+![boardCafe](https://user-images.githubusercontent.com/37528765/161987082-e325e6df-791d-42ae-9e87-6d866375c3ac.JPG)
 
 ---
 
@@ -89,6 +96,7 @@
 - 하트를 눌러 환심목록에 추가
 - 추가한 관심있는 보드게임을 한눈에 확인
 
+![image](https://user-images.githubusercontent.com/37528765/161994088-3d5a0be5-83d5-4324-bfcf-0567e223aa91.png)
 
 <br>
 
@@ -118,7 +126,7 @@
 <br>
 
 ## 🍏 API
-### [API 명세서]()
+### [API 명세서](https://challympic.postman.co/workspace/%25EC%259D%25B4%25EB%25B3%25B4%25EA%25B2%258C~9c816893-77c6-49e3-a830-0641ec0feaab/collection/19284775-7b32d986-2c8b-4b3a-8760-86cc5e845511)
 
 <br>
 
