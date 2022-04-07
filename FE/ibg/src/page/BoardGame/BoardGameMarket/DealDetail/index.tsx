@@ -193,6 +193,7 @@ export default function DealDetail() {
                 title="댓글"
                 reviewList={reviewList}
                 userNo={userNo}
+                dealUserNick={dealDetail?.userNick}
                 addCallback={registerReview}
               />
             </Grid>
