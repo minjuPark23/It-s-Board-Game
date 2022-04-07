@@ -33,7 +33,7 @@ export default function ReviewInfo(props: {
         sx={{ fontSize: { xs: 16, md: 21 }, fontWeight: "bold", mb: 1 }}
       >
         {props.title}
-        <Typography component="span">({props.reviewList.length})</Typography>
+        {/* <Typography component="span">({props.reviewList.length})</Typography> */}
       </Typography>
 
       {props.userNo ? (
