@@ -33,8 +33,6 @@ class UserView(viewsets.ModelViewSet):
 
     @api_view(['GET'])
     def recommend_by_desc_similarity(self, game_no):
-        print("유저가 한 게임 중 비슷한 유형별")
-        print(game_no)
         df_games = Game.objects.all()
         df_games = pd.DataFrame(df_games.values("game_no", "game_name", "game_desc"))
 
@@ -46,9 +44,6 @@ class UserView(viewsets.ModelViewSet):
 
         # Construct the required TF-IDF matrix by fitting and transforming the data
         tfidf_matrix = tfidf.fit_transform(df_games['game_desc'])
-
-        # Output the shape of tfidf_matrix
-        print(tfidf_matrix.shape)
 
         # 300개의 게임을 설명하는데 7000개 이상의 다른 단어가 사용되었다. 이 행렬을 사용해 유사성 점수를 계산할 수 있습니다. 코사인 유사성을 사용해 두 영화간의 유사성을 계산한다.
         # 코사인 유사성 사용 이유: 크기와 무관하고 계산이 비교적 쉽고 빠르기 때문.
@@ -79,10 +74,8 @@ class UserView(viewsets.ModelViewSet):
             return df_games['game_name'].iloc[game_indices]
 
         recommendations = get_recommendations(game_no)
-        print(recommendations)
 
         game_no_list = list(recommendations.index)
-        print(game_no_list)
         return Response(game_no_list)
 
     """
@@ -95,8 +88,9 @@ class UserView(viewsets.ModelViewSet):
     def recommend_by_score_on_score_count(request):
         df_games = Game.objects.all()
         df_games = pd.DataFrame(df_games.values("game_no", "game_total_score"))
-        df_scores = Score.objects.all().values("game_no", "score_rating")
-        df_scores = pd.DataFrame(df_scores)
+
+        # df_scores1 = Score.objects.all().values("game_no", "score_rating")
+        df_scores = pd.DataFrame(Score.objects.all().values("game_no", "score_rating")).astype('float32')
 
         df_games['score_count'] = df_scores.groupby('game_no')['score_rating'].count()
 
@@ -117,7 +111,6 @@ class UserView(viewsets.ModelViewSet):
         q_games = q_games.sort_values('score2', ascending=False)
 
         game_list = list(q_games['game_no'])
-        print(game_list)
 
         return Response(game_list)
 
@@ -168,7 +161,6 @@ class UserView(viewsets.ModelViewSet):
 
     @api_view(['GET'])
     def recommend_by_predicted_score_for_svd(request, user_no):
-        print("평점 추천2")
         # 이미 Recommend에 저장된 것 다 지우기
         Recommend.objects.filter(user_no=user_no).delete()
 
@@ -227,8 +219,6 @@ class UserView(viewsets.ModelViewSet):
 
         already_rated, predictions = recommend_games(df_svd_preds, user_no, game_list, score_list, 10)
 
-        print(predictions)
-
         return Response()
 
     """
@@ -239,7 +229,6 @@ class UserView(viewsets.ModelViewSet):
 
     @api_view(['GET'])
     def recommend_by_predicted_score(request, user_no):
-        print("평점 추천")
         # 추천 받아서 결과 반환
 
         # 이미 Recommend에 저장된 것 다 지우기
