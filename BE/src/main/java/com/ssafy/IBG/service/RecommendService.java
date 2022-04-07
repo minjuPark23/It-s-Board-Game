@@ -32,7 +32,7 @@ public class RecommendService {
     /**
      * @author : 권오범
      * @date : 2022-03-25 오후 15:00
-     * @desc: 리뷰 순으로 게임 추천 / Query Test 필요
+     * @desc: 리뷰 순으로 게임 추천
      **/
     public List<Game> getRecommendByReviews(int limit){
         return recommendRepository.findRecommendByReviews(limit);
@@ -61,8 +61,8 @@ public class RecommendService {
      * @date : 2022-04-23 오후 15:00
      * @desc: 난이도 순으로 게임 추천
      **/
-    public List<Game> getRecommendByWeight(int userNo, double weight, int limit){
-        return recommendRepository.findRecommendByWeight(userNo, weight, limit);
+    public List<Game> getRecommendByWeight(int userNo, double weight, int limit, double percent){
+        return recommendRepository.findRecommendByWeight(userNo, weight*(1.0 + percent), weight*(1.0 - percent), limit);
     }
 
     /**
@@ -70,8 +70,8 @@ public class RecommendService {
      * @date : 2022-04-23 오후 15:00
      * @desc: 플레이어 수로 게임 추천
      **/
-    public List<Game> getRecommendByPlayer(Integer userNo, double minPlayers, double maxPlayers, int limit) {
-        return recommendRepository.findRecommendByPlayer(userNo, (int)Math.round(minPlayers), (int)Math.round(maxPlayers), limit);
+    public List<Game> getRecommendByPlayer(Integer userNo, double maxPlayers, double minPlayers, int limit, double percent) {
+        return recommendRepository.findRecommendByPlayer(userNo, (int)Math.round(maxPlayers*(1.0 + percent)), (int)Math.round(minPlayers*(1.0 - percent)), limit);
     }
 
     /**
@@ -79,8 +79,8 @@ public class RecommendService {
      * @date : 2022-04-03 오후 15:00
      * @desc: 플레이 시간으로 게임 추천
      **/
-    public List<Game> getRecommendByPlayTime(Integer userNo, double minPlayTime, double maxPlayTime, int limit) {
-        return recommendRepository.findRecommendByPlayTime(userNo, (int)Math.round(minPlayTime), (int)Math.round(maxPlayTime), limit);
+    public List<Game> getRecommendByPlayTime(Integer userNo, double maxPlayTime, double minPlayTime, int limit, double percent) {
+        return recommendRepository.findRecommendByPlayTime(userNo, (int)Math.round(maxPlayTime*(1.0 + percent)), (int)Math.round(minPlayTime*(1.0 - percent)), limit);
     }
 
     /**
@@ -88,8 +88,8 @@ public class RecommendService {
      * @date : 2022-04-03 오후 15:00
      * @desc: 추천 연령으로 게임 추천
      **/
-    public List<Game> getRecommendByAge(Integer userNo, double gameAgeAvg, int limit) {
-        return recommendRepository.findRecommendByAge(userNo, gameAgeAvg, limit);
+    public List<Game> getRecommendByAge(Integer userNo, double gameAgeAvg, int limit, double percent) {
+        return recommendRepository.findRecommendByAge(userNo, (int)Math.round(gameAgeAvg*(1.0 + percent)),(int)Math.round(gameAgeAvg*(1.0 - percent)),  limit);
     }
 
     /**
@@ -97,7 +97,7 @@ public class RecommendService {
      * @date : 2022-04-03 오후 15:00
      * @desc: 초보자 추천 게임
      **/
-    public List<Game> getRecommendByNewbie(Integer userNo, double gameAgeWeight, int limit) {
-        return recommendRepository.findRecommendByNewbie(userNo, gameAgeWeight, limit);
+    public List<Game> getRecommendByNewbie(Integer userNo, double gameAgeWeight, int limit, double percent) {
+        return recommendRepository.findRecommendByNewbie(userNo, gameAgeWeight*percent, limit);
     }
 }

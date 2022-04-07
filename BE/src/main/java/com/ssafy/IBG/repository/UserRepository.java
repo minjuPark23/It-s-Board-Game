@@ -21,7 +21,6 @@ public class UserRepository {
             em.persist(user);
             return true;
         } catch (Exception e){
-            System.err.println("회원가입 실패");
             return false;
         }
     }
@@ -54,7 +53,6 @@ public class UserRepository {
         try {
             return em.find(User.class, userNo);
         } catch (NoResultException e){
-            System.err.println("해당 유저가 없습니다.");
             return null;
         }
     }
@@ -65,7 +63,6 @@ public class UserRepository {
                     .setParameter("userEmail", userEmail)
                     .getSingleResult();
         } catch (NoResultException e){
-            System.err.println("해당 유저가 없습니다.");
             return null;
         }
     }

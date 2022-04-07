@@ -1,6 +1,7 @@
 package com.ssafy.IBG.repository;
 
 import com.ssafy.IBG.domain.Deal;
+import com.ssafy.IBG.domain.DealReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -65,6 +66,39 @@ public class DealRepository {
     public Deal findDealByDealNo(int dealNo) {
         try{
             return em.find(Deal.class, dealNo);
+        }catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-05 오후 4:15
+     * @desc : 거래 리뷰 등록
+    **/
+    public boolean saveDealReview(DealReview dealReview) {
+        try{
+            em.persist(dealReview);
+            return true;
+        }catch (NoResultException e) {
+            return false;
+        }
+    }
+
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-05 오후 5:10
+     * @desc : 거래 번호로 댓글 목록 가져오기
+     * @modify
+     * - @author : 곽현준
+     * - @date : 2022-04-05 오전 10:35
+     * - @desc : 댓글 순서 변경
+    **/
+    public List<DealReview> findDealReviewByDealNo(int dealNo) {
+        try{
+            return em.createQuery("select dr from DealReview dr where dr.deal.dealNo = :dealNo order by dr.dealReviewNo desc", DealReview.class)
+                    .setParameter("dealNo", dealNo)
+                    .getResultList();
         }catch (NoResultException e) {
             return null;
         }

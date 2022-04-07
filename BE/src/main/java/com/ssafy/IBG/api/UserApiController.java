@@ -145,7 +145,7 @@ public class UserApiController {
 
         if(scoreService.getScoreCnt(request.getUserNo()) >= 10){
             System.out.println("유저의 평점 데이터가 10보다 크니 장고 실행");
-            restapiService.requestGETAPI("/user/predict", request.getUserNo());
+            restapiService.requestGETAPI("/user3", request.getUserNo());
         }
 
         return new Result(HttpStatus.OK.value());

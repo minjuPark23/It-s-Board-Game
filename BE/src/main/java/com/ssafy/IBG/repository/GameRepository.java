@@ -75,7 +75,6 @@ public class GameRepository {
      **/
     public List<Game> findGameByFilter(String gameName, String gameKorName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
 
-        System.out.println(gameCategory);
         JPQLQuery<Game> query = new JPAQuery<>(em);
         QGame qGame = new QGame("Game");
 
@@ -90,7 +89,7 @@ public class GameRepository {
             builder.and(qGame.gameMinPlayer.goe(gamePlayer));
         }
         if(gameTime != null){
-            builder.and(qGame.gameMaxTime.loe(gameTime));
+            builder.and(qGame.gameMaxTime.goe(gameTime));
         }
         if(gameAge != null){
             builder.and(qGame.gameAge.loe(gameAge));

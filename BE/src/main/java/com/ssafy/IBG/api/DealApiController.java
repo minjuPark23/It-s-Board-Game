@@ -3,6 +3,7 @@ package com.ssafy.IBG.api;
 import com.ssafy.IBG.api.deal.*;
 import com.ssafy.IBG.api.dto.Result;
 import com.ssafy.IBG.domain.Deal;
+import com.ssafy.IBG.domain.DealReview;
 import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.User;
 import com.ssafy.IBG.service.DealService;
@@ -193,5 +194,44 @@ public class DealApiController {
         Deal deal = dealService.updateDealStatus(dealUpdateRequest.getDealNo());
         if(deal == null) return new Result(HttpStatus.NO_CONTENT.value());
         return new Result(HttpStatus.OK.value());
+    }
+
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-05 오후 4:04
+     * @desc : 댓글 생성
+    **/
+    @PostMapping("/deal/review")
+    public Result setDealReview(@RequestBody DealReviewRequest request) {
+
+        DealReview dealReview = new DealReview();
+
+        Deal deal = dealService.getDealDetailByDealNo(request.getDealNo());
+        User user = userService.getUserByUserNo(request.getUserNo());
+
+        dealReview.setDeal(deal);
+        dealReview.setUser(user);
+        dealReview.setDealReviewContent(request.getDealReviewContent());
+
+        boolean isSaved = dealService.setDealReview(dealReview);
+        if(!isSaved) return new Result(HttpStatus.NO_CONTENT.value());
+
+        return new Result(HttpStatus.OK.value());
+    }
+    
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-05 오후 4:56
+     * @desc : 거래번호로 댓글 가져오기
+    **/
+    @GetMapping("/deal/review/{dealNo}")
+    public Result getDealReviewByDealNo(@PathVariable int dealNo) {
+
+        List<DealReview> dealReviewList = dealService.getDealReviewByDealNo(dealNo);
+
+        List<DealReviewResponse> collect = dealReviewList.stream()
+                .map(dealReview -> new DealReviewResponse(dealReview))
+                .collect(Collectors.toList());
+        return new Result(HttpStatus.OK.value(), collect);
     }
 }
