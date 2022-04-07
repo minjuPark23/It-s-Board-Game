@@ -22,7 +22,9 @@ bin/
 *.iws
 *.iml
 *.ipr
+aws.yml
 out/
+aws.yml
 !**/src/main/**/out/
 !**/src/test/**/out/
 
@@ -46,4 +48,5 @@ out/
 
 ### DATA ###
 *.csv
+*.p
 chromedriver.exe

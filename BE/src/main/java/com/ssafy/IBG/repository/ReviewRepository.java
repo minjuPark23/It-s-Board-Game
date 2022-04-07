@@ -14,14 +14,20 @@ public class ReviewRepository {
     private final EntityManager em;
 
     /**
-    * @author : 박민주
-    * @date : 2022-03-23 오후 6:23
-    * @desc: 게임 하나당 리뷰 목록
-    **/
+     * @author : 박민주
+     * @date : 2022-03-23 오후 6:23
+     * @desc: 게임 하나당 리뷰 목록
+     * @modify :
+     * - author : 박민주
+     * - date : 2022-04-01 오전 1:01
+     * - desc : order by 추가
+     **/
     public List<Review> findReviewByGameNo(int gameNo){
-        List<Review> reviewList = em.createQuery("select r from Review r where r.game.gameNo = :gameNo", Review.class)
+        List<Review> reviewList = em.createQuery("select r from Review r where r.game.gameNo = :gameNo order by r.reviewNo desc", Review.class)
                 .setParameter("gameNo", gameNo)
                 .getResultList();
+        if(reviewList.size() > 50)
+            reviewList = reviewList.subList(0,50);
         return reviewList;
     }
 

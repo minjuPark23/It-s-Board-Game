@@ -32,6 +32,15 @@ public class GameRepository {
     }
 
     /**
+    * @author : 박민주
+    * @date : 2022-04-01 오후 9:52
+    **/
+    public List<Game> findGameList(){
+        return em.createQuery("select g from Game g", Game.class)
+                .getResultList();
+    }
+
+    /**
      * @author : 박민주
      * @date : 2022-03-23 오후 5:51
      **/
@@ -64,7 +73,7 @@ public class GameRepository {
      * @author : 박민주
      * @date : 2022-03-23 오후 5:52
      **/
-    public List<Game> findGameByFilter(String gameName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
+    public List<Game> findGameByFilter(String gameName, String gameKorName, Integer gamePlayer, Integer gameTime, Double gameWeight, Integer gameAge, Double gameScore, List<String> gameCategory) {
 
         JPQLQuery<Game> query = new JPAQuery<>(em);
         QGame qGame = new QGame("Game");
@@ -73,11 +82,14 @@ public class GameRepository {
         if(gameName != null){
             builder.and(qGame.gameName.contains(gameName));
         }
+        if (gameKorName != null){
+            builder.and(qGame.gameKorName.contains(gameKorName));
+        }
         if(gamePlayer != null){
             builder.and(qGame.gameMinPlayer.goe(gamePlayer));
         }
         if(gameTime != null){
-            builder.and(qGame.gameMaxTime.loe(gameTime));
+            builder.and(qGame.gameMaxTime.goe(gameTime));
         }
         if(gameAge != null){
             builder.and(qGame.gameAge.loe(gameAge));
@@ -88,7 +100,7 @@ public class GameRepository {
         if(gameScore != null){
             builder.and(qGame.gameTotalScore.goe(gameScore));
         }
-        if(!gameCategory.isEmpty()){
+        if(gameCategory != null){
             for (String c : gameCategory) {
                 builder.and(qGame.gameCategory.contains(c));
             }
@@ -99,4 +111,10 @@ public class GameRepository {
                 .fetch();
         return gameList;
     }
+
+    public double findAvgWeight() {
+        return (Double)em.createQuery("select avg(g) from Game g")
+                .getSingleResult();
+    }
+
 }
