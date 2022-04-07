@@ -7,6 +7,7 @@ import lombok.Data;
 public class GameListResponse{
     private int gameNo;
     private String gameName;
+    private String gameKorName;
     private String gameCategory;
     private int gameMinPlayer;
     private int gameMaxPlayer;
@@ -17,6 +18,7 @@ public class GameListResponse{
     public GameListResponse(Game game, boolean isLike) {
         this.gameNo = game.getGameNo();
         this.gameName = game.getGameName();
+        this.gameKorName = game.getGameKorName();
         this.gameCategory = game.getGameCategory();
         this.gameMinPlayer = game.getGameMinPlayer();
         this.gameMaxPlayer = game.getGameMaxPlayer();

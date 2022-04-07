@@ -5,9 +5,11 @@ import com.ssafy.IBG.api.review.ReviewRequest;
 import com.ssafy.IBG.api.review.ReviewResponse;
 import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Review;
+import com.ssafy.IBG.domain.Score;
 import com.ssafy.IBG.domain.User;
 import com.ssafy.IBG.service.GameService;
 import com.ssafy.IBG.service.ReviewService;
+import com.ssafy.IBG.service.ScoreService;
 import com.ssafy.IBG.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ public class ReviewApiController {
     private final ReviewService reviewService;
     private final GameService gameService;
     private final UserService userService;
+    private final ScoreService scoreService;
 
     /**
     * @author : 박민주
@@ -33,7 +36,10 @@ public class ReviewApiController {
     public Result getReviewList(@PathVariable("gameNo") int gameNo){
         List<Review> reviewList = reviewService.getReviewByGameNo(gameNo);
         List<ReviewResponse> collect = reviewList.stream()
-                .map(rl -> new ReviewResponse(rl))
+                .map(rl -> {
+                    Score score = scoreService.getScoreByUserNoGameNo(rl.getUser().getUserNo(), rl.getGame().getGameNo());
+                    return new ReviewResponse(rl, score);
+                })
                 .collect(Collectors.toList());
         return new Result(HttpStatus.OK.value(), collect);
     }

@@ -1,12 +1,16 @@
-import * as React from "react";
+import { useState, Fragment, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { RootStateOrAny, useSelector, useDispatch } from "react-redux";
+import SearchBar from "./component/SearchBar";
+import AvatarGenerator from "../AvatarGenerator";
+import { getAutoAllGame } from "../../api/game";
+
 // material ui
-import { styled, alpha } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import InputBase from "@mui/material/InputBase";
 import Menu from "@mui/material/Menu";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import List from "@mui/material/List";
@@ -15,103 +19,92 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import ImageListItem from "@mui/material/ImageListItem";
+
 // 아이콘
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
 import ExtensionOutlinedIcon from "@mui/icons-material/ExtensionOutlined";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import LoginIcon from "@mui/icons-material/Login";
 import Logout from "@mui/icons-material/Logout";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+// import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import MapIcon from "@mui/icons-material/Map";
+import { Typography } from "@mui/material";
 
-// Nav 항목 - link가 존재하면 페이지 이동, method가 존재하면 해당 함수 실행
+// Nav 항목 - link가 존재하면 페이지 이동, method가 존재하면 해당 함수 실행(handleNavMethod 추가 필요)
 const pages = [
   { label: "보드게임", icon: <ExtensionOutlinedIcon />, link: "/search" },
   { label: "BGM", icon: <StorefrontOutlinedIcon />, link: "/market" },
+  { label: "보드게임 카페", icon: <MapIcon />, link: "/map" },
 ];
 const userNav = [
   {
     label: "관심목록",
     icon: <FavoriteBorderIcon />,
-    link: "/",
+    link: "/mygames",
   },
-  {
-    label: "채팅",
-    icon: <ChatBubbleOutlineOutlinedIcon />,
-    method: null,
-  },
-  { label: "로그아웃", icon: <Logout />, method: null },
+  // {
+  //   label: "채팅",
+  //   icon: <ChatBubbleOutlineOutlinedIcon />,
+  //   method: "",
+  // },
+  { label: "로그아웃", icon: <Logout />, method: "logout" },
 ];
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  position: "static",
-  backgroundColor: "transparent",
-  boxShadow: "rgba(33, 35, 38, 0.1) 0px 10px 10px -10px",
-}));
-
-// 검색창 스타일
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: 18,
-  backgroundColor: alpha(theme.palette.warning.main, 0.2),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.warning.main, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: theme.spacing(2),
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-  boxShadow: "rgba(0, 0, 0, 0.04) 0px 3px 5px",
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  right: 0,
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  color: "grey",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  fontSize: 13.5,
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(1)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "40ch",
-    },
-  },
+  position: "fixed",
+  //backgroundColor: "error",
+  backgroundColor: theme.palette.warning.main,
+  //boxShadow: "rgba(33, 35, 38, 0.1) 0px 10px 10px -10px",
+  boxShadow: "rgba(33, 35, 38, 0.1) 0px 0px 0px 0px",
+  //  maxHeight: 50,
 }));
 
 export default function NavBar() {
+  const dispatch = useDispatch();
   // 로그인 여부
-  const [auth, setAuth] = React.useState(false);
+  const auth = useSelector((state: RootStateOrAny) => state.isLogin);
+  const userName = useSelector((state: RootStateOrAny) => state.user.userNick);
   // 사용자 메뉴 Open/Close(PC)
-  const [userMenu, setUserMenu] = React.useState<null | HTMLElement>(null);
+  const [userMenu, setUserMenu] = useState<null | HTMLElement>(null);
   // Mobild 메뉴 Open/Close
-  const [mobileMenu, setMobileMenu] = React.useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
+  // 자동완성을 위한 게임 목록
+  const [autoGameList, setAutoGameList] = useState([]);
+
+  const logoImg = require("../../assets/logo.png");
+
   // 페이지 이동
   const navigate = useNavigate();
 
-  // 로그인 상태 확인하여 상태값 변경하기
-  const checkLoginState = () => {
-    setAuth(false);
+  useEffect(() => {
+    getAutoAllGame().then((data) => {
+      if (data.code === 200) {
+        setAutoGameList(data.data);
+      }
+    });
+  }, []);
+
+  //로그아웃 메서드
+  const logoutMethod = () => {
+    sessionStorage.clear();
+    dispatch({ type: "logout" });
+    navigate("/");
+  };
+
+  // 메뉴 메서드 실행
+  const handleNavMethod = (val: string) => {
+    switch (val) {
+      case "logout":
+        logoutMethod();
+        break;
+      default:
+        break;
+    }
   };
 
   // 사용자 메뉴 열고 닫기(로그인 했을 때)
@@ -159,7 +152,11 @@ export default function NavBar() {
             <ListItem
               button
               key={item.label}
-              onClick={() => (item.link ? movePage(item.link) : item.method)}
+              onClick={() =>
+                item.link
+                  ? movePage(item.link)
+                  : handleNavMethod(item.method as string)
+              }
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.label} />
@@ -179,7 +176,9 @@ export default function NavBar() {
     </Box>
   );
 
+  // 페이지 이동
   const movePage = (page: string) => {
+    handleCloseUserMenu();
     navigate(page);
   };
 
@@ -189,33 +188,39 @@ export default function NavBar() {
         <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
           <ImageListItem
             sx={{
-              maxWidth: 50,
+              maxWidth: 40,
               cursor: "pointer",
+              //  mb: { md: 2, xs: 1 },
+              ml: { md: 15 },
             }}
             onClick={() => movePage("/")}
           >
-            <img src="img/logo.png" alt="logo" />
+            <img src={logoImg} alt="logo" />
           </ImageListItem>
-
-          <ImageListItem
+          <Typography
             sx={{
+              ml: { md: 1.5 },
               mr: { xs: 0, md: 3 },
               minWidth: 65,
               cursor: "pointer",
               display: { xs: "none", md: "block" },
+              fontSize: 22,
             }}
             onClick={() => movePage("/")}
           >
-            <img src="img/logotext.PNG" alt="logoText" />
-          </ImageListItem>
-
+            이보게
+          </Typography>
           {/* Nav 반응형 - PC --------------------------------------*/}
           {/* 페이지 이동 Nav */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page.label}
-                sx={{ my: 2, color: "black", display: "block" }}
+                sx={{
+                  color: "white",
+                  display: "block",
+                  // mb: 2
+                }}
                 onClick={() => movePage(page.link)}
               >
                 {page.label}
@@ -223,22 +228,22 @@ export default function NavBar() {
             ))}
           </Box>
           {/* 검색창 */}
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="보드게임 검색"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
+          <SearchBar
+            placeholder="보드게임 검색"
+            gameList={autoGameList}
+            onClickItem={(no: number) => movePage(`/detail/${no}`)}
+          />
           {/* 오른쪽 메뉴(사용자) auth: 로그인 여부 */}
           {auth ? (
-            <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+            <Box
+              sx={{
+                flexGrow: 0,
+                display: { xs: "none", md: "flex" },
+              }}
+            >
               <Tooltip title="사용자 메뉴">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  {/* 수정필요 - 사용자 닉네임에 따라 변경 */}
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <AvatarGenerator userName={userName} isNav={true} />
                 </IconButton>
               </Tooltip>
               <Menu
@@ -284,7 +289,15 @@ export default function NavBar() {
                 }}
               >
                 {userNav.map((item) => (
-                  <MenuItem sx={{ fontSize: "0.9rem" }}>
+                  <MenuItem
+                    sx={{ fontSize: "0.9rem" }}
+                    key={item.label}
+                    onClick={() =>
+                      item.link
+                        ? movePage(item.link)
+                        : handleNavMethod(item.method as string)
+                    }
+                  >
                     <ListItemIcon>{item.icon}</ListItemIcon>
                     {item.label}
                   </MenuItem>
@@ -295,7 +308,12 @@ export default function NavBar() {
             <Box sx={{ flexGrow: 0 }}>
               <Button
                 color="warning"
-                sx={{ color: "black", display: { xs: "none", md: "block" } }}
+                sx={{
+                  color: "white",
+                  display: { xs: "none", md: "block" },
+                  // mb: { md: 2 },
+                  mr: { md: 15 },
+                }}
                 onClick={() => movePage("/signin")}
               >
                 로그인
@@ -304,7 +322,7 @@ export default function NavBar() {
           )}
           {/* Nav 반응형 Mobile --------------------------------------- */}
           <Box sx={{ display: { xs: "block", md: "none" } }}>
-            <React.Fragment key="right">
+            <Fragment key="right">
               <IconButton size="large" onClick={toggleMobileMenu(true)}>
                 <MenuIcon />
               </IconButton>
@@ -317,7 +335,7 @@ export default function NavBar() {
               >
                 {MobileMenuList()}
               </SwipeableDrawer>
-            </React.Fragment>
+            </Fragment>
           </Box>
         </Toolbar>
       </Container>

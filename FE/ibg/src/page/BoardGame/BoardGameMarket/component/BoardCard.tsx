@@ -1,23 +1,26 @@
-import * as React from "react";
 import { styled } from "@mui/material/styles";
 import {
   Card,
-  CardActions, 
+  CardActions,
   CardContent,
   CardMedia,
   CardActionArea,
   Grid,
-  Typography
+  Typography,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 interface Deal {
   deal: {
     dealTitle: string;
-    dealState: boolean;
+    dealGame: string;
+    dealStatus: boolean;
+    dealNo: number;
+    dealPath: string;
+    dealSavedName: string;
+    dealPrice: number;
     gameNo: number;
-    gameImg: string;
     gameName: string;
-    gamePrice: number;
   };
 }
 
@@ -51,7 +54,7 @@ const DealTitle = styled("div")(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }));
 
-const Category = styled("div")(({ theme }) => ({
+const DealGame = styled("div")(({ theme }) => ({
   fontSize: "0.85rem",
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
@@ -60,15 +63,15 @@ const Category = styled("div")(({ theme }) => ({
 }));
 
 /* 거래 상태 */
-const MarketState = styled("span")(({ theme }) => ({
-  width: 80,
+const MarketState = styled("span")(({ theme, color }) => ({
+  width: 74,
   height: 30,
   lineHeight: 1,
-  textAlign: 'center',
-  fontSize: 12,
-  color: '#FCB500',
-  borderRadius: 10,
-  border: "1px solid #FCB500",
+  textAlign: "center",
+  fontSize: 11,
+  color: color,
+  borderRadius: 12,
+  border: "1px solid " + color,
   backgroundColor: "transparent",
   padding: theme.spacing(1),
 }));
@@ -77,22 +80,26 @@ const MarketState = styled("span")(({ theme }) => ({
 const Price = styled(Typography)(({ theme }) => ({
   width: 80,
   height: 30,
-  textAlign: 'right',
-  padding: theme.spacing(0.8, 0, 0, 0),
+  textAlign: "right",
+  padding: theme.spacing(0.5, 0, 0, 0),
 }));
 
 /* 하단 틀 */
 const StateWrapper = styled(CardActions)(({ theme }) => ({
-  justifyContent: 'space-between',
-padding: theme.spacing(0),
-marginRight: 0,
-marginTop: 20,
+  justifyContent: "space-between",
+  padding: theme.spacing(0),
+  marginRight: 0,
+  marginTop: 20,
 }));
 
 export default function BoardCard({ deal }: Deal) {
+  const navigate = useNavigate();
+  const moveToDetail = () => {
+    navigate(`/market/detail/${deal.dealNo}`);
+  };
   return (
-    <Grid item xs={12} sm={4} md={3} lg={2.5}>
-      <StyledCard variant="outlined">
+    <Grid item xs={6} sm={4} md={3} lg={2.4}>
+      <StyledCard variant="outlined" onClick={moveToDetail}>
         <CardActionArea>
           <ImgWrapper>
             <CardMedia
@@ -103,20 +110,18 @@ export default function BoardCard({ deal }: Deal) {
                 objectFit: "contain",
               }}
               component="img"
-              image={deal.gameImg}
-              alt={deal.gameName}
+              image={deal.dealPath + "/" + deal.dealSavedName}
+              alt={deal.dealTitle}
             />
           </ImgWrapper>
           <CardContent>
             <DealTitle>{deal.dealTitle}</DealTitle>
-            <Category>{deal.gameName}</Category>
+            <DealGame>{deal.gameName}</DealGame>
             <StateWrapper>
-              <MarketState>
-              {deal.dealState}거래중
+              <MarketState color={deal.dealStatus ? "#67B6FF" : "#FCB500"}>
+                {deal.dealStatus ? "거래완료" : "거래중"}
               </MarketState>
-              <Price variant="body2">
-              {deal.gamePrice}원
-              </Price>
+              <Price variant="body2">{deal.dealPrice.toLocaleString()}원</Price>
             </StateWrapper>
           </CardContent>
         </CardActionArea>

@@ -18,30 +18,29 @@ interface User {
 
 function Form({ sendDataToParent }: User) {
   const [password, setPassword] = useState("");
-  const [checked, setChecked] = React.useState(false);
   const [email, setEmail] = useState("");
   const [isRemember, setIsRemember] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["rememberEmail"]);
+  const [prevSave, setPrevSave] = useState("");
   /*비밀번호 */
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  let prevSave = "";
+  // let prevSave = "";
   /* 이메일 검사 */
   useEffect(() => {
     if (cookies.rememberEmail !== undefined) {
       setEmail(cookies.rememberEmail);
       setIsRemember(true);
-      prevSave = email;
+      setPrevSave(cookies.rememberEmail);
     }
-  }, []);
+  }, [cookies.rememberEmail]);
 
   const saveEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsRemember(e.target.checked);
     if (e.target.checked) {
-      //alert("remember" + email + " " + e.target.checked);
-      setCookie("rememberEmail", email, { maxAge: 2000 });
+      setCookie("rememberEmail", email, { maxAge: 31536000 });
     } else {
       removeCookie("rememberEmail");
     }
@@ -53,16 +52,15 @@ function Form({ sendDataToParent }: User) {
     let check = /@/;
     return !check.test(email) && email.length > 1;
   };
-  const sendData = () => {
-    if (password.length != 0 && email.length != 0) {
-      {
-        if (isRemember && prevSave != email) {
-          //원래 저장된 이메일과 다른 email을 저장하는 경우 */
-          removeCookie("rememberEmail");
-          setCookie("rememberEmail", email, { maxAge: 2000 });
-        }
-        sendDataToParent(email, password); //전달
+  const sendData = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (password.length !== 0 && email.length !== 0) {
+      //원래 저장된 이메일과 다른 email을 저장하는 경우 */
+      if (isRemember && prevSave !== email) {
+        removeCookie("rememberEmail");
+        setCookie("rememberEmail", email, { maxAge: 31536000 });
       }
+      sendDataToParent(email, password); //전달
     }
   };
 
@@ -78,7 +76,7 @@ function Form({ sendDataToParent }: User) {
         >
           로그인
         </Typography>
-        <form>
+        <form onSubmit={sendData}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
               <TextField
@@ -111,7 +109,6 @@ function Form({ sendDataToParent }: User) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                autoFocus
               />
             </Grid>
           </Grid>
@@ -136,7 +133,6 @@ function Form({ sendDataToParent }: User) {
                 variant="contained"
                 color="primary"
                 size="large"
-                onClick={sendData}
                 sx={{ my: 2 }}
               >
                 로그인
