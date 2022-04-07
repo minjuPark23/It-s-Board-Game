@@ -165,12 +165,16 @@ public class RecommendApiController {
         double percent = 0.3;
 
         List<Game> list = recommendService.getRecommendByWeight(userNo, weight, 30, percent);
-        while(list.size() < 10){
+
+        Result result = getRecommendGameList(userNo, list);
+
+        while(result == null){
             percent += 0.1;
             list = recommendService.getRecommendByWeight(userNo, weight, 30, percent);
+            result = getRecommendGameList(userNo, list);
         }
 
-        return getRecommendGameList(userNo, list);
+        return result;
     }
 
     /**
@@ -224,12 +228,15 @@ public class RecommendApiController {
         double percent = 0.3;
 
         List<Game> list = recommendService.getRecommendByPlayer(userNo, maxPlayers, minPlayers, 30, percent);
-        while(list.size() < 10){
+        Result result = getRecommendGameList(userNo, list);
+
+        while(result == null){
             percent += 0.1;
             list = recommendService.getRecommendByPlayer(userNo, maxPlayers, minPlayers, 30, percent);
+            result = getRecommendGameList(userNo, list);
         }
 
-        return getRecommendGameList(userNo, list);
+        return result;
     }
 
     /**
@@ -253,12 +260,15 @@ public class RecommendApiController {
 
         double percent = 0.3;
         List<Game> list = recommendService.getRecommendByPlayTime(userNo, maxPlayTime, minPlayTime, 30, percent);
-        while(list.size() < 10){
+        Result result = getRecommendGameList(userNo, list);
+
+        while(result == null){
             percent += 0.1;
             list = recommendService.getRecommendByPlayTime(userNo, maxPlayTime, minPlayTime, 30, percent);
+            result = getRecommendGameList(userNo, list);
         }
 
-        return getRecommendGameList(userNo, list);
+        return result;
     }
 
     /**
@@ -279,12 +289,15 @@ public class RecommendApiController {
 
         double percent = 0.3;
         List<Game> list = recommendService.getRecommendByAge(userNo, gameAgeAvg, 30, percent);
-        while(list.size() < 10){
+        Result result = getRecommendGameList(userNo, list);
+
+        while(result == null){
             percent += 0.1;
             list = recommendService.getRecommendByAge(userNo, gameAgeAvg, 30, percent);
+            result = getRecommendGameList(userNo, list);
         }
 
-        return getRecommendGameList(userNo, list);
+        return result;
     }
 
     /**
@@ -298,11 +311,15 @@ public class RecommendApiController {
 
         double percent = 0.3;
         List<Game> list = recommendService.getRecommendByNewbie(userNo, gameAgeWeight, 30, percent);
-        while(list.size() < 10){
+        Result result = getRecommendGameList(userNo, list);
+
+        while(result == null){
             percent += 0.1;
             list = recommendService.getRecommendByNewbie(userNo, gameAgeWeight, 30, percent);
+            result = getRecommendGameList(userNo, list);
         }
-        return getRecommendGameList(userNo, list);
+
+        return result;
     }
 
     /**
@@ -318,6 +335,9 @@ public class RecommendApiController {
                 recommend_list.add(g);
             }
         }
+
+        if(recommend_list.size() < 5)
+            return null;
 
         Collections.shuffle(recommend_list);
 
@@ -349,9 +369,6 @@ public class RecommendApiController {
     private Result getResultList(List<Game> list, Integer userNo, String target){
         List<RecommendResultResponse> collect = list.stream()
                 .map(g-> {
-                    if(userNo == null)
-                        return new RecommendResultResponse(g, false);
-
                     return new RecommendResultResponse(g, interestService.getIsLike(userNo, g.getGameNo()));
                 })
                 .collect(Collectors.toList());
