@@ -155,6 +155,10 @@ public class RecommendApiController {
     @GetMapping("/game/weight/{userNo}")
     public Result getRecommendByWeight(@PathVariable(name="userNo", required = false) Integer userNo){
         List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
+
+        if(scores.size() == 0)
+            return new Result(HttpStatus.NO_CONTENT.value());
+
         double weight = 0d;
         for(Score score : scores){
             weight += score.getGame().getGameWeight();
@@ -183,13 +187,14 @@ public class RecommendApiController {
      * @desc: 평가했던 게임들과 유사한 게임 추천
      * */
     @GetMapping("/game/category/{userNo}")
-    public Result getRecommendByCategory(@PathVariable Integer userNo) throws JsonProcessingException {
+    public Result getRecommendByCategory(@PathVariable("userNo") Integer userNo) throws JsonProcessingException {
         List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
 
         // list 사이즈로 평가한 게임이 없는 경우 에러 처리리
+        if(scores.size() == 0)
+            return new Result(HttpStatus.NO_CONTENT.value());
 
         int num = (int)(Math.random()*(scores.size()));
-        System.out.println(scores.get(num).getGame().getGameNo());
         int game_no = scores.get(num).getGame().getGameNo();
 
         List<Integer> list = restapiService.requestGETAPI("/category", game_no);
@@ -214,6 +219,10 @@ public class RecommendApiController {
     @GetMapping("/game/player/{userNo}")
     public Result getRecommendByPlayer(@PathVariable(name="userNo", required = false) Integer userNo){
         List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
+
+        if(scores.size() == 0)
+            return new Result(HttpStatus.NO_CONTENT.value());
+
         double minPlayers = 0d;
         double maxPlayers = 0d;
 
@@ -247,6 +256,10 @@ public class RecommendApiController {
     @GetMapping("/game/time/{userNo}")
     public Result getRecommendByTime(@PathVariable Integer userNo){
         List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
+
+        if(scores.size() == 0)
+            return new Result(HttpStatus.NO_CONTENT.value());
+
         double minPlayTime = 0d;
         double maxPlayTime = 0d;
 
@@ -279,6 +292,10 @@ public class RecommendApiController {
     @GetMapping("/game/age/{userNo}")
     public Result getRecommendByAge(@PathVariable Integer userNo){
         List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
+
+        if(scores.size() == 0)
+            return new Result(HttpStatus.NO_CONTENT.value());
+
         double gameAgeAvg = 0d;
 
         for(Score score : scores){
@@ -309,7 +326,7 @@ public class RecommendApiController {
     public Result getRecommendByNewbie(@PathVariable Integer userNo){
         double gameAgeWeight = gameService.getAvgWeight();
 
-        double percent = 0.3;
+        double percent = 0.5;
         List<Game> list = recommendService.getRecommendByNewbie(userNo, gameAgeWeight, 30, percent);
         Result result = getRecommendGameList(userNo, list);
 
@@ -336,8 +353,9 @@ public class RecommendApiController {
             }
         }
 
-        if(recommend_list.size() < 5)
+        if(recommend_list.size() < 5) {
             return null;
+        }
 
         Collections.shuffle(recommend_list);
 
