@@ -153,6 +153,7 @@ class UserView(viewsets.ModelViewSet):
         for idx, row in recommendations.iterrows():
             findGame = get_object_or_404(Game, pk=idx)
             r = Recommend(game_no=findGame, user_no=findUser, recommend_rating=row['predict']);
+            print("save")
             r.save()
 
         return Response()
