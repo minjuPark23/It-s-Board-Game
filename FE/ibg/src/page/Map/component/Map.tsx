@@ -16,7 +16,7 @@ export default function Map({ long, lat, addr }: Location) {
     const options = {
       center: new kakao.maps.LatLng(lat, long),
       level: 5,
-      scrollwheel: false,
+      scrollwheel: true,
     };
 
     const map = new kakao.maps.Map(container, options); //맵 뿌리기
