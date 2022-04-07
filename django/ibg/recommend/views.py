@@ -65,7 +65,7 @@ class UserView(viewsets.ModelViewSet):
             sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
 
             # Get the scores of the 10 most similar movies
-            sim_scores = sim_scores[1:31]
+            sim_scores = sim_scores[1:11]
 
             # Get the movie indices
             game_indices = [i[0] for i in sim_scores]
@@ -139,29 +139,30 @@ class UserView(viewsets.ModelViewSet):
         model.fit(X, y)
         # user_profile = [model.intercept_, *model.coef_]
 
-        recommendations = game_list.copy()
+        recommendations = game_list[~game_list.index.isin(user_score_list['game_no'])].copy()
         recommend_category = recommendations['game_category'].str.get_dummies("|")
         predict = model.predict(recommend_category)
 
         recommendations['predict'] = predict
         # print(recommendations)
 
-        recommendations = recommendations[~game_list.index.isin(user_score_list['game_no'])]
+        # recommendations = recommendations[~game_list.index.isin(user_score_list['game_no'])]
         # print(recommendations)
 
-        # findUser = get_object_or_404(User, pk=user_no)
-        # for idx, row in recommendations.iterrows():
-        #     findGame = get_object_or_404(Game, pk=idx)
-        #     r = Recommend(game_no=findGame, user_no=findUser, recommend_rating=row['predict']);
-        #     print("save")
-        #     r.save()
+        findUser = get_object_or_404(User, pk=user_no)
+        for idx, row in recommendations.iterrows():
+            findGame = get_object_or_404(Game, pk=idx)
+            r = Recommend(game_no=findGame, user_no=findUser, recommend_rating=row['predict']);
+            print("save")
+            r.save()
 
-        recommendations = recommendations.sort_values('predict', ascending=False)
+        # recommendations = recommendations.sort_values('predict', ascending=False)
         # print(recommendations)
 
-        recommendations = recommendations.index[:10]
-        print(recommendations.values.tolist())
-        return Response(recommendations.values.tolist())
+        # recommendations = recommendations.index[:10]
+        # print(recommendations.values.tolist())
+        # return Response(recommendations.values.tolist())
+        return Response()
 
     """
          @author : 박민주
