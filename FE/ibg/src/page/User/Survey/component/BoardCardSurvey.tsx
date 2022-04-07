@@ -70,7 +70,7 @@ export default function BoardCard({ game, parentCallback }: ICount) {
           </ImgWrapper>
           <CardContent>
             <Grid container justifyContent="center">
-              <GameTitle>{game.gameName}</GameTitle>
+              <GameTitle>{game.gameKorName}</GameTitle>
               <Box width="100%" />
               <StarRating
                 initStarRate={0}

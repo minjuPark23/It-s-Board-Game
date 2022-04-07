@@ -42,7 +42,8 @@ const MarketUploadDialog = ({
   const Img = styled("img")({
     width: "100%",
   });
-
+  //이미지
+  const logoImg = require("../../../../assets/logo.png");
   const [gameNo, setGameNo] = useState("");
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
@@ -157,7 +158,7 @@ const MarketUploadDialog = ({
             marginRight: 1,
           }}
         >
-          <img src="img/logo.png" alt="logo" />
+          <img src={logoImg} alt="logo" />
         </ImageListItem>
         거래 등록
       </DialogTitle>

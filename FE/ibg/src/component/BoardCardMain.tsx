@@ -109,7 +109,13 @@ export default function BoardCard(props: { game: IGame; marginX?: number }) {
           </ImgWrapper>
           <CardContent>
             <GameTitle>{props.game.gameKorName}</GameTitle>
-            <Category>{props.game.gameCategory}</Category>
+            <Category>
+              {props.game.gameCategory === "NaN" ? (
+                <br />
+              ) : (
+                props.game.gameCategory
+              )}
+            </Category>
             <AddInfo>
               <PersonIcon color="warning" fontSize="small" sx={{ mr: 0.5 }} />
               {props.game.gameMinPlayer}~{props.game.gameMaxPlayer}명

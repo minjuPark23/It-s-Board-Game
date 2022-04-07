@@ -14,7 +14,7 @@ const Seller = styled("span")(({ theme }) => ({
 
 export default function ReviewItem(props: {
   review: IReview;
-  userNick?: string;
+  dealUserNick?: string;
 }) {
   return (
     <>
@@ -43,7 +43,9 @@ export default function ReviewItem(props: {
             </Typography>
           )}
           {typeof props.review.scoreRating !== "number" &&
-            props.review.userNick === props.userNick && <Seller>판매자</Seller>}
+            props.review.userNick === props.dealUserNick && (
+              <Seller>판매자</Seller>
+            )}
         </Box>
         <Typography
           sx={{ fontSize: { xs: 12, md: 15 }, mt: 0.7, whiteSpace: "pre-line" }}

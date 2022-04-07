@@ -23,6 +23,7 @@ export default function MyGames() {
   const [userno] = useState(
     useSelector((state: RootStateOrAny) => state.user.userNo)
   );
+  //  const logoImg = require("../../../assets/logo_tears.png");
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
     const init = async () => {
@@ -34,19 +35,41 @@ export default function MyGames() {
 
   return (
     <>
+      {/* 타이틀 */}
       <TitleToolbar title="관심목록" />
-
       <Container style={{ marginTop: 20, padding: 10 }}>
+        {/* 관심 목록 리스트 */}
         <Grid container spacing={2}>
           {gameList.length !== 0 ? (
             gameList.map((game) => (
               <BoardCardMain key={game.gameNo} game={game}></BoardCardMain>
             ))
           ) : (
-            <Typography>아직 관심 등록된 게임이 없어요</Typography>
+            <Grid
+              container
+              spacing={0}
+              justifyContent="center"
+              direction="column"
+              alignItems="center"
+              style={{ minHeight: "70vh" }}
+            >
+              <Grid item xs={3}>
+                <Typography
+                  sx={{
+                    fontSize: { xs: 18, md: 24 },
+                    fontWeight: "bold",
+                    mb: 1,
+                    minWidth: 65,
+                    display: { xs: "block", md: "block" },
+                  }}
+                >
+                  아직 관심 등록된 게임이 없어요
+                </Typography>
+              </Grid>
+            </Grid>
           )}
         </Grid>
-        <Box sx={{ mb: 15 }} />
+        <Box sx={{ mb: { md: 5 } }} />
       </Container>
     </>
   );

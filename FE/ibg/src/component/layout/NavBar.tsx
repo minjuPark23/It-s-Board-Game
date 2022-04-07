@@ -199,12 +199,12 @@ export default function NavBar() {
           </ImageListItem>
           <Typography
             sx={{
+              ml: { md: 1.5 },
               mr: { xs: 0, md: 3 },
               minWidth: 65,
               cursor: "pointer",
               display: { xs: "none", md: "block" },
-              // mb: 2,
-              ml: { md: 2 },
+              fontSize: 22,
             }}
             onClick={() => movePage("/")}
           >
