@@ -52,7 +52,7 @@ export default function SignUp() {
           setLoading(true);
           userInfo(decode_token.userNo)
             .then((response) => {
-              console.log(response);
+              // console.log(response);
               let userNick = response.userNick;
               let userNo = response.userNo;
 
@@ -67,7 +67,7 @@ export default function SignUp() {
               setLoading(false);
             })
             .catch((error) => {
-              console.log(error);
+              // console.log(error);
             });
           setLoading(false);
         } else {
