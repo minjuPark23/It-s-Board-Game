@@ -132,7 +132,7 @@ class UserView(viewsets.ModelViewSet):
         user_score_list = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating")).set_index('score_no')
         user_score_list = user_score_list.merge(categorys, left_on='game_no', right_index=True)
 
-        model = Lasso(alpha=0.5)
+        model = Lasso(alpha=0.003)
         X = user_score_list[categorys.columns]
         y = user_score_list['score_rating']
         model.fit(X, y)
