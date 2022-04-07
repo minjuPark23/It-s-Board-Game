@@ -46,7 +46,7 @@ public class RESTAPIService {
 
         data = data.substring(1, data.length()-1);
         String[] game_no_list = data.split(",");
-        List<Integer> list = Arrays.stream(game_no_list).map(str -> Integer.parseInt(str)).collect(Collectors.toList());
+        List<Integer> list = Arrays.stream(game_no_list).map(str -> Integer.parseInt(str.strip())).collect(Collectors.toList());
 
         return list;
     }

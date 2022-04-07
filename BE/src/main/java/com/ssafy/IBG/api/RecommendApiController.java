@@ -107,7 +107,7 @@ public class RecommendApiController {
             gameNo = (int)(random*300)+1;
         }else{
             double random = Math.random();
-            int n = (int)(random*scoreList.size())+1;
+            int n = (int)(random*scoreList.size());
             gameNo = scoreList.get(n).getGame().getGameNo();
         }
 
@@ -207,7 +207,7 @@ public class RecommendApiController {
         if(scores.size() == 0)
             return new Result(HttpStatus.NO_CONTENT.value());
 
-        int num = 1+(int)(Math.random()*(scores.size()));
+        int num = (int)(Math.random()*(scores.size()));
         int game_no = scores.get(num).getGame().getGameNo();
 
         List<Integer> list = restapiService.requestGETAPI("/category", game_no);
