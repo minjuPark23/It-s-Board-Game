@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Grid, Box } from "@mui/material/";
 import Form from "./component/Form";
 import WelcomeStepper from "../component/WelcomeStepper";
+import swal from "sweetalert";
+
 //index에서 api 호출 -> Form에서 index(parent)로 전달
 import {
   join,
@@ -27,9 +29,8 @@ export default function SignUp() {
   const dispatch = useDispatch();
   //api 연결
   const signup = (nickname: string, email: string, password: string) => {
-    // alert("called");
-    if (!checkedEmail) alert("이메일 중복 체크를 확인 부탁드립니다.");
-    else if (!checkedNick) alert("닉네임 중복 체크를 확인 부탁드립니다.");
+    if (!checkedEmail) swal("이메일 중복 체크를 확인 부탁드립니다.");
+    else if (!checkedNick) swal("닉네임 중복 체크를 확인 부탁드립니다.");
     else if (checkedEmail && checkedNick)
       callJoinApi(nickname, email, password);
   };
@@ -42,17 +43,14 @@ export default function SignUp() {
       sessionStorage.removeItem("accessToken");
       login(email, password).then((response) => {
         if (response.data.code === 200) {
-          // alert(response.data.code);
-
           let token = response.headers.authorization;
           let decode_token = jwtDecode<MyToken>(token);
           sessionStorage.setItem("accessToken", token);
 
-          //alert(decode_token.userNo);
           setLoading(true);
           userInfo(decode_token.userNo)
             .then((response) => {
-              console.log(response);
+              // console.log(response);
               let userNick = response.userNick;
               let userNo = response.userNo;
 
@@ -61,17 +59,16 @@ export default function SignUp() {
                 userData: { email, password, userNick, userNo },
               });
 
-              // alert("navigate");
               navigate("/survey");
               window.location.reload();
               setLoading(false);
             })
             .catch((error) => {
-              console.log(error);
+              // console.log(error);
             });
           setLoading(false);
         } else {
-          alert("이메일 또는 비밀번호를 확인해주세요");
+          swal("이메일 또는 비밀번호를 확인해주세요");
         }
       });
     });
@@ -84,10 +81,10 @@ export default function SignUp() {
     setLoading(true);
     checkEmail(email).then((codeRes) => {
       if (codeRes.code === 200) {
-        alert("사용 가능한 이메일 입니다.");
+        swal("사용 가능한 이메일 입니다.");
         setCheckedEmail(true);
       } else {
-        alert("사용 불가능한 이메일입니다.");
+        swal("사용 불가능한 이메일입니다.");
         setCheckedEmail(false);
       }
     });
@@ -97,10 +94,10 @@ export default function SignUp() {
   const nicknameCheck = (nickname: string) => {
     checkNickname(nickname).then((codeRes) => {
       if (codeRes.code === 200) {
-        alert("사용 가능한 닉네임 입니다.");
+        swal("사용 가능한 닉네임 입니다.");
         setCheckedNick(true);
       } else {
-        alert("사용 불가능한 닉네임입니다.");
+        swal("사용 불가능한 닉네임입니다.");
         setCheckedNick(false);
       }
     });

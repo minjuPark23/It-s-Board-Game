@@ -16,6 +16,7 @@ import {
   ImageListItem,
   Typography,
 } from "@mui/material";
+import swal from "sweetalert";
 
 interface IProps {
   open: boolean;
@@ -119,7 +120,7 @@ const MarketUploadDialog = ({
     else if (
       !e.target.files[0].name.match(/.(jpg|jpeg|png|gif|JPG|PNG|JPEG)$/i)
     ) {
-      alert("이미지 파일을 선택해주세요");
+      swal("이미지 파일을 선택해주세요");
     }
     //파일 저장
     else {
