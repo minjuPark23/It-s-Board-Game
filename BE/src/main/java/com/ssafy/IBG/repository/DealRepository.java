@@ -89,10 +89,14 @@ public class DealRepository {
      * @author : 곽현준
      * @date : 2022-04-05 오후 5:10
      * @desc : 거래 번호로 댓글 목록 가져오기
+     * @modify
+     * - @author : 곽현준
+     * - @date : 2022-04-05 오전 10:35
+     * - @desc : 댓글 순서 변경
     **/
     public List<DealReview> findDealReviewByDealNo(int dealNo) {
         try{
-            return em.createQuery("select dr from DealReview dr where dr.deal.dealNo = :dealNo", DealReview.class)
+            return em.createQuery("select dr from DealReview dr where dr.deal.dealNo = :dealNo order by dr.dealReviewNo desc", DealReview.class)
                     .setParameter("dealNo", dealNo)
                     .getResultList();
         }catch (NoResultException e) {
