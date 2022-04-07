@@ -143,11 +143,11 @@ public class UserApiController {
         if(!scoreService.registScore(request.getUserNo(), request.getGameNo(), request.getScoreRating()))
             return new Result(HttpStatus.CONFLICT.value());
 
-        if(scoreService.getScoreCnt(request.getUserNo()) >= 10){
-            System.out.println("유저의 평점 데이터가 10보다 크니 장고 실행");
-            List<Integer> gameNoList = restapiService.requestGETAPI("/user3", request.getUserNo());
-
-        }
+//        if(scoreService.getScoreCnt(request.getUserNo()) >= 10){
+//            System.out.println("유저의 평점 데이터가 10보다 크니 장고 실행");
+//            List<Integer> gameNoList = restapiService.requestGETAPI("/user3", request.getUserNo());
+//
+//        }
 
         return new Result(HttpStatus.OK.value());
     }
