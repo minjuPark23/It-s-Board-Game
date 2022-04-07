@@ -4,10 +4,11 @@ import ReviewItem from "./ReviewItem";
 import { IReview } from "../../../types/IReview";
 import { Typography, TextField, Box, Button } from "@mui/material";
 
-export default function Reviews(props: {
+export default function ReviewInfo(props: {
   title: string;
   reviewList: IReview[];
   userNo: number;
+  dealUserNick?: string;
   addCallback: Function;
 }) {
   const [newReview, setNewReview] = useState("");
@@ -77,7 +78,13 @@ export default function Reviews(props: {
       )}
 
       {props.reviewList.map((review) => {
-        return <ReviewItem key={review.reviewNo} review={review} />;
+        return (
+          <ReviewItem
+            key={review.reviewNo ? review.reviewNo : review.dealReviewContent}
+            review={review}
+            dealUserNick={props.dealUserNick}
+          />
+        );
       })}
     </Box>
   );

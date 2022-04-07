@@ -5,7 +5,6 @@ import {
   Grid,
   Box,
   Container,
-  Divider,
   InputBase,
   Button,
   Modal,
@@ -16,9 +15,9 @@ import { styled, alpha, createTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import BoardCard from "./component/BoardCard";
 import MarketUploadDialog from "./component/MarketUploadDialog";
-import Title from "./component/Title";
 import { RootStateOrAny, useSelector } from "react-redux";
 import { getAutoAllGame } from "../../../api/game";
+import BGMTitle from "../component/BGMTitle";
 
 export default function BoardGameMarket() {
   const userNo = useSelector((state: RootStateOrAny) => state.user.userNo);
@@ -158,55 +157,76 @@ export default function BoardGameMarket() {
   };
 
   return (
-    <Container style={{ marginTop: 20, padding: 20 }}>
-      {/* BGM 상단 */}
-      <Box
-        style={{ marginBottom: 10 }}
-        sx={{ display: "flex", justifyContent: "space-between" }}
-      >
-        {/* 거래 업로드 버튼 */}
-        <Title />
-        <Button
-          style={{ height: 20 }}
-          sx={{ top: { md: 28, xs: 10 }, cursor: "pointer" }}
-          color="primary"
-          onClick={handleOpen}
-        >
-          거래 등록
-        </Button>
-        {userNo ? (
-          <MarketUploadDialog
-            open={open}
-            gameList={gameList}
-            handleClose={handleClose}
-            sendDataToParent={handleSubmit}
-          />
-        ) : (
-          <Modal open={open} onClose={handleClose}>
-            <Box sx={modalStyle}>
-              <Stack sx={{ width: "100%" }} spacing={2}>
-                <Alert severity="error">로그인 후 등록이 가능합니다.</Alert>
-              </Stack>
-            </Box>
-          </Modal>
-        )}
-      </Box>
-      <Divider />
-      <Search sx={{ width: { xs: "100%", sm: 330 } }}>
-        <SearchIconWrapper>
-          <SearchIcon />
-        </SearchIconWrapper>
-        <StyledInputBase
-          placeholder="보드게임 이름(영문)으로 검색"
-          inputProps={{ "aria-label": "search" }}
-          onKeyUp={handleSearchKeyUp}
-        />
-      </Search>
-      <Grid container spacing={1} style={{ marginTop: 14 }}>
-        {dealList.map((deal, index) => (
-          <BoardCard key={index} deal={deal}></BoardCard>
-        ))}
-      </Grid>
-    </Container>
+    <>
+      <BGMTitle />
+      <Container>
+        {/* 상단 : 검색 및 거래 등록 */}
+        <Grid container spacing={2} direction="row">
+          <Grid container item xs={12}>
+            <Box />
+          </Grid>
+          <Grid container item xs={12} spacing={2}>
+            <Grid item xs={7}>
+              <Search sx={{ width: { xs: "100%", sm: 330 } }}>
+                <SearchIconWrapper sx={{ mb: { md: 0, xs: 10 } }}>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="보드게임 이름(영문)으로 검색"
+                  inputProps={{ "aria-label": "search" }}
+                  onKeyUp={handleSearchKeyUp}
+                />
+              </Search>
+            </Grid>
+            {/* 영역용 */}
+            <Grid item xs={1} />
+            {/* 거래 업로드 버튼 */}
+            <Grid item xs={4}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "end",
+                  my: 2,
+                }}
+              >
+                <Button
+                  sx={{
+                    cursor: "pointer",
+                    color: "primary",
+                  }}
+                  onClick={handleOpen}
+                >
+                  거래 등록
+                </Button>
+                {userNo ? (
+                  <MarketUploadDialog
+                    open={open}
+                    gameList={gameList}
+                    handleClose={handleClose}
+                    sendDataToParent={handleSubmit}
+                  />
+                ) : (
+                  <Modal open={open} onClose={handleClose}>
+                    <Box sx={modalStyle}>
+                      <Stack sx={{ width: "100%" }} spacing={2}>
+                        <Alert severity="error">
+                          로그인 후 등록이 가능합니다.
+                        </Alert>
+                      </Stack>
+                    </Box>
+                  </Modal>
+                )}
+              </Box>
+            </Grid>
+          </Grid>
+        </Grid>
+        {/* 리스트 */}
+        <Grid container spacing={1} style={{ marginTop: 14 }}>
+          {dealList.map((deal, index) => (
+            <BoardCard key={index} deal={deal}></BoardCard>
+          ))}
+        </Grid>
+      </Container>
+    </>
   );
 }

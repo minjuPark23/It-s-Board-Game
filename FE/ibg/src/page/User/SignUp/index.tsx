@@ -48,7 +48,7 @@ export default function SignUp() {
           let decode_token = jwtDecode<MyToken>(token);
           sessionStorage.setItem("accessToken", token);
 
-          alert(decode_token.userNo);
+          //alert(decode_token.userNo);
           setLoading(true);
           userInfo(decode_token.userNo)
             .then((response) => {
@@ -114,7 +114,7 @@ export default function SignUp() {
         spacing={0}
         direction="column"
         alignItems="center"
-        sx={{ mt: { xs: 1, sm: 5, md: 8 } }}
+        sx={{ mt: { xs: 5, sm: 5, md: 20 } }}
       >
         <Box sx={{ width: width < 600 ? "90%" : "33%" }}>
           <WelcomeStepper value="0" />

@@ -73,7 +73,7 @@ function Form({ parentCallback, emailCallback, nicknameCallback }: User) {
     } else if (password.length < 6) {
       alert("비밀번호는 6글자 이상이어야합니다.");
       setCanSubmit(false);
-    } else if (password != passwordCheck) {
+    } else if (password !== passwordCheck) {
       alert("비밀번호 확인이 일치하지 않습니다");
       setCanSubmit(false);
     } else setCanSubmit(true);
@@ -164,7 +164,6 @@ function Form({ parentCallback, emailCallback, nicknameCallback }: User) {
                     : ""
                 }
                 label="닉네임 입력"
-                autoFocus
               />
             </Grid>
             <Grid item xs={3} sm={3}>
@@ -196,7 +195,6 @@ function Form({ parentCallback, emailCallback, nicknameCallback }: User) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                autoFocus
               />
             </Grid>
             <Grid item xs={12}>

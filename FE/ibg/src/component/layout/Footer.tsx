@@ -8,7 +8,8 @@ const StyledFooter = styled(AppBar)(({ theme }) => ({
   position: "relative",
   transform: "translateY(-100%)",
   padding: theme.spacing(2, 0),
-  backgroundColor: theme.palette.warning.main,
+  //  backgroundColor: theme.palette.warning.main,
+  backgroundColor: "#f5f5f5",
   boxShadow: "none",
   color: theme.palette.common.black,
   zIndex: 1,
@@ -31,8 +32,10 @@ const StyledImage = styled("img")(() => ({
 }));
 
 export default function Footer() {
+  const puzzleImg = require("../../assets/puzzle.png");
+
   return (
-    <StyledFooter>
+    <StyledFooter sx={{ mt: { xs: 4 } }}>
       <Container maxWidth="xl">
         <Toolbar sx={{ display: "block" }}>
           <Typography sx={{ mb: 2 }}>
@@ -50,7 +53,7 @@ export default function Footer() {
           <Typography variant="caption" gutterBottom>
             © 2022 by SSAFY 6기 대전 1반 1팀, All rights reserved.
           </Typography>
-          <StyledImage src="img/puzzle.png"></StyledImage>
+          <StyledImage src={puzzleImg}></StyledImage>
         </Toolbar>
       </Container>
     </StyledFooter>

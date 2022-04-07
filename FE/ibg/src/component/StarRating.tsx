@@ -28,13 +28,9 @@ export default function StarRating({
     if (!userNo) {
       navigate("/signin");
     } else {
-      rateGame(userNo, gameNo, score).then((data) => {
-        // 별점이 정상적으로 등록된 경우에만 상태 변경 및 점수 전달
-        if (data.code === 200) {
-          setStarRate(score);
-          if (parentCallback !== null) parentCallback(score); //parent에 score 넘겨주기
-        }
-      });
+      rateGame(userNo, gameNo, score);
+      setStarRate(score);
+      if (parentCallback !== null) parentCallback(score); //parent에 score 넘겨주기
     }
   };
 

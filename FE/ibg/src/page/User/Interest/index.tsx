@@ -3,7 +3,8 @@ import BoardCardMain from "../../../component/BoardCardMain";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { getLikedList } from "../../../api/user";
 import { RootStateOrAny, useSelector } from "react-redux";
-// Game 객체 => types파일로 빼는 것이 좋음
+import TitleToolbar from "../../../component/TitleToolbar";
+
 export interface Game {
   gameNo: number;
   gameImg: string;
@@ -22,41 +23,54 @@ export default function MyGames() {
   const [userno] = useState(
     useSelector((state: RootStateOrAny) => state.user.userNo)
   );
-  // const pic = "img/logo_tears.png";
-
-  // 관심 게임이 없는 경우 추가해야함
+  //  const logoImg = require("../../../assets/logo_tears.png");
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
     const init = async () => {
       let data = await getLikedList(userno);
-      if (data != null) setGameList(data); //gameImg, gameName, gameNo를 준다
+      if (data !== null) setGameList(data); //gameImg, gameName, gameNo를 준다
     };
     init();
   });
 
   return (
-    <Container style={{ marginTop: 20, padding: 20 }}>
-      <Typography
-        sx={{
-          fontSize: { xs: 20, md: 24 },
-          fontWeight: "bold",
-          mb: 1,
-        }}
-      >
-        나의 관심 게임 목록
-      </Typography>
+    <>
+      {/* 타이틀 */}
+      <TitleToolbar title="관심목록" />
       <Container style={{ marginTop: 20, padding: 10 }}>
+        {/* 관심 목록 리스트 */}
         <Grid container spacing={2}>
-          {gameList.length != 0 ? (
+          {gameList.length !== 0 ? (
             gameList.map((game) => (
               <BoardCardMain key={game.gameNo} game={game}></BoardCardMain>
             ))
           ) : (
-            <Typography>아직 관심 등록된 게임이 없어요</Typography>
+            <Grid
+              container
+              spacing={0}
+              justifyContent="center"
+              direction="column"
+              alignItems="center"
+              style={{ minHeight: "70vh" }}
+            >
+              <Grid item xs={3}>
+                <Typography
+                  sx={{
+                    fontSize: { xs: 18, md: 24 },
+                    fontWeight: "bold",
+                    mb: 1,
+                    minWidth: 65,
+                    display: { xs: "block", md: "block" },
+                  }}
+                >
+                  아직 관심 등록된 게임이 없어요
+                </Typography>
+              </Grid>
+            </Grid>
           )}
         </Grid>
-        <Box sx={{ mb: 15 }} />
+        <Box sx={{ mb: { md: 5 } }} />
       </Container>
-    </Container>
+    </>
   );
 }

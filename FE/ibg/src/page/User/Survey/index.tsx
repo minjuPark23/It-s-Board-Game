@@ -8,7 +8,6 @@ import ConfirmDialog from "./component/ConfirmDialog";
 import { initSurvey } from "../../../api/user";
 //네비게이션
 import { useNavigate } from "react-router-dom";
-import { RootStateOrAny, useSelector } from "react-redux";
 //스캘래톤로더
 import SkeletonLoader from "./component/SkeletonCardSurvey";
 // Game 객체
@@ -16,6 +15,7 @@ export interface Game {
   gameNo: number;
   gameImg: string;
   gameName: string;
+  gameKorName: string;
 }
 // Rated  객체
 export interface IProps {
@@ -30,10 +30,6 @@ export default function Survey() {
   const [width] = useState(window.innerWidth); //width
   const [open, setOpen] = useState(false); //modal
   const [loading, setLoading] = useState(true);
-  //백앤드 대체되면 아래 userNo 삭제하기
-  const [userNo] = useState(
-    useSelector((state: RootStateOrAny) => state.user.userNo)
-  );
   const navigate = useNavigate();
 
   // function to handle modal open
@@ -55,15 +51,13 @@ export default function Survey() {
   useEffect(() => {
     // API 연결(게임리스트 불러오기)
     const init = async () => {
-      //백앤드 완료되면 아래로 대체
-      //const data = await initSurvey().then(()=>{setLoading(false)});
-      await initSurvey(userNo).then((data) => {
+      await initSurvey().then((data) => {
         setGameList(data); //gameImg, gameName, gameNo를 준다
         setLoading(false);
       });
     };
     init();
-  }, [""]);
+  }, []);
 
   // count 업데이트하는 method
   const countHandler = (ratedGameNo: number, score: number) => {
@@ -96,7 +90,7 @@ export default function Survey() {
         spacing={0}
         direction="column"
         alignItems="center"
-        sx={{ mt: { xs: 1, sm: 5, md: 8 } }}
+        sx={{ mt: { xs: 5, sm: 5, md: 20 } }}
       >
         <Box sx={{ width: width < 600 ? "90%" : "33%" }}>
           <WelcomeStepper value="1" />

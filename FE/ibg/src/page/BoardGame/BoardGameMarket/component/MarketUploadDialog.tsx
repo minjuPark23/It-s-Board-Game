@@ -42,14 +42,15 @@ const MarketUploadDialog = ({
   const Img = styled("img")({
     width: "100%",
   });
-
+  //이미지
+  const logoImg = require("../../../../assets/logo.png");
   const [gameNo, setGameNo] = useState("");
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [contents, setContents] = useState("");
   const [file, setFile] = useState<File>();
   const [preview, setPreview] = useState<any>();
-  const [scroll, setScroll] = useState<DialogProps["scroll"]>("paper");
+  const [scroll] = useState<DialogProps["scroll"]>("paper"); //setScroll 빌드에러 때문에 뺐습니다.
   const [errorText, setErrorText] = useState("");
 
   useEffect(() => {
@@ -157,7 +158,7 @@ const MarketUploadDialog = ({
             marginRight: 1,
           }}
         >
-          <img src="img/logo.png" alt="logo" />
+          <img src={logoImg} alt="logo" />
         </ImageListItem>
         거래 등록
       </DialogTitle>

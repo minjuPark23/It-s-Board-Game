@@ -23,7 +23,7 @@ const CustomTheme = createTheme({
 
       #ibgContent {
         heignt: auto;
-        min-height: 96%;
+        min-height: 100%;
         padding-bottom: 140px;
       }
 
