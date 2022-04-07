@@ -131,20 +131,25 @@ public class RecommendApiController {
      * - desc : 추천 테이블 평점별로 가져오기 추후)셔플해서 가져오기 추가해야한다.
      * */
     @GetMapping("/game/score/{userNo}")
-    public Result getRecommendByScore(@PathVariable(name = "userNo") Integer userNo) {
-        List<Recommend> recommendList = recommendService.getRecommendByUserNo(userNo);
-        if (recommendList.size() < 10) {
-            System.out.println("아직 평점 데이터 10개가 안된다.");
-            return new Result(HttpStatus.OK.value(), null);
-        }
+    public Result getRecommendByScore(@PathVariable(name = "userNo") Integer userNo) throws JsonProcessingException {
+//        List<Recommend> recommendList = recommendService.getRecommendByUserNo(userNo);
+//        if (recommendList.size() < 10) {
+//            System.out.println("아직 평점 데이터 10개가 안된다.");
+//            return new Result(HttpStatus.OK.value(), null);
+//        }
+//
+//        System.out.println("평점 데이터 충분해 추천 데이터 반환. "+ recommendList.size());
+//
+//        List<Game> collect = recommendList.stream().map(r -> r.getGame()).collect(Collectors.toList());
+//
+//        Collections.shuffle(collect);
+//
+//        return getResultList(collect, userNo);
+        List<Integer> gameNoList = restapiService.requestGETAPI("/user3", userNo);
 
-        System.out.println("평점 데이터 충분해 추천 데이터 반환. "+ recommendList.size());
+        List<Game> game_popular_list = gameNoList.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
 
-        List<Game> collect = recommendList.stream().map(r -> r.getGame()).collect(Collectors.toList());
-
-        Collections.shuffle(collect);
-
-        return getResultList(collect, userNo);
+        return getResultList(game_popular_list, userNo);
     }
 
     /**
