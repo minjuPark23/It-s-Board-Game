@@ -89,8 +89,8 @@ class UserView(viewsets.ModelViewSet):
         df_games = Game.objects.all()
         df_games = pd.DataFrame(df_games.values("game_no", "game_total_score"))
 
-        df_scores1 = Score.objects.all().values("game_no", "score_rating")
-        df_scores = pd.DataFrame(df_scores1)
+        # df_scores1 = Score.objects.all().values("game_no", "score_rating")
+        df_scores = pd.DataFrame(Score.objects.all().values("game_no", "score_rating")).astype('float32')
 
         df_games['score_count'] = df_scores.groupby('game_no')['score_rating'].count()
 
@@ -129,38 +129,28 @@ class UserView(viewsets.ModelViewSet):
         categorys = game_list['game_category'].str.get_dummies("|")
 
         scores = Score.objects.filter(user_no=user_no)
-        user_score_list = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating")).set_index('score_no')
+        user_score_list = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating")).set_index(
+            'score_no')
         user_score_list = user_score_list.merge(categorys, left_on='game_no', right_index=True)
 
-        model = Lasso(alpha=0.75)
+        model = Lasso(alpha=0.5)
         X = user_score_list[categorys.columns]
         y = user_score_list['score_rating']
         model.fit(X, y)
-        # user_profile = [model.intercept_, *model.coef_]
+        user_profile = [model.intercept_, *model.coef_]
 
-        recommendations = game_list[~game_list.index.isin(user_score_list['game_no'])].copy()
+        recommendations = game_list[~game_list.index.isin(user_score_list['game_no'])]
         recommend_category = recommendations['game_category'].str.get_dummies("|")
         predict = model.predict(recommend_category)
 
         recommendations['predict'] = predict
-        # print(recommendations)
-
-        # recommendations = recommendations[~game_list.index.isin(user_score_list['game_no'])]
-        # print(recommendations)
 
         findUser = get_object_or_404(User, pk=user_no)
         for idx, row in recommendations.iterrows():
             findGame = get_object_or_404(Game, pk=idx)
             r = Recommend(game_no=findGame, user_no=findUser, recommend_rating=row['predict']);
-            print("save")
             r.save()
 
-        # recommendations = recommendations.sort_values('predict', ascending=False)
-        # print(recommendations)
-
-        # recommendations = recommendations.index[:10]
-        # print(recommendations.values.tolist())
-        # return Response(recommendations.values.tolist())
         return Response()
 
     """
