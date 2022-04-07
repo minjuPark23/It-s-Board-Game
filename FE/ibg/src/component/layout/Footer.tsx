@@ -35,7 +35,7 @@ export default function Footer() {
   const puzzleImg = require("../../assets/puzzle.png");
 
   return (
-    <StyledFooter>
+    <StyledFooter sx={{ mt: { xs: 4 } }}>
       <Container maxWidth="xl">
         <Toolbar sx={{ display: "block" }}>
           <Typography sx={{ mb: 2 }}>
