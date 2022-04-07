@@ -37,7 +37,6 @@ public class ScoreRepository {
                     .setParameter("gameNo", gameNo)
                     .getSingleResult();
         } catch (NoResultException e){
-            System.err.println("이전 평가 기록이 없습니다.");
             return null;
         }
     }

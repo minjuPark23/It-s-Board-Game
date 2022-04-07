@@ -61,7 +61,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             // JWT 토큰을 사용하면서 세션을 만들 이유는 없지만 단지 권한 처리 때문에
             // attemptAuthentication 함수 실행 후 successfulAuthentication 함수가 실행된다.
 
-            System.out.println("test");
             return authentication;
         } catch (IOException e) {
             e.printStackTrace();
