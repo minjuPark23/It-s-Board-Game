@@ -85,11 +85,13 @@ public class RecommendApiController {
      * */
     @GetMapping("/game/ranking/{userNo}")
     public Result getRecommendByRanking(@PathVariable(name = "userNo") Integer userNo) throws JsonProcessingException {
-        List<Integer> game_no_list = restapiService.requestGETAPI("/popular");
-
-        List<Game> game_popular_list = game_no_list.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
-
-        return getResultList(game_popular_list, userNo);
+            // 테스트 필요
+          return new Result(HttpStatus.NO_CONTENT.value());
+//        List<Integer> game_no_list = restapiService.requestGETAPI("/popular");
+//
+//        List<Game> game_popular_list = game_no_list.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
+//
+//        return getResultList(game_popular_list, userNo);
     }
 
     /**
