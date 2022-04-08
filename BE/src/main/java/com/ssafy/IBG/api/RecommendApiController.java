@@ -157,6 +157,8 @@ public class RecommendApiController {
 
         List<Game> game_popular_list = gameNoList.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
 
+        Collections.shuffle(game_popular_list);
+
         return getResultList(game_popular_list, userNo);
     }
 
