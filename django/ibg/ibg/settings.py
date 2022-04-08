@@ -94,7 +94,7 @@ DATABASES = {
         'USER': 'ibg',  # 유저 ID
         'PASSWORD': 'ssafyB101!',  # 유저 비밀번호
         'HOST': 'database',    # 현재 DB 연결 HOST
-        'PORT': '3306'  # 현재 DB 연결 포트번호
+        'PORT': '3306',  # 현재 DB 연결 포트번호
         'CONN_MAX_AGE': 300
     }
 }
