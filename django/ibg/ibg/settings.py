@@ -95,7 +95,7 @@ DATABASES = {
         'PASSWORD': 'ssafyB101!',  # 유저 비밀번호
         'HOST': 'localhost',    # 현재 DB 연결 HOST
         'PORT': '7779',  # 현재 DB 연결 포트번호
-        'CONN_MAX_AGE': 60
+        'CONN_MAX_AGE': 300
     }
 }
 
