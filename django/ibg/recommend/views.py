@@ -86,7 +86,7 @@ class UserView(viewsets.ModelViewSet):
 
     @api_view(['GET'])
     def recommend_by_score_on_score_count(request):
-        df_games = Game.objects.all()
+        df_games = Game.objects.only("game_no", "game_total_score").all()
         df_games = pd.DataFrame(df_games.values("game_no", "game_total_score"))
 
         df_scores1 = Score.objects.all().values("game_no", "score_rating")
@@ -124,7 +124,7 @@ class UserView(viewsets.ModelViewSet):
     def recommend_by_predicted_score_for_lasso(self, user_no):
         Recommend.objects.filter(user_no=user_no).delete()
 
-        games = Game.objects.all()
+        games = Game.objects.only('game_no', 'game_category').all()
         game_list = pd.DataFrame(games.values("game_no", "game_category")).set_index('game_no')
         categorys = game_list['game_category'].str.get_dummies("|")
 
