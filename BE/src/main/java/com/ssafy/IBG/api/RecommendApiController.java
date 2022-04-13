@@ -5,10 +5,7 @@ import com.ssafy.IBG.api.dto.Result;
 import com.ssafy.IBG.api.recommend.RecommendResultResponse;
 import com.ssafy.IBG.api.recommend.RecommendResultResponseWithTarget;
 import com.ssafy.IBG.api.recommend.RecommendSurveyResponse;
-import com.ssafy.IBG.domain.Game;
-import com.ssafy.IBG.domain.Recommend;
-import com.ssafy.IBG.domain.RecommendDesc;
-import com.ssafy.IBG.domain.Score;
+import com.ssafy.IBG.domain.*;
 import com.ssafy.IBG.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -220,16 +217,42 @@ public class RecommendApiController {
         int num = (int)(Math.random()*(scores.size()));
         int game_no = scores.get(num).getGame().getGameNo();
 
-        List<Integer> list = restapiService.requestGETAPI("/category", game_no);
-        String target = gameService.getGameByGameNo(game_no).getGameKorName();
+//        List<Integer> list = restapiService.requestGETAPI("/category", game_no);
+        List<RecommendCate> cateList = recommendService.getRecommendCateByGameNo(game_no);
+
+        List<Integer> list = cateList.stream().map(
+                rc -> rc.getRecGame().getGameNo()
+        ).collect(Collectors.toList());
+
 
         List<Game> gameList = list.stream()
                 .map(no-> gameService.getGameByGameNo(no))
                 .collect(Collectors.toList());
+        String target = gameService.getGameByGameNo(game_no).getGameKorName();
 
-        Collections.shuffle(gameList);
+        Result result = getRecommendGameList(userNo, gameList, target);
 
-        return getResultList(gameList, userNo, target);
+        while(result == null){
+            // 게임 다시 선정
+            num = (int)(Math.random()*(scores.size()));
+            game_no = scores.get(num).getGame().getGameNo();
+            cateList = recommendService.getRecommendCateByGameNo(game_no);
+
+            list = cateList.stream().map(
+                    rc -> rc.getRecGame().getGameNo()
+            ).collect(Collectors.toList());
+
+            gameList = list.stream()
+                    .map(no-> gameService.getGameByGameNo(no))
+                    .collect(Collectors.toList());
+
+            target = gameService.getGameByGameNo(game_no).getGameKorName();
+
+            result = getRecommendGameList(userNo, gameList, target);
+        }
+
+        return result;
+
     }
 
     /**
@@ -399,6 +422,29 @@ public class RecommendApiController {
         Collections.shuffle(recommend_list);
 
         return getResultList(recommend_list, userNo);
+    }
+
+    /**
+     * @author : 권오범
+     * @date : 2022-03-25 오전 15:00
+     * @desc: 추천 게임 리스트 중 플레이해본 게임 제외, 타이틀 포함
+     * */
+    private Result getRecommendGameList(Integer userNo, List<Game> list, String target) {
+        List<Game> recommend_list = new LinkedList<>();
+
+        for(Game g : list){
+            if(scoreService.getScoreByUserNoGameNo(userNo, g.getGameNo()).getScoreRating() == 0d){
+                recommend_list.add(g);
+            }
+        }
+
+        if(recommend_list.size() < 5) {
+            return null;
+        }
+
+        Collections.shuffle(recommend_list);
+
+        return getResultList(recommend_list, userNo, target);
     }
 
     /**
