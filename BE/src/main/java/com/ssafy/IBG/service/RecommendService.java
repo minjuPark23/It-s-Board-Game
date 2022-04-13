@@ -2,6 +2,8 @@ package com.ssafy.IBG.service;
 
 import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Recommend;
+import com.ssafy.IBG.domain.RecommendCate;
+import com.ssafy.IBG.domain.RecommendDesc;
 import com.ssafy.IBG.repository.RecommendRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -99,5 +101,24 @@ public class RecommendService {
      **/
     public List<Game> getRecommendByNewbie(Integer userNo, double gameAgeWeight, int limit, double percent) {
         return recommendRepository.findRecommendByNewbie(userNo, gameAgeWeight*percent, limit);
+    }
+
+    /**
+     * @author : 권오범
+     * @date : 2022-04-13 오후 10:50
+     * @desc: 비슷한 장르의 게임
+     **/
+    public List<RecommendCate> getRecommendCateByGameNo(Integer gameNo) {
+        return recommendRepository.findRecommendCateByGameNo(gameNo);
+    }
+
+
+    /**
+    * @author : 박민주
+    * @date : 2022-04-13 오후 10:05
+    * @desc : 비슷한 유형의 게임
+    **/
+    public List<RecommendDesc> getRecommendDescByGameNo(int gameNo) {
+        return recommendRepository.findRecommendDescByGameNo(gameNo);
     }
 }
