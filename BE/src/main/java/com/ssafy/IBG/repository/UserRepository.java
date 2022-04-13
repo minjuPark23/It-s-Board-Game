@@ -68,7 +68,7 @@ public class UserRepository {
     }
 
     public Integer findUserSize() {
-        return em.createQuery("select u from User u", Integer.class)
+        return em.createQuery("select u from User u", User.class)
                 .getResultList().size();
     }
 }
