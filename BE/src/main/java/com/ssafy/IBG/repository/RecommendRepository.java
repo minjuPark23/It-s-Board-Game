@@ -136,7 +136,7 @@ public class RecommendRepository {
     public List<RecommendCate> findRecommendCateByGameNo(Integer gameNo) {
         return em.createQuery("select rc from RecommendCate rc where rc.targetGame.gameNo = :gameNo", RecommendCate.class)
                 .setParameter("gameNo", gameNo)
-                .setMaxResults(15)
+                .setMaxResults(20)
                 .getResultList();
     }
 }

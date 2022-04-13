@@ -118,11 +118,7 @@ public class RecommendApiController {
                 .map(rd -> rd.getRecGame())
                 .collect(Collectors.toList());
 
-        Collections.shuffle(gameList);
-
-        gameList = gameList.subList(0, 10);
-
-        return getResultList(gameList, userNo, target);
+        return getRecommendGameList(userNo, gameList, target);
     }
 
 
@@ -220,39 +216,17 @@ public class RecommendApiController {
 //        List<Integer> list = restapiService.requestGETAPI("/category", game_no);
         List<RecommendCate> cateList = recommendService.getRecommendCateByGameNo(game_no);
 
-        List<Integer> list = cateList.stream().map(
-                rc -> rc.getRecGame().getGameNo()
-        ).collect(Collectors.toList());
-
-
-        List<Game> gameList = list.stream()
-                .map(no-> gameService.getGameByGameNo(no))
-                .collect(Collectors.toList());
-        String target = gameService.getGameByGameNo(game_no).getGameKorName();
-
-        Result result = getRecommendGameList(userNo, gameList, target);
-
-        while(result == null){
-            // 게임 다시 선정
-            num = (int)(Math.random()*(scores.size()));
-            game_no = scores.get(num).getGame().getGameNo();
-            cateList = recommendService.getRecommendCateByGameNo(game_no);
-
-            list = cateList.stream().map(
-                    rc -> rc.getRecGame().getGameNo()
-            ).collect(Collectors.toList());
-
-            gameList = list.stream()
-                    .map(no-> gameService.getGameByGameNo(no))
-                    .collect(Collectors.toList());
-
-            target = gameService.getGameByGameNo(game_no).getGameKorName();
-
-            result = getRecommendGameList(userNo, gameList, target);
+        if(cateList == null){
+            return new Result(HttpStatus.NO_CONTENT.value());
         }
 
-        return result;
+        List<Game> gameList = cateList.stream()
+                .map(cl -> cl.getRecGame())
+                .collect(Collectors.toList());
 
+        String target = gameService.getGameByGameNo(game_no).getGameKorName();
+
+        return getRecommendGameList(userNo, gameList, target);
     }
 
     /**
@@ -414,12 +388,16 @@ public class RecommendApiController {
                 recommend_list.add(g);
             }
         }
+        Collections.shuffle(recommend_list);
 
         if(recommend_list.size() < 5) {
             return null;
+        }else if(recommend_list.size() < 10){
+            recommend_list = recommend_list.subList(0, recommend_list.size());
+        }else{
+            recommend_list = recommend_list.subList(0, 10);
         }
 
-        Collections.shuffle(recommend_list);
 
         return getResultList(recommend_list, userNo);
     }
@@ -437,12 +415,15 @@ public class RecommendApiController {
                 recommend_list.add(g);
             }
         }
+        Collections.shuffle(recommend_list);
 
         if(recommend_list.size() < 5) {
             return null;
+        }else if(recommend_list.size() < 10){
+            recommend_list = recommend_list.subList(0, recommend_list.size());
+        }else{
+            recommend_list = recommend_list.subList(0, 10);
         }
-
-        Collections.shuffle(recommend_list);
 
         return getResultList(recommend_list, userNo, target);
     }
