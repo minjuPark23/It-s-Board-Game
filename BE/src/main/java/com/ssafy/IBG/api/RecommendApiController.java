@@ -5,9 +5,7 @@ import com.ssafy.IBG.api.dto.Result;
 import com.ssafy.IBG.api.recommend.RecommendResultResponse;
 import com.ssafy.IBG.api.recommend.RecommendResultResponseWithTarget;
 import com.ssafy.IBG.api.recommend.RecommendSurveyResponse;
-import com.ssafy.IBG.domain.Game;
-import com.ssafy.IBG.domain.Recommend;
-import com.ssafy.IBG.domain.Score;
+import com.ssafy.IBG.domain.*;
 import com.ssafy.IBG.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +28,7 @@ public class RecommendApiController {
     private final RESTAPIService restapiService;
     private final GameService gameService;
     private final ScoreService scoreService;
+    private final UserService userService;
 
     /**
      * @author : 권오범
@@ -115,11 +114,13 @@ public class RecommendApiController {
 
         String target = gameService.getGameByGameNo(gameNo).getGameKorName();
 
-        List<Integer> game_no_list = restapiService.requestGETAPI("/desc", gameNo);
+        List<RecommendDesc> recommendDescList = recommendService.getRecommendDescByGameNo(gameNo);
 
-        List<Game> game_popular_list = game_no_list.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
+        List<Game> gameList = recommendDescList.stream()
+                .map(rd -> rd.getRecGame())
+                .collect(Collectors.toList());
 
-        return getResultList(game_popular_list, userNo, target);
+        return getRecommendGameList(userNo, gameList, target);
     }
 
 
@@ -134,34 +135,34 @@ public class RecommendApiController {
      * */
     @GetMapping("/game/score/{userNo}")
     public Result getRecommendByScore(@PathVariable(name = "userNo") Integer userNo) throws JsonProcessingException {
-//        int scoreCnt = scoreService.getScoreCnt(userNo);
-//        if (scoreCnt < 10) {
-//            System.out.println("아직 평점 데이터 10개가 안된다.");
-//            return new Result(HttpStatus.OK.value(), null);
-//        }
-//        List<Recommend> recommendList = recommendService.getRecommendByUserNo(userNo);
+        int scoreCnt = scoreService.getScoreCnt(userNo);
+        if (scoreCnt < 10) {
+            System.out.println("아직 평점 데이터 10개가 안된다.");
+            return new Result(HttpStatus.OK.value(), null);
+        }
+        List<Recommend> recommendList = recommendService.getRecommendByUserNo(userNo);
+
+        System.out.println("평점 데이터 충분해 추천 데이터 반환. "+ recommendList.size());
+
+        List<Game> collect = recommendList.stream().map(r -> r.getGame()).collect(Collectors.toList());
+
+        Collections.shuffle(collect);
+
+        return getResultList(collect, userNo);
+
+//        List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
 //
-//        System.out.println("평점 데이터 충분해 추천 데이터 반환. "+ recommendList.size());
+//        if(scores.size() < 10)
+//            return new Result(HttpStatus.NO_CONTENT.value());
 //
-//        List<Game> collect = recommendList.stream().map(r -> r.getGame()).collect(Collectors.toList());
 //
-//        Collections.shuffle(collect);
+//        List<Integer> gameNoList = restapiService.requestGETAPI("/user3", userNo);
 //
-//        return getResultList(collect, userNo);
-
-        List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
-
-        if(scores.size() < 10)
-            return new Result(HttpStatus.NO_CONTENT.value());
-
-
-        List<Integer> gameNoList = restapiService.requestGETAPI("/user3", userNo);
-
-        List<Game> game_popular_list = gameNoList.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
-
-        Collections.shuffle(game_popular_list);
-
-        return getResultList(game_popular_list, userNo);
+//        List<Game> game_popular_list = gameNoList.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
+//
+//        Collections.shuffle(game_popular_list);
+//
+//        return getResultList(game_popular_list, userNo);
     }
 
     /**
@@ -214,16 +215,20 @@ public class RecommendApiController {
         int num = (int)(Math.random()*(scores.size()));
         int game_no = scores.get(num).getGame().getGameNo();
 
-        List<Integer> list = restapiService.requestGETAPI("/category", game_no);
-        String target = gameService.getGameByGameNo(game_no).getGameKorName();
+//        List<Integer> list = restapiService.requestGETAPI("/category", game_no);
+        List<RecommendCate> cateList = recommendService.getRecommendCateByGameNo(game_no);
 
-        List<Game> gameList = list.stream()
-                .map(no-> gameService.getGameByGameNo(no))
+        if(cateList == null){
+            return new Result(HttpStatus.NO_CONTENT.value());
+        }
+
+        List<Game> gameList = cateList.stream()
+                .map(cl -> cl.getRecGame())
                 .collect(Collectors.toList());
 
-        Collections.shuffle(gameList);
+        String target = gameService.getGameByGameNo(game_no).getGameKorName();
 
-        return getResultList(gameList, userNo, target);
+        return getRecommendGameList(userNo, gameList, target);
     }
 
     /**
@@ -355,6 +360,24 @@ public class RecommendApiController {
     }
 
     /**
+     * @author : 곽현준
+     * @date : 2022-04-13 오후 11:04
+     * @desc : 평점 데이터 저장하기
+    **/
+    @GetMapping("/game/score/all")
+    public Result setScoreRecommend() throws JsonProcessingException {
+        try{
+            int MAX_USER = userService.getUserSize();
+            for(int userNo = 331993; userNo < MAX_USER; userNo++){
+                restapiService.requestGETAPI("/user3", userNo);
+            }
+        } catch (Exception e) {
+            return new Result(HttpStatus.NOT_FOUND.value(), e);
+        }
+        return new Result(HttpStatus.OK.value());
+    }
+
+    /**
      * @author : 권오범
      * @date : 2022-03-25 오전 15:00
      * @desc: 추천 게임 리스트 중 플레이해본 게임 제외
@@ -367,14 +390,44 @@ public class RecommendApiController {
                 recommend_list.add(g);
             }
         }
+        Collections.shuffle(recommend_list);
 
         if(recommend_list.size() < 5) {
             return null;
+        }else if(recommend_list.size() < 10){
+            recommend_list = recommend_list.subList(0, recommend_list.size());
+        }else{
+            recommend_list = recommend_list.subList(0, 10);
         }
 
-        Collections.shuffle(recommend_list);
 
         return getResultList(recommend_list, userNo);
+    }
+
+    /**
+     * @author : 권오범
+     * @date : 2022-03-25 오전 15:00
+     * @desc: 추천 게임 리스트 중 플레이해본 게임 제외, 타이틀 포함
+     * */
+    private Result getRecommendGameList(Integer userNo, List<Game> list, String target) {
+        List<Game> recommend_list = new LinkedList<>();
+
+        for(Game g : list){
+            if(scoreService.getScoreByUserNoGameNo(userNo, g.getGameNo()).getScoreRating() == 0d){
+                recommend_list.add(g);
+            }
+        }
+        Collections.shuffle(recommend_list);
+
+        if(recommend_list.size() < 5) {
+            return null;
+        }else if(recommend_list.size() < 10){
+            recommend_list = recommend_list.subList(0, recommend_list.size());
+        }else{
+            recommend_list = recommend_list.subList(0, 10);
+        }
+
+        return getResultList(recommend_list, userNo, target);
     }
 
     /**
