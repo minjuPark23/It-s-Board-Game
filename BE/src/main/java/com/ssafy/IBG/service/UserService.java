@@ -55,7 +55,7 @@ public class UserService {
      * @date : 2022-04-13 오후 11:08
      * @desc : 유저 전체 사이즈
     **/
-    public Long getUserSize() {
+    public Integer getUserSize() {
         return userRepository.findUserSize();
     }
 }
