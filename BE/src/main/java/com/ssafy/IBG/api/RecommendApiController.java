@@ -367,7 +367,7 @@ public class RecommendApiController {
     @GetMapping("/game/score/all")
     public Result setScoreRecommend() throws JsonProcessingException {
         try{
-            int MAX_USER = userService.getUserSize();
+            Long MAX_USER = userService.getUserSize();
             for(int userNo = 331993; userNo < MAX_USER; userNo++){
                 restapiService.requestGETAPI("/user3", userNo);
             }
