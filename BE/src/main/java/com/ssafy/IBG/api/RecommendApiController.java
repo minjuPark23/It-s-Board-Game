@@ -367,18 +367,14 @@ public class RecommendApiController {
     @GetMapping("/game/score/all")
     public Result setScoreRecommend() throws JsonProcessingException {
         Integer MAX_USER = userService.getUserSize();
-        System.out.println("max user : " + MAX_USER);
         for(int userNo = 348466; userNo <= MAX_USER; userNo++){
-            System.out.println("userNo: " + userNo);
             // user 없는 경우 넘어감
             if(userService.getUserByUserNo(userNo) == null) continue;
             // 해당 유저의 평점 개수
             int scoreCnt = scoreService.getScoreCnt(userNo);
-            System.out.println("scoreCnt : " + scoreCnt);
             // 10개 미만인 경우 넘어감
             if(scoreCnt < 10) continue;
             restapiService.requestGETAPI("/user3", userNo);
-            System.out.println("request done");
         }
         return new Result(HttpStatus.OK.value());
     }
