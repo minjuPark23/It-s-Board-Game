@@ -27,12 +27,12 @@ export default function Main() {
     shallowEqual
   );
   const [descGame, setDescGame] = useState("");
-  // const [categoryGame, setCategoryGame] = useState("");
+  const [categoryGame, setCategoryGame] = useState("");
 
   const [userGameList, setUserGameList] = useState<IGame[]>([]);
   const [newbieGameList, setNewbieGameList] = useState<IGame[]>([]);
   const [descGameList, setDescGameList] = useState<IGame[]>([]);
-  // const [categoryGameList, setCategoryGameList] = useState<IGame[]>([]);
+  const [categoryGameList, setCategoryGameList] = useState<IGame[]>([]);
   const [weightGameList, setWeightGameList] = useState<IGame[]>([]);
   const [playerGameList, setPlayerGameList] = useState<IGame[]>([]);
   const [timeGameList, setTimeGameList] = useState<IGame[]>([]);
@@ -43,7 +43,7 @@ export default function Main() {
   const [userLoading, setUserLoading] = useState<boolean>(userNo);
   const [newbieLoading, setNewbieLoading] = useState<boolean>(true);
   const [descLoading, setDescLoading] = useState<boolean>(userNo);
-  // const [categoryLoading, setCategoryLoading] = useState<boolean>(userNo);
+  const [categoryLoading, setCategoryLoading] = useState<boolean>(userNo);
   const [weightLoading, setWeightLoading] = useState<boolean>(userNo);
   const [playerLoading, setPlayerLoading] = useState<boolean>(userNo);
   const [timeLoading, setTimeLoading] = useState<boolean>(userNo);
@@ -84,18 +84,18 @@ export default function Main() {
           isMounted && setDescLoading(false);
         });
         // TODO : Issue!
-      // // 많이 느림(5)
-      // getRecommByCategory(userNo, signal)
-      //   .then((data) => {
-      //     if (data.code === 200 && isMounted) {
-      //       setCategoryGame(data.data.title);
-      //       setCategoryGameList(data.data.recommendResultResponses);
-      //     }
-      //     isMounted && setCategoryLoading(false);
-      //   })
-      //   .catch(() => {
-      //     isMounted && setCategoryLoading(false);
-      //   });
+      // 많이 느림(5)
+      getRecommByCategory(userNo, signal)
+        .then((data) => {
+          if (data.code === 200 && isMounted) {
+            setCategoryGame(data.data.title);
+            setCategoryGameList(data.data.recommendResultResponses);
+          }
+          isMounted && setCategoryLoading(false);
+        })
+        .catch(() => {
+          isMounted && setCategoryLoading(false);
+        });
       getRecommByWeight(userNo, signal)
         .then((data) => {
           if (data.code === 200 && isMounted) {
@@ -322,7 +322,7 @@ export default function Main() {
           />
         )
       )}
-      {/* {categoryLoading ? (
+      {categoryLoading ? (
         <SkelTheme />
       ) : (
         categoryGameList.length > 0 && (
@@ -331,7 +331,7 @@ export default function Main() {
             gameList={categoryGameList}
           />
         )
-      )} */}
+      )}
       {reviewLoading ? (
         <SkelTheme />
       ) : (
