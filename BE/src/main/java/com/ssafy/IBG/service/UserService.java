@@ -56,6 +56,7 @@ public class UserService {
      * @desc : 유저 전체 사이즈
     **/
     public Integer getUserSize() {
-        return userRepository.findUserSize();
+        User user = userRepository.findLastUser();
+        return user.getUserNo();
     }
 }
