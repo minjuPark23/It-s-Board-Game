@@ -132,34 +132,34 @@ public class RecommendApiController {
      * */
     @GetMapping("/game/score/{userNo}")
     public Result getRecommendByScore(@PathVariable(name = "userNo") Integer userNo) throws JsonProcessingException {
-//        int scoreCnt = scoreService.getScoreCnt(userNo);
-//        if (scoreCnt < 10) {
-//            System.out.println("아직 평점 데이터 10개가 안된다.");
-//            return new Result(HttpStatus.OK.value(), null);
-//        }
-//        List<Recommend> recommendList = recommendService.getRecommendByUserNo(userNo);
+        int scoreCnt = scoreService.getScoreCnt(userNo);
+        if (scoreCnt < 10) {
+            System.out.println("아직 평점 데이터 10개가 안된다.");
+            return new Result(HttpStatus.OK.value(), null);
+        }
+        List<Recommend> recommendList = recommendService.getRecommendByUserNo(userNo);
+
+        System.out.println("평점 데이터 충분해 추천 데이터 반환. "+ recommendList.size());
+
+        List<Game> collect = recommendList.stream().map(r -> r.getGame()).collect(Collectors.toList());
+
+        Collections.shuffle(collect);
+
+        return getResultList(collect, userNo);
+
+//        List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
 //
-//        System.out.println("평점 데이터 충분해 추천 데이터 반환. "+ recommendList.size());
+//        if(scores.size() < 10)
+//            return new Result(HttpStatus.NO_CONTENT.value());
 //
-//        List<Game> collect = recommendList.stream().map(r -> r.getGame()).collect(Collectors.toList());
 //
-//        Collections.shuffle(collect);
+//        List<Integer> gameNoList = restapiService.requestGETAPI("/user3", userNo);
 //
-//        return getResultList(collect, userNo);
-
-        List<Score> scores = scoreService.getScoreListByUserNoOrderByRating(userNo);
-
-        if(scores.size() < 10)
-            return new Result(HttpStatus.NO_CONTENT.value());
-
-
-        List<Integer> gameNoList = restapiService.requestGETAPI("/user3", userNo);
-
-        List<Game> game_popular_list = gameNoList.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
-
-        Collections.shuffle(game_popular_list);
-
-        return getResultList(game_popular_list, userNo);
+//        List<Game> game_popular_list = gameNoList.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
+//
+//        Collections.shuffle(game_popular_list);
+//
+//        return getResultList(game_popular_list, userNo);
     }
 
     /**

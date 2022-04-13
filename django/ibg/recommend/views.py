@@ -124,13 +124,12 @@ class UserView(viewsets.ModelViewSet):
     def recommend_by_predicted_score_for_lasso(self, user_no):
         Recommend.objects.filter(user_no=user_no).delete()
 
-        games = Game.objects.all()
+        games = Game.objects.only('game_no', 'game_category').all()
         game_list = pd.DataFrame(games.values("game_no", "game_category")).set_index('game_no')
         categorys = game_list['game_category'].str.get_dummies("|")
 
         scores = Score.objects.filter(user_no=user_no)
-        user_score_list = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating")).set_index(
-            'score_no')
+        user_score_list = pd.DataFrame(scores.values("score_no", "game_no", "user_no", "score_rating")).set_index('score_no')
         user_score_list = user_score_list.merge(categorys, left_on='game_no', right_index=True)
 
         model = Lasso(alpha=0.003)
@@ -139,31 +138,46 @@ class UserView(viewsets.ModelViewSet):
         model.fit(X, y)
         # user_profile = [model.intercept_, *model.coef_]
 
+        # recoomendations가 모든 게임 리스트 가져옴
         recommendations = game_list.copy()
+        # 카테고리로 정리
         recommend_category = recommendations['game_category'].str.get_dummies("|")
+        
+        # lasso로 만든 예측 모델
         predict = model.predict(recommend_category)
 
+        # 300개의 게임에 대한 예측값을 'predict' 컬럼에 저장
         recommendations['predict'] = predict
         # print(recommendations)
 
+        # 내가 보지 않은 게임
         recommendations = recommendations[~game_list.index.isin(user_score_list['game_no'])]
         # print(recommendations)
 
-        # findUser = get_object_or_404(User, pk=user_no)
-        # for idx, row in recommendations.iterrows():
-        #     findGame = get_object_or_404(Game, pk=idx)
-        #     r = Recommend(game_no=findGame, user_no=findUser, recommend_rating=row['predict']);
-        #     print("save")
-        #     r.save()
+        # 유저 찾고
+        findUser = get_object_or_404(User, pk=user_no)
 
+        # TODO : 인덱스(gameNo) 변경되는지 확인 요망
         recommendations = recommendations.sort_values('predict', ascending=False)
         # print(recommendations)
 
-        recommendations = recommendations.index[:10]
-        print(recommendations.values.tolist())
-        return Response(recommendations.values.tolist())
-        # return Response()
+        # 행 순회하면서 저장
+        # TODO: 50개 순회로 변경 .range()
+        k = 0
+        for idx, row in recommendations.iterrows():
+            if k == 50:
+                break
+            findGame = get_object_or_404(Game, pk=idx)
+            r = Recommend(game_no=findGame, user_no=findUser, recommend_rating=row['predict']);
+            r.save()
+            k += 1
+        # print(recommendations)
 
+        # recommendations = recommendations.index[:10]
+        # print(recommendations.values.tolist())
+        # return Response(recommendations.values.tolist())
+        return Response()
+        
     """
          @author : 박민주
          @date : 2022-04-4 오전 16:00
