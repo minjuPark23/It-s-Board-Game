@@ -43,7 +43,6 @@ public class ScoreService {
     **/
     public int getScoreCnt(Integer userNo){
         int scoreCntByUserNo = scoreRepository.findScoreCntByUserNo(userNo);
-        System.out.println("총 평점 개수"+ scoreCntByUserNo);
         return scoreCntByUserNo;
     }
 
