@@ -31,6 +31,7 @@ public class RecommendApiController {
     private final RESTAPIService restapiService;
     private final GameService gameService;
     private final ScoreService scoreService;
+    private final UserService userService;
 
     /**
      * @author : 권오범
@@ -357,6 +358,24 @@ public class RecommendApiController {
         }
 
         return result;
+    }
+
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-13 오후 11:04
+     * @desc : 평점 데이터 저장하기
+    **/
+    @GetMapping("/game/score/all")
+    public Result setScoreRecommend() throws JsonProcessingException {
+        try{
+            int MAX_USER = userService.getUserSize();
+            for(int userNo = 331993; userNo < MAX_USER; userNo++){
+                restapiService.requestGETAPI("/user3", userNo);
+            }
+        } catch (Exception e) {
+            return new Result(HttpStatus.NOT_FOUND.value(), e);
+        }
+        return new Result(HttpStatus.OK.value());
     }
 
     /**
