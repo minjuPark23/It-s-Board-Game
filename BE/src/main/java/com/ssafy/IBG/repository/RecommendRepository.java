@@ -2,6 +2,7 @@ package com.ssafy.IBG.repository;
 
 import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Recommend;
+import com.ssafy.IBG.domain.RecommendDesc;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -122,6 +123,12 @@ public class RecommendRepository {
         return em.createQuery("select g from Game g where g.gameWeight <= :gameAgeWeight order by g.gameTotalScore desc", Game.class)
                 .setParameter("gameAgeWeight", gameAgeWeight)
                 .setMaxResults(limit)
+                .getResultList();
+    }
+
+    public List<RecommendDesc> findRecommendDescByGameNo(int gameNo) {
+        return em.createQuery("select rd from RecommendDesc rd where rd.targetGame.gameNo = :gameNo", RecommendDesc.class)
+                .setParameter("gameNo", gameNo)
                 .getResultList();
     }
 }

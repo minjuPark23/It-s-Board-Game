@@ -7,6 +7,7 @@ import com.ssafy.IBG.api.recommend.RecommendResultResponseWithTarget;
 import com.ssafy.IBG.api.recommend.RecommendSurveyResponse;
 import com.ssafy.IBG.domain.Game;
 import com.ssafy.IBG.domain.Recommend;
+import com.ssafy.IBG.domain.RecommendDesc;
 import com.ssafy.IBG.domain.Score;
 import com.ssafy.IBG.service.*;
 import lombok.RequiredArgsConstructor;
@@ -113,11 +114,17 @@ public class RecommendApiController {
 
         String target = gameService.getGameByGameNo(gameNo).getGameKorName();
 
-        List<Integer> game_no_list = restapiService.requestGETAPI("/desc", gameNo);
+        List<RecommendDesc> recommendDescList = recommendService.getRecommendDescByGameNo(gameNo);
 
-        List<Game> game_popular_list = game_no_list.stream().map(no -> gameService.getGameByGameNo(no)).collect(Collectors.toList());
+        List<Game> gameList = recommendDescList.stream()
+                .map(rd -> rd.getRecGame())
+                .collect(Collectors.toList());
 
-        return getResultList(game_popular_list, userNo, target);
+        Collections.shuffle(gameList);
+
+        gameList = gameList.subList(0, 10);
+
+        return getResultList(gameList, userNo, target);
     }
 
 
