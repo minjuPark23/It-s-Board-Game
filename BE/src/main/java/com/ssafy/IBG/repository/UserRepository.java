@@ -67,8 +67,8 @@ public class UserRepository {
         }
     }
 
-    public Long findUserSize() {
-        return em.createQuery("select count(u) from User u", Long.class)
-                .getSingleResult();
+    public Integer findUserSize() {
+        return em.createQuery("select u from User u", Integer.class)
+                .getResultList().size();
     }
 }
