@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import ThemeList from "./component/ThemeList";
 import {
   getRecommByAge,
-  // getRecommByCategory,
+  getRecommByCategory,
   getRecommByDesc,
   getRecommByNewbie,
   getRecommByPlayer,
