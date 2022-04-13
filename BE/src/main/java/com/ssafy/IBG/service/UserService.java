@@ -50,4 +50,12 @@ public class UserService {
         return userRepository.findUserByUserNo(userNo);
     }
 
+    /**
+     * @author : 곽현준
+     * @date : 2022-04-13 오후 11:08
+     * @desc : 유저 전체 사이즈
+    **/
+    public int getUserSize() {
+        return userRepository.findUserSize();
+    }
 }
