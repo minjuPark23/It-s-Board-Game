@@ -99,7 +99,7 @@ export default function GameInfo(props: { game: IGameDetail }) {
       return shortDesc;
     }
     return props.game.gameKorDesc;
-  }, [isShowMore]);
+  }, [isShowMore, props.game.gameKorDesc]);
 
   return (
     <Grid container spacing={2} sx={{ my: { xs: 0, md: 4 } }}>
