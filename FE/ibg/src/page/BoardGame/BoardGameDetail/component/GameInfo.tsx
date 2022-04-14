@@ -17,6 +17,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import CategoryIcon from "@mui/icons-material/Category";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { useMemo, useRef, useState } from "react";
 
 // 게임 이미지 영역
 const ImgWrapper = styled(ImageListItem)(() => ({
@@ -85,6 +88,18 @@ const AlignDiv = styled("div")(() => ({
 
 export default function GameInfo(props: { game: IGameDetail }) {
   const user = useSelector((state: RootStateOrAny) => state.user);
+  const [isShowMore, setIsShowMore] = useState(false);
+  const textLimit = useRef(330);
+
+  const gameDesc = useMemo(() => {
+    const shortDesc = props.game.gameKorDesc.slice(0, textLimit.current);
+
+    if (props.game.gameKorDesc.length > textLimit.current) {
+      if (isShowMore) return props.game.gameKorDesc;
+      return shortDesc;
+    }
+    return props.game.gameKorDesc;
+  }, [isShowMore]);
 
   return (
     <Grid container spacing={2} sx={{ my: { xs: 0, md: 4 } }}>
@@ -128,7 +143,33 @@ export default function GameInfo(props: { game: IGameDetail }) {
             </InfoIcon>
             카테고리: {props.game.gameCategory}
           </InfoText>
-          <InfoText sx={{ mt: 1.5 }}>{props.game.gameKorDesc}</InfoText>
+
+          <InfoText sx={{ mt: 1.5 }}>{gameDesc}</InfoText>
+          <Box
+            sx={{
+              mt: 0.5,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "gray",
+              cursor: "pointer",
+            }}
+            onClick={() => setIsShowMore(!isShowMore)}
+          >
+            {props.game.gameKorDesc.length > textLimit.current &&
+              (isShowMore ? (
+                <>
+                  <ExpandLessIcon />
+                  닫기
+                </>
+              ) : (
+                <>
+                  <ExpandMoreIcon />
+                  더보기
+                </>
+              ))}
+          </Box>
+
           <AvgRate>
             {(Math.floor(props.game.gameTotalScore * 100) / 100).toFixed(2)}
             {/* <Typography component="span"> 점</Typography> */}
